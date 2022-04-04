@@ -170,7 +170,7 @@ const Downloader = ({folder}) => {
   }
 
   return (
-    <div>
+    <div style={{textAlign:'center'}}>
     <AwesomeButton
     type="instagram"
     style={{marginBottom:'20px'}}

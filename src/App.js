@@ -11,6 +11,7 @@ const Folder = styled.div`
   background: rgb(0 0 0 / 53%);
   backdrop-filter: blur(7px);
   margin-bottom: 50px;
+  text-align:center;
 `;
 
 function App() {
