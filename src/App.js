@@ -1,56 +1,59 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
-import './App.css';
+import React, { useState } from "react";
+import { getConfig } from "./api";
+import Menu from "./Menu";
+import Download from "./Downloader";
+import styled from "styled-components";
+
+const Folder = styled.div`
+  color: white;
+  color: white;
+  padding: 20px 10px;
+  background: rgb(0 0 0 / 53%);
+  backdrop-filter: blur(7px);
+  margin-bottom: 50px;
+`;
 
 function App() {
+  const [menu, setMenu] = useState(false);
+  const [openLeaf, setOpenLeaf] = useState([]);
+  const [folder, setFolder] = useState(null);
+  const { isCalling, data: tree, error } = getConfig.useHook();
+
+  const toggleMenu = () => setMenu(!menu);
+
+  const getContent = () => {
+    if (isCalling === true) {
+      return <>Is Calling config</>;
+    }
+
+    if (error) {
+      return <>An error occured</>;
+    }
+
+    return (
+      <div>
+        {menu && (
+          <Menu
+            onClose={toggleMenu}
+            tree={tree}
+            folder={folder}
+            setFolder={setFolder}
+            open={openLeaf}
+            setOpen={setOpenLeaf}
+          />
+        )}
+        {folder && <Download folder={folder} />}
+      </div>
+    );
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
+      <Folder onClick={toggleMenu}>
+        Download Folder:
+        <div>{folder?.path}</div>
+      </Folder>
+      {getContent()}
     </div>
   );
 }
