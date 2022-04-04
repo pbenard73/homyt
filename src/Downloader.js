@@ -85,6 +85,7 @@ display: flex;
     }
     iframe + div {
     position:absolute;
+    pointer-events:none;
     inset:0;
     &:before{
       content:'';
