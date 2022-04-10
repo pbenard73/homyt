@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 
 const suffixEnv = process.env.NODE_ENV === 'production' ? '' : `.${process.env.NODE_ENV}`
-
-require('dotenv').config({ path: `${__dirname}/../.env${suffixEnv}` })
+if (process.env.IS_DOCKER === undefined) {
+  require('dotenv').config({ path: `${__dirname}/../.env${suffixEnv}` })
+}
 
 /**
  * Module dependencies.
