@@ -16,11 +16,91 @@ const loopFile = (rootPath) =>
       children: loopFile(path.join(rootPath, i.name)),
     }));
 
-router.get("/config", (req, res, next) => {
-  const files = loopFile(process.env.MUSIC_FOLDER);
+const loopDir = (rootPath) =>
+  fs
+    .readdirSync(rootPath, { withFileTypes: true })
+    .filter((i) => exceptFiles.indexOf(i.name) === -1)
+    .map((i) => ({
+      name: i.name,
+      path: path.join(rootPath, i.name).replace(process.env.MUSIC_FOLDER, ""),
+      children: i.isDirectory() === true ? loopDir(path.join(rootPath, i.name)) : undefined,
+    }))
+    .sort((a, b) => {
+      if (a.children !== undefined && b.children === undefined) {
+        return -1
+      }
+      if (b.children !== undefined && a.children === undefined) {
+        return 1
+      }
+
+      return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1
+    })
+    ;
+
+    router.get("/config", (req, res, next) => {
+      const files = loopDir(process.env.MUSIC_FOLDER);
+    
+      res.json(files);
+    });
+
+    router.delete("/deleteFile", (req, res, next) => {
+      const {file} = req.body;
+      const filepath = path.join(process.env.MUSIC_FOLDER, file);
+
+      if (fs.existsSync(filepath) === false) {
+        return res.json({valid: false})
+      }
+
+      fs.unlinkSync(filepath)
+
+      res.json({valid:true});
+    });
+
+router.post("/readdir", (req, res, next) => {
+  const {folder} = req.body;
+  const folderPath = path.join(process.env.MUSIC_FOLDER, folder);
+
+  if (fs.existsSync(folderPath) === false) {
+    return res.json({valid: false})
+  }
+
+  const files = loopDir(process.env.MUSIC_FOLDER);
 
   res.json(files);
+})
+
+router.post("/moveFile", async (req, res, next) => {
+  const { from, to } = req.body;
+
+  if (from === undefined || to === undefined) {
+    return res.json({valid: false})
+  }
+
+  const targetFrom = path.join(process.env.MUSIC_FOLDER, from)
+  const targetTo = path.join(process.env.MUSIC_FOLDER, to)
+
+  if (fs.existsSync(targetFrom) === false || fs.existsSync(targetTo) === false) {
+    return res.json({valid: false});
+  }
+
+  fs.renameSync(targetFrom, targetTo)
+
+  res.json({valid: true})
 });
+
+router.get('/listen', (req, res) => {
+  const {url} = req.query
+  console.log(req.query)
+
+  const filePath = path.join(process.env.MUSIC_FOLDER, url)
+
+  if (fs.existsSync(filePath) === true) {
+    return res.sendFile(filePath)
+  }
+
+  res.status(400).json({valid:false})
+
+})
 
 router.post("/download", async (req, res, next) => {
   const { url, folder } = req.body;
@@ -35,7 +115,7 @@ router.post("/search/:query", async (req, res, next) => {
 
   try {
     const { data } = await axios.get(
-      `https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&q=${encodeURIComponent(
+      `https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=15&q=${encodeURIComponent(
         query
       )}&order=viewCount&type=video&key=${process.env.API_KEY}`
     );

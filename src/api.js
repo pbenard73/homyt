@@ -4,6 +4,10 @@ const pool = {
   search: { path: "/search/:query", method: "post" },
   download: { path: "/download", method: "post" },
   getConfig: { path: "/config" },
+  readdir: { path: "/readdir", method:"post" },
+  deleteFile: {path: "/deleteFile", method:"delete"},
+  moveFile: {path: "/moveFile", method:"post"},
+  listen: {path:"/listen"}
 };
 
-export const { getConfig, download, search } = makeApi(pool, process.env.REACT_APP_API);
+export const { getConfig, download, search, readdir, deleteFile, moveFile, listen } = makeApi(pool, process.env.REACT_APP_API);
