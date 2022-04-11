@@ -23,7 +23,7 @@ Youtube video converter for music server
 
 ```
 git clone https://github.com/pbenard73/homyt
-cd homy
+cd homyt
 docker build -t homyt .
 docker run -e MUSIC_FOLDER=/music -e API_KEY=my_api_key -v /my/music/directory:/music -p 3066:3000 homyt
 ```

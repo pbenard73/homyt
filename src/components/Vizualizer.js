@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useEffect,  useRef } from 'react'
 import { useVisualizer } from '../redux/visualizerSlice';
 import styled from 'styled-components'
 import listener, { EVENTS } from '../utils/listener';
 import spectrum from '../utils/spectrum';
 import './../visualizers/style.scss'
+import player, { STATE } from '../utils/player';
 
 const Canvas = styled.canvas`
     height:100vh;
@@ -15,47 +16,36 @@ const Canvas = styled.canvas`
 `
 
 const Vizualizer = () => {
-    const canvasRef = useRef();
-
-    const visualizer = useVisualizer()
-
     useEffect(() => {
-        visualizer.setCanvas(canvasRef.current)
-
-        listener.register('canvas_start', EVENTS.PLAYER_START, () => {
-            const audioElement = document.querySelector('#casper_video')
-            const canvas = document.querySelector('#spectrum_canvas')
-
-            var audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            var source = audioContext.createMediaElementSource(audioElement);
-            var analyser = audioContext.createAnalyser();
-            let gainNode = audioContext.createGain();
-            source.connect(gainNode );
-            source.connect(analyser  );
-        
-            gainNode.connect(audioContext.destination);
-
-            let lastValue = null
-
-            function draw() {                
-                analyser.fftSize = 2048;
-                var bufferMemoryLength = analyser.frequencyBinCount;
-                var dataArray = new Uint8Array(bufferMemoryLength);
-                analyser.getByteTimeDomainData(dataArray);
-
-                canvas.removeAttribute('data-theme');  
-                lastValue = spectrum.getRenderer()({lastValue, canvas, bufferMemoryLength, dataArray})
+        listener.register('canvas_start', EVENTS.PLAYER_START, () => {  
+            setTimeout(() => {      
+                const {analyzer, canvas} = player.getContext()
                 
-               window.requestAnimationFrame(draw);
-            }
+                let lastValue = null
 
-            window.requestAnimationFrame(draw);
+                function draw() {                
+                    analyzer.fftSize = 2048;
+                    var bufferMemoryLength = analyzer.frequencyBinCount;
+                    var dataArray = new Uint8Array(bufferMemoryLength);
+                    analyzer.getByteTimeDomainData(dataArray);
+
+                    canvas.removeAttribute('data-theme');  
+                    lastValue = spectrum.getRenderer()({lastValue, canvas, bufferMemoryLength, dataArray})
+                    if (player.getState() !== STATE.PLAYING) {
+                        return
+                    }
+
+                     window.requestAnimationFrame(draw);
+                }
+
+                window.requestAnimationFrame(draw);
+            })  
         })
 
     }, [])
 
     return (
-        <Canvas id="spectrum_canvas" ref={canvasRef} height="1024" width="1024"></Canvas>
+        <Canvas id="spectrum_canvas" height="1024" width="1024"></Canvas>
     )
 }
 

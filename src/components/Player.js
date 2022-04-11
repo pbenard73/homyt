@@ -20,6 +20,8 @@ import SkipNextIcon from '@mui/icons-material/SkipNext';
 import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import VolumeDownIcon from '@mui/icons-material/VolumeDown';
+import player from '../utils/player';
+import storage, { STORAGE } from '../utils/storage';
 
 const RoundPlayer = styled.div`
   position:relative;
@@ -78,7 +80,7 @@ const PLAY_TYPE = {
 
 const [state, setState] = useState(PLAY_TYPE.STOP);
 const [metadata, setMetadata] = useState({});
-const [volume, setVolume] = useState(1);
+const [volume, setVolume] = useState(storage.get(STORAGE.VOLUME) || 1);
 const [currentTime, setCurrentTime] = useState(0);
 
 function secondsToHms(d) {
@@ -94,12 +96,25 @@ function secondsToHms(d) {
   return hDisplay + mDisplay + sDisplay;
 }
 
+const play = songWithIndex => {
+  app.setPlayIndex(songWithIndex.index)
+  const source = document.querySelector('#casper_video')
+    
+  source.src = listen.url({url: songWithIndex.path});
+  listener.dispatch(EVENTS.PLAYLIST_INDEX, songWithIndex.index)
+
+  console.log(player.getPlaylistIndex())
+
+  source.load();
+  source.play();
+}
+
 useEffect(() => {
   setVideoRef(document.querySelector('#casper_video'))
+  document.querySelector('#casper_video').volume = volume
   
-  listener.register('player_meta', EVENTS.PLAYER_META, (...args) => {
-    console.log('META', document.querySelector('#casper_video').duration, ...args)
-  })
+  listener.register('action_play_song', EVENTS.ACTION_PLAY_SONG, song => play(song))
+  
   listener.register('player_start', EVENTS.PLAYER_START, () => {
     setState(PLAY_TYPE.PLAY);
   })
@@ -125,13 +140,18 @@ useEffect(() => {
   })
   
   listener.register('player_end', EVENTS.PLAYER_END, () => {
-    const newIndex = playIndex + 1
+    const playlist = player.getPlaylist()
+    const index = player.getPlaylistIndex()
+    const newIndex = index + 1
 
     if (playlist.length - 1 >= newIndex) {
-      app.nextIndex()
-      loadZix(newIndex)
+      app.setPlayIndex(newIndex)
+      play({...playlist[newIndex], index: newIndex})
     } else {
       setState(PLAY_TYPE.STOP);
+      listener.dispatch(EVENTS.PLAYLIST_INDEX, null)
+      app.setPlayIndex(null)
+      listener.dispatch(EVENTS.PLAYER_CURRENT_HUMAN, '')
     }
   })
 }, [])
@@ -145,7 +165,8 @@ const {playlist, playIndex} = useSelector(state => ({
 
 const loadZix = (givenIndex, givenleaf = false) => {
   app.setPlayIndex(givenIndex)
-  const source = videoRef.querySelector('source')
+  listener.dispatch(EVENTS.PLAYLIST_INDEX, givenIndex);
+  const source = document.querySelector('#casper_video')
   
   const leaf = givenleaf === true ? givenIndex : playlist[givenIndex]
 
@@ -164,24 +185,35 @@ const onNextClick = () => {
     loadZix(playIndex + 1)
   }
 }
-const onPlayClick = () => videoRef.play();
-const onPauseClick = () => videoRef.pause();
+const onPlayClick = () => {
+  const playlistIndex = player.getPlaylistIndex()
+  const playlist = player.getPlaylist();
+
+  if (playlistIndex === null && playlist.length > 0) {
+    play({...playlist[0], index:0})
+  } else if (playlist.length > 0) {
+    document.querySelector('#casper_video').play();
+  }
+}
+const onPauseClick = () => document.querySelector('#casper_video').pause();
 const onVolumeUpClick = () => {
   const source = document.querySelector('#casper_video')
-  const mvolume = source.volume += 0.1;
+  const mvolume = source.volume + 0.1;
 
   if (mvolume <= 1) {
     source.volume = mvolume
     setVolume(mvolume)
+    storage.set(STORAGE.VOLUME, mvolume)
   }
 }
 const onVolumeDownClick = () => {
   const source = document.querySelector('#casper_video')
-  const mvolume = source.volume -= 0.1;
+  const mvolume = source.volume - 0.1;
 
   if (volume >= 0) {
     source.volume = mvolume
     setVolume(mvolume)
+    storage.set(STORAGE.VOLUME, mvolume)
   }
 }
 
@@ -258,11 +290,6 @@ angle = angle < 0 ? 270 + (angle + 90) : angle
             </span>
             <i></i>
             </RoundPlayer>
-          <figcaption>
-            {playlist.map((song, myindex) => (
-              <span style={playIndex === myindex ? {color:'red'}: {}} key={song.path} href={listen.url({url: song.path})} onClick={() => loadZix(myindex) }>{song.name}</span>
-            ))}
-          </figcaption>
         </figure>
       </div>
   );

@@ -2,13 +2,15 @@ import { createSlice } from '@reduxjs/toolkit'
 import { useDispatch } from 'react-redux'
 import Browser from '../windows/Browser'
 import Downloader from '../windows/Downloader'
+import Playlist from '../windows/Playlist'
 import SpectrumConfig from '../windows/SpectrumConfig'
 import { staty } from './appSlice'
 
 export const WINDOWS = {
   BROWSER: 'browser',
   DOWNLOADER: 'downloader',
-  SPECTRUM: 'spectrum'
+  SPECTRUM: 'spectrum',
+  PLAYLIST: 'playlist'
 }
 
 const windowsList = {
@@ -16,6 +18,14 @@ const windowsList = {
     uuid: WINDOWS.BROWSER,
     title: 'Browser',
     component: <Browser />
+  },
+  [WINDOWS.PLAYLIST]: {
+    uuid: WINDOWS.PLAYLIST,
+    title: 'Playlist',
+    component: <Playlist />,
+    options: {
+      size:[400, 400],
+    }
   },
   [WINDOWS.DOWNLOADER]: {
     uuid: WINDOWS.DOWNLOADER,

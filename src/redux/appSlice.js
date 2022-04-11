@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { useDispatch } from 'react-redux'
 import { getConfig } from '../api';
+import listener, { EVENTS } from '../utils/listener';
 const capitalize = string => string.replace(/([a-z])/i, (str, firstLetter) => firstLetter.toUpperCase())
 
 export const staty = (args) => Object.fromEntries(args.map(arg => [`set${capitalize(arg)}`, (state, action) => {state[arg] = action.payload; return state}]))
@@ -26,13 +27,17 @@ export default appSlice.reducer
 
 const addToPlaylist = (item) => (dispatch, getState) => {
   const playlist = getState().app.playlist
-
-  dispatch(setPlaylist([...playlist, item]))
+  const newPlaylist = [...playlist, item]
+  dispatch(setPlaylist(newPlaylist))
+  listener.dispatch(EVENTS.PLAYLIST_CHANGE, newPlaylist)
+  if (newPlaylist.length === 1) {
+    listener.dispatch(EVENTS.ACTION_PLAY_SONG, {...item, index: 0});
+  }
 }
 
-const nextIndex = (dispatch, getState) => {
-  const index = getState().app.playIndex
-
+const nextIndex = () => (dispatch, getState) => {
+  const index = getState().app.playIndex  
+  listener.dispatch(EVENTS.PLAYLIST_INDEX, index + 1)
   dispatch(setPlayIndex(index + 1))
 }
 
@@ -41,7 +46,10 @@ export const useApp = () => {
 
     return {
        setPlayIndex: value => dispatch(setPlayIndex(value)),
-        setPlaylist: value => dispatch(setPlaylist(value)),
+        setPlaylist: value => {
+          dispatch(setPlaylist(value))
+          listener.dispatch(EVENTS.PLAYLIST_CHANGE, value)
+        },
         addToPlaylist: item => dispatch(addToPlaylist(item)),
         nextIndex: () => dispatch(nextIndex()),
         getFullTree: async () => {

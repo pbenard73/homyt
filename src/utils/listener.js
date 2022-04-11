@@ -6,7 +6,10 @@ export const EVENTS = {
     PLAYER_TIME_UPDATE: 'playertimeupdate',
     PLAYER_META: 'playermeta',
     PLAYER_SEEK: 'playerseek',
-    PLAYER_CURRENT_HUMAN: 'playercurrenthuman'
+    PLAYER_CURRENT_HUMAN: 'playercurrenthuman',
+    ACTION_PLAY_SONG: 'action_play_song',
+    PLAYLIST_CHANGE: 'playlist_change',
+    PLAYLIST_INDEX: 'playlist_index'
 }
 
 class Listener {
@@ -20,6 +23,9 @@ class Listener {
         [EVENTS.PLAYER_META]: [],
         [EVENTS.PLAYER_CURRENT_HUMAN]: [],
         [EVENTS.PLAYER_SEEK]: [],
+        [EVENTS.ACTION_PLAY_SONG]: [],
+        [EVENTS.PLAYLIST_CHANGE]: [],
+        [EVENTS.PLAYLIST_INDEX]: [],
     }
 
     register(uuid, eventName, callback) {
