@@ -9,8 +9,10 @@ const barVisualizer = ({clear, analyzer, lastValue, canvas, bufferMemoryLength, 
     var barHeight;
     var x = 0;
 
+if (clear !== false) {
+    canvas.setAttribute('data-theme', 'bar');
 
-    canvas.setAttribute('data-theme', 'libarne');
+}
 
     var    ctx = canvas.getContext('2d');
     if (clear !== false) {

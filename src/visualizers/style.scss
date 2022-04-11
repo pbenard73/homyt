@@ -1,3 +1,25 @@
 canvas[data-theme="line"]{
     background-color: rgba(0, 0, 0, 0.7);
 }
+@keyframes fufull {
+    from {
+        filter: hue-rotate(0deg);
+    }
+    to {
+        filter: hue-rotate(360deg);
+    }
+}
+@keyframes opacity {
+    from {
+        background-color: rgba(0, 0, 0, .85);
+    }
+    to {
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+}
+canvas[data-theme="line"]{
+    background-color: rgba(0, 0, 0, 0.7);
+}
+canvas[data-theme="full"]{
+   animation: fufull 15s linear infinite, opacity 10s ease infinite alternate-reverse;
+}
