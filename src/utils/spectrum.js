@@ -1,8 +1,10 @@
 import visualizers, { VISUALIZER } from "../visualizers";
+import storage, { STORAGE } from "./storage";
 
 class Spectrum {
-    renderer= VISUALIZER.LINE
+    renderer= storage.get(STORAGE.SPECTRUM) || VISUALIZER.NONE
     setRenderer(renderer) {
+        storage.set(STORAGE.SPECTRUM, renderer)
         this.renderer = renderer
     }
     getRenderer() {

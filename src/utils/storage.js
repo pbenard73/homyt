@@ -1,5 +1,6 @@
 export const STORAGE = {
     VOLUME: 'volume',
+    SPECTRUM: 'spectrum',
 }
 
 class Storage {
