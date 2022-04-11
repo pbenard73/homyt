@@ -1,6 +1,8 @@
-const circleVisualizer = ({canvas, bufferMemoryLength, dataArray}) => {
+const circleVisualizer = ({clear, canvas, bufferMemoryLength, dataArray}) => {
     var    ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    if (clear !== false) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
 
     ctx.lineWidth = 1.5;
     ctx.strokeStyle = 'red';

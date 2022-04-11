@@ -1,7 +1,9 @@
-const lineVisualizer = ({lastValue, canvas, bufferMemoryLength, dataArray}) => {
+const lineVisualizer = ({clear, lastValue, canvas, bufferMemoryLength, dataArray}) => {
     canvas.setAttribute('data-theme', 'line');
     var    ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    if (clear !== false) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
     ctx.stroke();
 
     ctx.lineWidth = 1.5;

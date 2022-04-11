@@ -30,7 +30,7 @@ const Vizualizer = () => {
                     analyzer.getByteTimeDomainData(dataArray);
 
                     canvas.removeAttribute('data-theme');  
-                    lastValue = spectrum.getRenderer()({lastValue, canvas, bufferMemoryLength, dataArray})
+                    lastValue = spectrum.getRenderer()({analyzer, lastValue, canvas, bufferMemoryLength, dataArray})
                     if (player.getState() !== STATE.PLAYING) {
                         return
                     }

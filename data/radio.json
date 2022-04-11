@@ -18,5 +18,13 @@
     {
         "name": "Montagne FM",
         "path": "http://montagnefm.ice.infomaniak.ch/montagnefm-96.mp3"
+    },
+    {
+        "name": "Bulgaria",
+        "path": "https://play.global.audio/bgradio128"
+    },
+    {
+        "name": "FIP",
+        "path": "http://icecast.radiofrance.fr/fip-hifi.aac"
     }
 ]
