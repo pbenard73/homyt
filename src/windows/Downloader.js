@@ -12,6 +12,7 @@ import socketIOClient from "socket.io-client";
 import { search, download } from './../api'
 import VideocamIcon from '@mui/icons-material/Videocam';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
+import Form from '../components/Form'
 
 const MODE = {
     DOWNLOAD: 'download',
@@ -22,21 +23,6 @@ const Cli = styled.div`
     color: #9bf5ff;
     text-align: left;
     padding: 5px 10px;
-`
-const Form = styled.form`
-  color:white;
-  > div {
-    background: rgb(255 255 255 / 31%);
-    margin-left: auto;
-    margin-right: auto;
-    padding: 20px;
-    border-radius: 10px;
-    backdrop-filter: blur(3px) hue-rotate(115deg);
-    border: 3px solid #898989;
-    box-shadow: 5px 8px 17px 9px rgb(0 0 0 / 76%);
-    display:flex;
-    flex-direction:column;
-  }
 `
 
 const Reflex = styled(IconButton)`

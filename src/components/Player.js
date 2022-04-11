@@ -99,11 +99,8 @@ function secondsToHms(d) {
 const play = songWithIndex => {
   app.setPlayIndex(songWithIndex.index)
   const source = document.querySelector('#casper_video')
-  console.log(songWithIndex)
   source.src = listen.url({url: songWithIndex.path, radio: songWithIndex.radio});
   listener.dispatch(EVENTS.PLAYLIST_INDEX, songWithIndex.index)
-
-  console.log(player.getPlaylistIndex())
 
   source.load();
   source.play();

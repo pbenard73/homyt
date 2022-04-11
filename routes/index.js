@@ -40,7 +40,7 @@ const loopDir = (rootPath) =>
     router.get("/config", (req, res, next) => {
       const files = loopDir(process.env.MUSIC_FOLDER);
       const radioFiles = fs.readFileSync(path.join(__dirname, `/../data/radio.json`), 'utf8');
-      console.log(radioFiles, typeof radioFiles)
+     
       const radios = JSON.parse(radioFiles)
     
       res.json({files, radios});
@@ -116,6 +116,34 @@ router.post("/download", async (req, res, next) => {
 
   res.json({ valid: true });
 });
+
+router.post('/addradio', async (req, res, next) => {
+  const {path:givenPath, name} = req.body
+
+  if (typeof name !== 'string' || typeof givenPath !== 'string' || givenPath.trim() === '' || name.trim() === '') {
+    return res.json({valid: false})
+  }
+const radioFileUrl = path.join(__dirname, `/../data/radio.json`);
+  const radioFiles = fs.readFileSync(radioFileUrl, 'utf8'); 
+  let radios = []
+  
+  try {
+    radios = JSON.parse(radioFiles)
+    if (Array.isArray(radios) === false) {
+      radios = []
+    }
+  } catch(e) {
+
+  }
+
+  radios.push({name, path: givenPath})
+
+  fs.writeFileSync(radioFileUrl, JSON.stringify(radios, null, 4))
+
+  const files = loopDir(process.env.MUSIC_FOLDER);
+
+  res.json({files, radios});
+})
 
 router.post("/search/:query", async (req, res, next) => {
   const { query } = req.params;

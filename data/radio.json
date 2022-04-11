@@ -12,7 +12,11 @@
         "path": "http://stream.virginradio.fr/virgin.mp3"
     },
     {
-        "name": "Virgin Radio",
-        "path": "http://stream.virginradio.fr/virgin.mp3"
+        "name": "Nostalgie",
+        "path": "http://streamingp.shoutcast.com/NostalgiePremium-mp3"
+    },
+    {
+        "name": "Montagne FM",
+        "path": "http://montagnefm.ice.infomaniak.ch/montagnefm-96.mp3"
     }
 ]

@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { useDispatch } from 'react-redux'
-import { getConfig } from '../api';
+import { addradio, getConfig } from '../api';
 import listener, { EVENTS } from '../utils/listener';
 const capitalize = string => string.replace(/([a-z])/i, (str, firstLetter) => firstLetter.toUpperCase())
 
@@ -46,7 +46,8 @@ export const useApp = () => {
     const dispatch = useDispatch();
 
     return {
-       setPlayIndex: value => dispatch(setPlayIndex(value)),
+      setFullTree: value => dispatch(setFullTree(value)),
+      setPlayIndex: value => dispatch(setPlayIndex(value)),
         setPlaylist: value => {
           dispatch(setPlaylist(value))
           listener.dispatch(EVENTS.PLAYLIST_CHANGE, value)
