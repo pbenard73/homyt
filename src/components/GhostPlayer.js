@@ -27,6 +27,7 @@ const GhostPlayer = () => (
    onEnded={(...args) => listener.dispatch(EVENTS.PLAYER_END, ...args)}
    onTimeUpdate={(...args) => listener.dispatch(EVENTS.PLAYER_TIME_UPDATE, ...args)}
    onLoadedMetadata={(...args) => listener.dispatch(EVENTS.PLAYER_META, ...args)}
+   crossOrigin="anonymous"
    >
     <source />       
   </CasperVideo>

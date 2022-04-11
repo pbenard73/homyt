@@ -39,8 +39,11 @@ const loopDir = (rootPath) =>
 
     router.get("/config", (req, res, next) => {
       const files = loopDir(process.env.MUSIC_FOLDER);
+      const radioFiles = fs.readFileSync(path.join(__dirname, `/../data/radio.json`), 'utf8');
+      console.log(radioFiles, typeof radioFiles)
+      const radios = JSON.parse(radioFiles)
     
-      res.json(files);
+      res.json({files, radios});
     });
 
     router.delete("/deleteFile", (req, res, next) => {
@@ -89,8 +92,12 @@ router.post("/moveFile", async (req, res, next) => {
 });
 
 router.get('/listen', (req, res) => {
-  const {url} = req.query
+  const {url, radio} = req.query
   console.log(req.query)
+
+  if (radio === 'true') {
+    return res.redirect(url)
+  }
 
   const filePath = path.join(process.env.MUSIC_FOLDER, url)
 

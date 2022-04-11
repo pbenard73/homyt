@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux'
 import Browser from '../windows/Browser'
 import Downloader from '../windows/Downloader'
 import Playlist from '../windows/Playlist'
+import Radio from '../windows/Radio'
 import SpectrumConfig from '../windows/SpectrumConfig'
 import { staty } from './appSlice'
 
@@ -10,6 +11,7 @@ export const WINDOWS = {
   BROWSER: 'browser',
   DOWNLOADER: 'downloader',
   SPECTRUM: 'spectrum',
+  RADIO: 'radio',
   PLAYLIST: 'playlist'
 }
 
@@ -18,6 +20,11 @@ const windowsList = {
     uuid: WINDOWS.BROWSER,
     title: 'Browser',
     component: <Browser />
+  },
+  [WINDOWS.RADIO]: {
+    uuid: WINDOWS.RADIO,
+    title: 'Radio',
+    component: <Radio />
   },
   [WINDOWS.PLAYLIST]: {
     uuid: WINDOWS.PLAYLIST,

@@ -11,6 +11,7 @@ const initialState = {
   fullTree: null,
   playlist: [],
   playIndex: null,
+  radios: []
 }
 
 export const appSlice = createSlice({
@@ -21,7 +22,7 @@ export const appSlice = createSlice({
   },
 })
 
-export const { setTree, setFullTree, setPlaylist, setPlayIndex } = appSlice.actions
+export const { setTree, setFullTree, setPlaylist, setPlayIndex, setRadios } = appSlice.actions
 
 export default appSlice.reducer
 
@@ -50,11 +51,13 @@ export const useApp = () => {
           dispatch(setPlaylist(value))
           listener.dispatch(EVENTS.PLAYLIST_CHANGE, value)
         },
+        setRadios: item => dispatch(setRadios(item)),
         addToPlaylist: item => dispatch(addToPlaylist(item)),
         nextIndex: () => dispatch(nextIndex()),
         getFullTree: async () => {
-          const tree = await getConfig()
+          const {files: tree, radios} = await getConfig()
           dispatch(setFullTree(tree))
+          dispatch(setRadios(radios))
         }
     }
 }
