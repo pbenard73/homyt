@@ -1,0 +1,21 @@
+{
+    "window_browser": "Dosya Gezgini",
+    "window_downloader": "Youtube'u indir",
+    "window_spectrum": "Ozel efektler",
+    "window_radios": "Radyo istasyonları",
+    "window_playlist": "Calma listesi",
+    "window_config": "Yapılandırma",
+    "window_remote": "Uzak",
+    "convert_succesfull": "Operasyon başarıyla tamamlandı",
+    "error": "Bir hata oluştu",
+    "mode_search_video": "Bir şarkı ara",
+    "mode_url": "url'ye göre video",
+    "target_folder": "Hedef klasör",
+    "video_url": "Video linki",
+    "download": "İndirmek",
+    "video_keywords": "Anahtar kelimeler",
+    "search": "Araştırma",
+    "add_radio": "Radyo Ekle",
+    "save": "Kayıt",
+    "visualizers": "Ozel efektler"
+}

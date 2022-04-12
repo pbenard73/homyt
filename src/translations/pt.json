@@ -1,0 +1,21 @@
+{
+    "window_browser": "Explorador de arquivos",
+    "window_downloader": "Aquisição do Youtube",
+    "window_spectrum": "Visualizadores",
+    "window_radios": "Estações de radio",
+    "window_playlist": "Playlist",
+    "window_config": "Configuração",
+    "window_remote": "Controlo remoto",
+    "convert_succesfull": "Operação concluída com sucesso",
+    "error": "Ocorreu um erro",
+    "mode_search_video": "Pesquisar um vídeo",
+    "mode_url": "Digite o URL",
+    "target_folder": "Pasta de destino",
+    "video_url": "URL do vídeo",
+    "download": "Baixar",
+    "video_keywords": "Palavras-chave",
+    "search": "Pesquisar",
+    "add_radio": "Adicionar rádio",
+    "save": "Registro",
+    "visualizers": "Visualizadores de espectro"
+}

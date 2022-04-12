@@ -4,6 +4,8 @@ import FolderIcon from '@mui/icons-material/Folder';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ContentPasteIcon from '@mui/icons-material/ContentPaste';
 import FileCopyIcon from '@mui/icons-material/FileCopy';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import styled from "styled-components";
 import { deleteFile } from "./api";
 import { useApp } from "./redux/appSlice";
@@ -42,6 +44,18 @@ const TreeView = ({ setFolder, select, setPlaylist, mode, tree, refresh, copyFil
     }
   }
 
+  const addAllFolder = leaf => {
+    const loop = obj => {
+      if (obj.children === undefined) {
+        return app.addToPlaylist(obj)
+      }
+
+      obj.children.forEach(i => loop(i))
+    }
+
+    loop(leaf)
+  }
+
   const renderTree = children => children.filter(i => setFolder !== undefined ? Array.isArray(i.children) : i).map(leaf => (
     <LeafItem key={leaf.path}>
       <div style={{flexDirection:'row', display:'flex'}}>
@@ -60,19 +74,24 @@ const TreeView = ({ setFolder, select, setPlaylist, mode, tree, refresh, copyFil
               S
             </IconButton>
           )}
-          {select !== true && leaf.children === undefined && (
+          {}
+          {select !== true && leaf.children === undefined ? (
             <>
           
             <IconButton onClick={() => app.addToPlaylist(leaf)} style={{color:'white'}}>
-              P
+              <AddCircleOutlineIcon />
             </IconButton>
-            <IconButton onClick={() => setCopyFile(leaf.path)} style={{color: copyFile === leaf.path ? 'red' : 'white'}}>
+            {/* <IconButton onClick={() => setCopyFile(leaf.path)} style={{color: copyFile === leaf.path ? 'red' : 'white'}}>
               <FileCopyIcon />
-            </IconButton>
+            </IconButton> */}
             <IconButton onClick={() => deleteFileAction(leaf.path)} style={{color:'white'}}>
               <DeleteIcon />
             </IconButton>
             </>
+          ) : (
+            <IconButton onClick={() => addAllFolder(leaf)} style={{color:'white'}}>
+              <AddCircleIcon />
+            </IconButton>
           )}
           {select !== true && leaf.children !== undefined && copyFile !== null && (
             <>
@@ -95,7 +114,7 @@ const TreeView = ({ setFolder, select, setPlaylist, mode, tree, refresh, copyFil
 
   return (
     <>
-    <List style={{maxHeight:'75vh', overflow:'auto'}}>
+    <List className="nodrag" style={{maxHeight:'75vh', overflow:'auto'}}>
       {renderTree(tree)}
     </List>
     </>

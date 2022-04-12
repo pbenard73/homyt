@@ -9,7 +9,13 @@ export const EVENTS = {
     PLAYER_CURRENT_HUMAN: 'playercurrenthuman',
     ACTION_PLAY_SONG: 'action_play_song',
     PLAYLIST_CHANGE: 'playlist_change',
-    PLAYLIST_INDEX: 'playlist_index'
+    PLAYLIST_INDEX: 'playlist_index',
+    REMOTE_VOLUME: 'remote_volume',
+    REMOTE_NEXT: 'remote_next',
+    REMOTE_PREV: 'remote_prev',
+    REMOTE_ACTION_VOLUME: 'remote_action_volume',
+    REMOTE_ACTION_NEXT: 'remote_action_next',
+    REMOTE_ACTION_PREV: 'remote_action_prev'
 }
 
 class Listener {
@@ -26,6 +32,12 @@ class Listener {
         [EVENTS.ACTION_PLAY_SONG]: [],
         [EVENTS.PLAYLIST_CHANGE]: [],
         [EVENTS.PLAYLIST_INDEX]: [],
+        [EVENTS.REMOTE_VOLUME]: [],
+        [EVENTS.REMOTE_VOLUME]: [],
+        [EVENTS.REMOTE_VOLUME]: [],
+        [EVENTS.REMOTE_ACTION_VOLUME]: [],
+        [EVENTS.REMOTE_ACTION_NEXT]: [],
+        [EVENTS.REMOTE_ACTION_PREV]: [],
     }
 
     register(uuid, eventName, callback) {

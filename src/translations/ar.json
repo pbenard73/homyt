@@ -1,0 +1,21 @@
+{
+    "window_browser": "مستكشف الملفات",
+    "window_downloader": "اقتناء يوتيوب",
+    "window_spectrum": "المتخيلون",
+    "window_radios": "محطات الإذاعة",
+    "window_playlist": "قائمة التشغيل",
+    "window_config": "إعدادات",
+    "window_remote": "بعيد",
+    "convert_succesfull": "إكمال العملية بنجاح",
+    "error": "حدث خطأ",
+    "mode_search_video": "ابحث في مقطع فيديو",
+    "mode_url": "إدخال عنوان الموقع",
+    "target_folder": "مجلد الوجهة",
+    "video_url": "رابط الفيديو",
+    "download": "تحميل",
+    "video_keywords": "الكلمات الدالة",
+    "search": "للبحث",
+    "add_radio": "اضافة راديو",
+    "save": "سجل",
+    "visualizers": "مشاهدي الطيف"
+}

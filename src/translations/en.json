@@ -1,0 +1,21 @@
+{
+    "window_browser": "File Browser",
+    "window_downloader": "Youtube Downloader",
+    "window_spectrum": "Visualizers",
+    "window_radios": "Radios",
+    "window_playlist": "Playlist",
+    "window_config": "Config",
+    "window_remote": "Remote",
+    "convert_succesfull": "Operation Successfull",
+    "error": "An error occured",
+    "mode_search_video": "Search a video",
+    "mode_url": "Video by URL",
+    "target_folder": "Target's Folder",
+    "video_url": "Video's URL",
+    "download": "Download",
+    "video_keywords": "Video's keywords",
+    "search": "Search",
+    "add_radio": "Add a Radio",
+    "save": "Save",
+    "visualizers": "Spectrum visualizers"
+}

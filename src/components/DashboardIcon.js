@@ -2,6 +2,8 @@ import React from 'react'
 import styled from 'styled-components'
 
 import Draggable from 'react-draggable';
+import { t } from 'i18next';
+import { useTranslation } from 'react-i18next';
 const IconWrapper = styled.div`
     width: 90px;
     height:120px;
@@ -13,7 +15,6 @@ const IconWrapper = styled.div`
     cursor:pointer;
     color:white;
     position:absolute;
-    left: ${props => props.position}px;
     top: 10px;
     .handle{
         position:absolute;
@@ -29,7 +30,10 @@ const IconWrapper = styled.div`
 
 
 
-const DashboardIcon = ({Icon, label, position, onClick}) => (
+const DashboardIcon = ({Icon, label, position, onClick}) => {
+    const { t} = useTranslation();
+
+    return (
     <Draggable handle={".handle"}>
 
     <IconWrapper position={position} onClick={(e) => {
@@ -39,9 +43,10 @@ const DashboardIcon = ({Icon, label, position, onClick}) => (
     }}>
             <span className="handle">X</span>
         <Icon />
-        <span>{label}</span>
+        <span>{t(label)}</span>
     </IconWrapper>
     </Draggable>
 )
+}
 
 export default DashboardIcon

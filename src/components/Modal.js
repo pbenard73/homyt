@@ -1,7 +1,6 @@
 import { Modal as MuiModal} from '@mui/material'
 import styled from 'styled-components'
 
-
 const Modal = styled(MuiModal)`
 display: flex;
     align-items: center;
@@ -37,16 +36,16 @@ display: flex;
       opacity:.7;
       position:absolute;
       inset:0;
-    animation: coco 5s 3s linear infinite alternate-reverse;
+      animation: coco 5s 3s linear infinite alternate-reverse;
     }
     &:after{
       content:'';
       opacity:.7;
       position:absolute;
       inset:0;
-    animation: coco 7s 2s linear infinite alternate-reverse;
+      animation: coco 7s 2s linear infinite alternate-reverse;
     }
-    }
+  }
 `
 
 export default Modal

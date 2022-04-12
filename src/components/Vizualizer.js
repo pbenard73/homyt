@@ -1,6 +1,5 @@
-import React, { useState } from 'react'
-import { useEffect,  useRef } from 'react'
-import { useVisualizer } from '../redux/visualizerSlice';
+import React from 'react'
+import { useEffect } from 'react'
 import styled from 'styled-components'
 import listener, { EVENTS } from '../utils/listener';
 import spectrum from '../utils/spectrum';
@@ -28,20 +27,19 @@ const Vizualizer = () => {
                     var bufferMemoryLength = analyzer.frequencyBinCount;
                     var dataArray = new Uint8Array(bufferMemoryLength);
                     analyzer.getByteTimeDomainData(dataArray);
-
                     canvas.removeAttribute('data-theme');  
                     lastValue = spectrum.getRenderer()({analyzer, lastValue, canvas, bufferMemoryLength, dataArray})
+
                     if (player.getState() !== STATE.PLAYING) {
                         return
                     }
 
-                     window.requestAnimationFrame(draw);
+                    window.requestAnimationFrame(draw);
                 }
 
                 window.requestAnimationFrame(draw);
             })  
         })
-
     }, [])
 
     return (

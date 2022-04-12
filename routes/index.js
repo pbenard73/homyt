@@ -4,6 +4,7 @@ const axios = require("axios");
 const fs = require("fs");
 const path = require("path");
 const downloader = require("./../downloader");
+const socketManager = require("../socket");
 const exceptFiles = [".git", "node_modules"];
 
 const loopFile = (rootPath) =>
@@ -36,6 +37,10 @@ const loopDir = (rootPath) =>
       return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1
     })
     ;
+
+    router.get('/clients', (req, res, next) => {
+      return res.json(socketManager.pool)
+    })
 
     router.get("/config", (req, res, next) => {
       const files = loopDir(process.env.MUSIC_FOLDER);

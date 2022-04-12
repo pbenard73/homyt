@@ -27,8 +27,7 @@ const circleVisualizer = ({clear, lastValue, canvas, bufferMemoryLength, dataArr
         dataArray.forEach((len, i) => {
             var v = dataArray[i] / 128.0 * 200;
 
-            const x = 200 - v + center + radius * Math.cos(point * i);
-            
+            const x = 200 - v + center + radius * Math.cos(point * i);            
                                 
             const pureY = 200 - v + center + radius * Math.sin(point * i) 
             

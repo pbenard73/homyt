@@ -26,5 +26,9 @@
     {
         "name": "FIP",
         "path": "http://icecast.radiofrance.fr/fip-hifi.aac"
+    },
+    {
+        "name": "Oxygène",
+        "path": "https://streamingp.shoutcast.com/radio-oxygene-grenoble"
     }
 ]

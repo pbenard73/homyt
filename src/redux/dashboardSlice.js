@@ -1,9 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { useDispatch } from 'react-redux'
 import Browser from '../windows/Browser'
+import Config from '../windows/Config'
 import Downloader from '../windows/Downloader'
 import Playlist from '../windows/Playlist'
 import Radio from '../windows/Radio'
+import Remote from '../windows/Remote'
 import SpectrumConfig from '../windows/SpectrumConfig'
 import { staty } from './appSlice'
 
@@ -12,23 +14,30 @@ export const WINDOWS = {
   DOWNLOADER: 'downloader',
   SPECTRUM: 'spectrum',
   RADIO: 'radio',
+  CONFIG: 'config',
+  REMOTE: 'remote',
   PLAYLIST: 'playlist'
 }
 
 const windowsList = {
+  [WINDOWS.REMOTE]: {
+    uuid: WINDOWS.REMOTE,
+    title: 'window_remote',
+    component: <Remote />
+  },
   [WINDOWS.BROWSER]: {
     uuid: WINDOWS.BROWSER,
-    title: 'Browser',
+    title: 'window_browser',
     component: <Browser />
   },
   [WINDOWS.RADIO]: {
     uuid: WINDOWS.RADIO,
-    title: 'Radio',
+    title: 'window_radios',
     component: <Radio />
   },
   [WINDOWS.PLAYLIST]: {
     uuid: WINDOWS.PLAYLIST,
-    title: 'Playlist',
+    title: 'window_playlist',
     component: <Playlist />,
     options: {
       size:[400, 400],
@@ -36,7 +45,7 @@ const windowsList = {
   },
   [WINDOWS.DOWNLOADER]: {
     uuid: WINDOWS.DOWNLOADER,
-    title: 'Downloader',
+    title: 'window_downloader',
     component: <Downloader />,
     center:true,
     options: {
@@ -45,8 +54,13 @@ const windowsList = {
   },
   [WINDOWS.SPECTRUM]: {
     uuid: WINDOWS.SPECTRUM,
-    title: 'Spectrum',
+    title: 'window_spectrum',
     component: <SpectrumConfig />
+  },
+  [WINDOWS.CONFIG]: {
+    uuid: WINDOWS.CONFIG,
+    title: 'window_config',
+    component: <Config />
   }
 }
 

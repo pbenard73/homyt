@@ -13,6 +13,7 @@ import { search, download } from './../api'
 import VideocamIcon from '@mui/icons-material/Videocam';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import Form from '../components/Form'
+import { useTranslation } from 'react-i18next'
 
 const MODE = {
     DOWNLOAD: 'download',
@@ -32,6 +33,7 @@ color:black;
 
 const Downloader = () => {
     const app = useApp()
+    const { t } = useTranslation()
     const [mode, setMode] = useState(MODE.SEARCH)
     const [folder, setFolder] = useState(null)
     const [folderModal, setFolderModal] = useState(false)
@@ -42,44 +44,42 @@ const Downloader = () => {
     const [socket, setSocket] = useState(null)
     const [query, setQuery] = useState('')
     const [results, setResults] = useState(null)
-    const [searching, setSearching] = useState(false)
     const [preview, setPreview] = useState(null)
 
-
-
     useEffect(() => {
-        const apiPath = process.env.REACT_APP_API
-    
-        const socketPath = apiPath !== '' ? apiPath : window.location.href
-    
-        const mySocket = socketIOClient(socketPath, {
-          withCredentials: true,
-        });
-    
-        mySocket.on("reset", data => {
-          setRealtime(null)
-        });
-    
-        mySocket.on("msg", data => {
-          console.log(data)
-          setRealtime(data)
-        });
-        mySocket.on("end", data => {
-          if (data.valid === true) {
-            setRealtime(["Operation terminée avec succes"])
-            app.getFullTree()
-          } else {
-            setRealtime(["Erreur"])
-          }
-        });
-    
-         setSocket(mySocket)
-    
-        return () => {
-          document.querySelector('#root').classList.remove('getaround')
-          socket?.close?.()
+      const apiPath = process.env.REACT_APP_API
+  
+      const socketPath = apiPath !== '' ? apiPath : window.location.href
+  
+      const mySocket = socketIOClient(socketPath, {
+        withCredentials: true,
+      });
+  
+      mySocket.on("reset", data => {
+        setRealtime(null)
+      });
+  
+      mySocket.on("msg", data => {
+        console.log(data)
+        setRealtime(data)
+      });
+      
+      mySocket.on("end", data => {
+        if (data.valid === true) {
+          setRealtime([t("convert_succesfull")])
+          app.getFullTree()
+        } else {
+          setRealtime(["error"])
         }
-      }, []);
+      });
+  
+        setSocket(mySocket)
+  
+      return () => {
+        document.querySelector('#root').classList.remove('getaround')
+        socket?.close?.()
+      }
+    }, []);
 
     const toggleMode = () => setMode(o => o === MODE.DOWNLOAD ? MODE.SEARCH : MODE.DOWNLOAD)
 
@@ -94,7 +94,7 @@ const Downloader = () => {
       const submitAction = async (e) => {
         e.preventDefault()
     
-        const result = await download({}, {url, folder: folder.path})
+        await download({}, {url, folder: folder.path})
       }
     
       const downloadAction = async videoId => {
@@ -105,20 +105,20 @@ const Downloader = () => {
 
     return (
         <>
-            <div style={{padding:'10px', color:'white'}}> 
+            <div className="nodrag" style={{padding:'10px', color:'white'}}> 
                 <div>
                     <AwesomeButton
                     type="instagram"
                     style={{marginRight:'20px'}}
                     onPress={toggleMode}
                     >
-                    {mode === MODE.DOWNLOAD ? 'Video Url' : 'Search Video'}
+                    {mode === MODE.DOWNLOAD ? t('mode_search_video') : t('mode_url')}
                     </AwesomeButton>
                     <AwesomeButton
                     type="instagram"
                     onPress={() => setFolderModal(true)}
                     >
-                    Destination
+                    {t('target_folder')}
                     </AwesomeButton>
 
                     {folder && folder.path}
@@ -128,13 +128,13 @@ const Downloader = () => {
                 {mode === MODE.DOWNLOAD ? (
                     <Form onSubmit={submitAction}>
                     <div>
-                        <TextField label="Video Url" value={url} required onChange={e => setUrl(e.target.value)} />
+                        <TextField label={t('video_url')} value={url} required onChange={e => setUrl(e.target.value)} />
                         <div>
                             <AwesomeButton
                             type="instagram"
                             style={{marginTop:'20px'}}
                             >
-                            Download
+                            {t('download')}
                             </AwesomeButton>
                         </div>
                     </div>
@@ -143,13 +143,13 @@ const Downloader = () => {
 
                     <Form onSubmit={searchApi}>
                         <div>
-                        <TextField label="Find a video" value={query} required onChange={e => setQuery(e.target.value)} />
+                        <TextField label={t('video_keywords')} value={query} required onChange={e => setQuery(e.target.value)} />
                         <div>
                             <AwesomeButton
                             type="instagram"
                             style={{marginTop:'20px'}}
                             >
-                            Find
+                            {t('search')}
                             </AwesomeButton>
                         </div>
                     </div>
