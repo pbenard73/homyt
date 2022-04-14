@@ -128,7 +128,7 @@ const Downloader = () => {
                 {mode === MODE.DOWNLOAD ? (
                     <Form onSubmit={submitAction}>
                     <div>
-                        <TextField label={t('video_url')} value={url} required onChange={e => setUrl(e.target.value)} />
+                        <TextField autoComplete="off" label={t('video_url')} value={url} required onChange={e => setUrl(e.target.value)} />
                         <div>
                             <AwesomeButton
                             type="instagram"
@@ -143,7 +143,7 @@ const Downloader = () => {
 
                     <Form onSubmit={searchApi}>
                         <div>
-                        <TextField label={t('video_keywords')} value={query} required onChange={e => setQuery(e.target.value)} />
+                        <TextField autoComplete="off" label={t('video_keywords')} value={query} required onChange={e => setQuery(e.target.value)} />
                         <div>
                             <AwesomeButton
                             type="instagram"

@@ -3,6 +3,7 @@ import { useVisualizer } from '../redux/visualizerSlice'
 import { VISUALIZER } from '../visualizers'
 import { useTranslation } from 'react-i18next'
 import { AwesomeButton } from "react-awesome-button";
+import { List, ListItem, ListItemText } from '@mui/material';
 
 const SpectrumConfig = () => {
     const { t } = useTranslation()
@@ -10,17 +11,15 @@ const SpectrumConfig = () => {
     return (
     <>
         <h1>{t('visualizers')}</h1>
+        <List className="nodrag">
         {Object.keys(VISUALIZER).map(spectrumMode => (
-            <AwesomeButton
-                type="instagram"
-                key={spectrumMode}
-                style={{marginRight:'20px'}}
-                className="nodrag"
-                onPress={() => visualizer.setSpectrum(VISUALIZER[spectrumMode])}
-            >
-                 {VISUALIZER[spectrumMode]}
-            </AwesomeButton>
+            <ListItem 
+            key={spectrumMode}
+            onClick={() => visualizer.setSpectrum(VISUALIZER[spectrumMode])}>
+                <ListItemText primary={t(`spectrum_${VISUALIZER[spectrumMode]}`)} />
+            </ListItem>
         ))}
+        </List>
     </>
 )
     }

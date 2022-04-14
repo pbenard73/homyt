@@ -17,5 +17,12 @@
     "search": "للبحث",
     "add_radio": "اضافة راديو",
     "save": "سجل",
-    "visualizers": "مشاهدي الطيف"
+    "visualizers": "مشاهدي الطيف",
+    "spectrum_line": "خط",
+    "spectrum_circle": "دائرة",
+    "spectrum_bar": "الحانات",
+    "spectrum_firework": "العاب ناريه",
+    "spectrum_heart": "قلب",
+    "spectrum_full": "مُجَمَّع",
+    "spectrum_none": "بدون تأثير"
 }

@@ -34,7 +34,7 @@ const Vizualizer = () => {
                         return
                     }
 
-                    setTimeout(() => window.requestAnimationFrame(draw), 45);
+                    setTimeout(() => window.requestAnimationFrame(draw));
                 }
 
                 window.requestAnimationFrame(draw);

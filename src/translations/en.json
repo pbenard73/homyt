@@ -17,5 +17,12 @@
     "search": "Search",
     "add_radio": "Add a Radio",
     "save": "Save",
-    "visualizers": "Spectrum visualizers"
+    "visualizers": "Spectrum visualizers",
+    "spectrum_line": "Line",
+    "spectrum_circle": "Circle",
+    "spectrum_bar": "Bars",
+    "spectrum_firework": "Firework",
+    "spectrum_heart": "Heart",
+    "spectrum_full": "Complex",
+    "spectrum_none": "No effect"
 }

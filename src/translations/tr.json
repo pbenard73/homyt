@@ -17,5 +17,12 @@
     "search": "Araştırma",
     "add_radio": "Radyo Ekle",
     "save": "Kayıt",
-    "visualizers": "Ozel efektler"
+    "visualizers": "Ozel efektler",
+    "spectrum_line": "Astar",
+    "spectrum_circle": "Daire",
+    "spectrum_bar": "Barlar",
+    "spectrum_firework": "Havai fişek",
+    "spectrum_heart": "Kalp",
+    "spectrum_full": "Karmaşık",
+    "spectrum_none": "Etkisi yok"
 }

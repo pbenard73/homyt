@@ -8,6 +8,7 @@ import GhostPlayer from "./components/GhostPlayer";
 import Human from "./components/Human";
 
 import AwesomeButtonStyles from "react-awesome-button/src/styles/styles.scss";
+import './App.scss';
 
 const AppStyled = styled.div`
   @media screen and (max-width:768px) {

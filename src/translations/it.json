@@ -17,5 +17,12 @@
     "search": "Ricercare",
     "add_radio": "Aggiungi Radio",
     "save": "Registrare",
-    "visualizers": "Visualizzatori di spettro"
+    "visualizers": "Visualizzatori di spettro",
+    "spectrum_line": "Linea",
+    "spectrum_circle": "Cerchio",
+    "spectrum_bar": "Barre",
+    "spectrum_firework": "Fuochi d'artificio",
+    "spectrum_heart": "Cuore",
+    "spectrum_full": "Complesso",
+    "spectrum_none": "Nessun effetto"
 }
