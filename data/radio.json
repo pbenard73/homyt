@@ -52,10 +52,6 @@
         "path": "http://stream.europe1.fr/europe1.mp3"
     },
     {
-        "name": "Virgin Radio",
-        "path": "http://stream.virginradio.fr/virgin.mp3"
-    },
-    {
         "name": "RFM",
         "path": "https://ais-live.cloud-services.paris:8443/rfm.mp3"
     },

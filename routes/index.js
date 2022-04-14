@@ -48,7 +48,7 @@ const loopDir = (rootPath) =>
      
       const radios = JSON.parse(radioFiles)
     
-      res.json({files, radios});
+      res.json({files, radios: radios.sort((a, b) => a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1)});
     });
 
     router.delete("/deleteFile", (req, res, next) => {

@@ -57,7 +57,7 @@ const Radio = () => {
             </Form>
         )}
         <List className="nodrag">
-            {[...radios].sort((a, b) => a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1).map((radio, songIndex) => (
+            {radios.map((radio, songIndex) => (
                 <ListItem key={radio.path}>
                     <ListItemText primary={radio.name}  style={{color: 'white'}}/>
                     <ListItemSecondaryAction>
