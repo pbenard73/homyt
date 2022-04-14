@@ -20,15 +20,179 @@
         "path": "http://montagnefm.ice.infomaniak.ch/montagnefm-96.mp3"
     },
     {
-        "name": "Bulgaria",
-        "path": "https://play.global.audio/bgradio128"
-    },
-    {
         "name": "FIP",
         "path": "http://icecast.radiofrance.fr/fip-hifi.aac"
     },
     {
         "name": "Oxygène",
         "path": "https://streamingp.shoutcast.com/radio-oxygene-grenoble"
+    },
+    {
+        "name": "France Bleu - Savoie",
+        "path": "http://icecast.radiofrance.fr/fbpaysdesavoie-lofi.mp3"
+    },
+    {
+        "name": "NRJ",
+        "path": "https://scdn.nrjaudio.fm/fr/30001/mp3_128.mp3?origine=fluxradios"
+    },
+    {
+        "name": "Rire & Chansons",
+        "path": "https://scdn.nrjaudio.fm/fr/30401/mp3_128.mp3?origine=fluxradios"
+    },
+    {
+        "name": "RTL2",
+        "path": "http://streamer-03.rtl.fr/rtl2-1-44-64?listen=webCwsBCggNCQgLDQUGBAcGBg"
+    },
+    {
+        "name": "Fun Radio",
+        "path": "http://streamer-02.rtl.fr/fun-1-44-64?listen=webCwsBCggNCQgLDQUGBAcGBg"
+    },
+    {
+        "name": "Europe 1",
+        "path": "http://stream.europe1.fr/europe1.mp3"
+    },
+    {
+        "name": "Virgin Radio",
+        "path": "http://stream.virginradio.fr/virgin.mp3"
+    },
+    {
+        "name": "RFM",
+        "path": "https://ais-live.cloud-services.paris:8443/rfm.mp3"
+    },
+    {
+        "name": "RMC",
+        "path": "https://audio.bfmtv.com/rmcradio_128.mp3?aw_0_1st.aggregator=unknow_from_dvmr"
+    },
+    {
+        "name": "BFM Business",
+        "path": "http://bfmbusiness.cdn.dvmr.fr/bfmbusiness"
+    },
+    {
+        "name": "Skyrock",
+        "path": "http://icecast.skyrock.net/s/natio_mp3_64k"
+    },
+    {
+        "name": "Mouv'",
+        "path": "http://icecast.radiofrance.fr/mouv-midfi.mp3"
+    },
+    {
+        "name": "Ouï FM",
+        "path": "http://ouifm.ice.infomaniak.ch/ouifm-high.mp3"
+    },
+    {
+        "name": "M Radio",
+        "path": "http://mfm.ice.infomaniak.ch/mfm-128.mp3"
+    },
+    {
+        "name": "Beur FM",
+        "path": "http://broadcast.infomaniak.ch/beurfm-high.mp3"
+    },
+    {
+        "name": "France Maghreb 2",
+        "path": "http://francemaghreb2.ice.infomaniak.ch/francemaghreb2-high.mp3"
+    },
+    {
+        "name": "Phare FM",
+        "path": "http://str0.creacast.com/pharefm"
+    },
+    {
+        "name": "Nova Lyon",
+        "path": "http://nova-lyon.ice.infomaniak.ch/nova-lyon-128.mp3"
+    },
+    {
+        "name": "RCF",
+        "path": "http://rcf.streamakaci.com/rcf.mp3"
+    },
+    {
+        "name": "Sud FM",
+        "path": "http://start-sud.ice.infomaniak.ch/start-sud-high.mp3"
+    },
+    {
+        "name": "Autoroute Info - Sud",
+        "path": "https://media.autorouteinfo.fr/direct_sud.mp3"
+    },
+    {
+        "name": "Autoroute Info - Nord",
+        "path": "https://media.autorouteinfo.fr/direct_nord.mp3"
+    },
+    {
+        "name": "Alpes 1 - Grenoble",
+        "path": "http://alpes1grenoble.ice.infomaniak.ch/alpes1grenoble-high.mp3"
+    },
+    {
+        "name": "Alta Frequenza",
+        "path": "http://altafrequenza.ice.infomaniak.ch/altafrequenza-128.mp3"
+    },
+    {
+        "name": "Contact FM",
+        "path": "http://radio-contact.ice.infomaniak.ch/radio-contact-high"
+    },
+    {
+        "name": "Evasion FM - Paris",
+        "path": "https://evasion75.ice.infomaniak.ch/evasion75-128.mp3"
+    },
+    {
+        "name": "FC Radio",
+        "path": "http://fcradio.ice.infomaniak.ch/fcradio-128.mp3"
+    },
+    {
+        "name": "Fréquence Plus",
+        "path": "http://freqplus.ice.infomaniak.ch/freqplus-high.mp3"
+    },
+    {
+        "name": "Fusion FM",
+        "path": "http://fusionfm.ice.infomaniak.ch:8000/fusionfm-192.mp3"
+    },
+    {
+        "name": "Hot Radio - Chambéry",
+        "path": "http://st8.hotradio.fr/34"
+    },
+    {
+        "name": "Radio Plus",
+        "path": "http://laradioplus.ice.infomaniak.ch/laradioplus-high.mp3"
+    },
+    {
+        "name": "Mistral FM - Marseille",
+        "path": "http://mistralfmaubagne.ice.infomaniak.ch/mistralfmaubagne-128.mp3"
+    },
+    {
+        "name": "ODS Radio",
+        "path": "http://ods.ice.infomaniak.ch/ods-high.mp3"
+    },
+    {
+        "name": "Radio Scoop",
+        "path": "http://radioscooplyon.ice.infomaniak.ch/radioscoop-lyon-128.mp3"
+    },
+    {
+        "name": "Voltage",
+        "path": "http://start-voltage.ice.infomaniak.ch/start-voltage-high.mp3"
+    },
+    {
+        "name": "Africa Radio",
+        "path": "http://african1paris.ice.infomaniak.ch/african1paris-128.mp3"
+    },
+    {
+        "name": "AllZic Radio Italia",
+        "path": "http://allzic35.ice.infomaniak.ch/allzic35.mp3"
+    },
+    {
+        "name": "Los 40 - Spain",
+        "path": "https://25693.live.streamtheworld.com/LOS40AAC_SC"
+    },
+    {
+        "name": "Süper FM - Turkey",
+        "path": "https://20133.live.streamtheworld.com/SUPER_FM.mp3"
+    },
+    {
+        "name": "Jawhara FM - Tunisie",
+        "path": "https://streaming2.toutech.net/jawharafm"
+    },
+    {
+        "name": "Top Radio - Algérie",
+        "path": "https://topradio.ice.infomaniak.ch/topradio.aac"
+    },
+    {
+        "name": "Hit Radio - Maroc",
+        "path": "https://hitradio-maroc.ice.infomaniak.ch/hitradio-maroc-128.mp3"
     }
 ]
