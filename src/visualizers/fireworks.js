@@ -1,6 +1,11 @@
 const fireworksVisualizer = ({clear, analyzer, lastValue, canvas, bufferMemoryLength, dataArray}) => {
     const ctx = canvas.getContext('2d')
 
+    ctx.beginPath()
+    ctx.fillStyle = "rgba(0,0,0,1)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.stroke()
+
     analyzer.fftSize = 256;
     bufferMemoryLength = analyzer.frequencyBinCount;
     dataArray = new Uint8Array(bufferMemoryLength);
@@ -48,7 +53,7 @@ const fireworksVisualizer = ({clear, analyzer, lastValue, canvas, bufferMemoryLe
             cw: canvas.width,
             ch: canvas.height,
             particles: [],
-            partCount: 250,
+            partCount: 100,
             fireworks: [],
             mx: canvas.width/2,
             my: canvas.height/2,
@@ -71,17 +76,55 @@ const fireworksVisualizer = ({clear, analyzer, lastValue, canvas, bufferMemoryLe
             dt:0,
             oldTime: Date.now(),
             numberOfAttack:0,
+            stars:[],
             ...(lastValue?.fw || {})
         }
     }
 
+    var n_stars = 150
+    var colors = [ '#176ab6', '#fb9b39']
+    for ( let i = 0; i < 98; i++) {
+      colors.push( '#fff')
+    }
+
+    const randomInt = ( max, min) => Math.floor( Math.random() * (max - min) + min)
+    class Star {
+        constructor( x, y, radius, color) {
+          this.x = x || randomInt( 0, canvas.width)
+          this.y = y || randomInt( 0, canvas.height)
+          this.radius = radius || Math.random() * 1.1
+          this.color = color || colors[randomInt(0, colors.length)]
+          this.dy = -Math.random() * .3
+        }
+        draw () {
+          ctx.beginPath()
+          ctx.arc( this.x, this.y, this.radius, 0, Math.PI *2 )
+          ctx.shadowBlur = randomInt( 3, 15)
+          ctx.shadowColor = this.color
+          ctx.strokeStyle = this.color
+          ctx.fillStyle = 'rgba( 255, 255, 255, .5)'
+          ctx.fill()
+          ctx.stroke()
+          ctx.closePath()
+        }
+        update( arrayStars = [] ) {
+          if ( this.y - this.radius < 0 ) this.createNewStar( arrayStars )
+          
+          this.y += this.dy
+          this.draw()
+        }
+        createNewStar( arrayStars = [] ) {
+          let i = arrayStars.indexOf( this )
+          arrayStars.splice( i, 1)
+          arrayStars.push( new Star( false, canvas.height + 5))
+        }
+      }
 
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
 
      var rand = function(rMi, rMa){return ~~((Math.random()*(rMa-rMi+1))+rMi);}
-
-        
+       
         var Particle = function(x, y, hue){
             this.x = x;
             this.y = y;
@@ -348,9 +391,9 @@ const fireworksVisualizer = ({clear, analyzer, lastValue, canvas, bufferMemoryLe
 
             updateDelta();
             ctx.globalCompositeOperation = 'destination-out';
-            ctx.fillStyle = 'rgba(0,0,0,'+data.fw.clearAlpha/100+')';
-            ctx.fillRect(0,0,data.fw.cw,data.fw.ch);
-            ctx.globalCompositeOperation = 'lighter';
+            ctx.fillStyle = "rgba(0,0,0,.6)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+          ctx.globalCompositeOperation = 'lighter';
             updateFireworks();
             updateParticles();
             drawFireworks();			
@@ -360,23 +403,29 @@ const fireworksVisualizer = ({clear, analyzer, lastValue, canvas, bufferMemoryLe
                 var x = 0;
                 var barWidth = ((canvas.width + heartSizes.length) / heartSizes.length) ;
                 for(var i = 0; i < heartSizes.length; i++) {
-                    if (i === data.fw.numberOfAttack && heartSizes[i] > 0) {
-                       
-                    
-                    var hheight = 1024 - (heartSizes[i] * 1024 / 128) 
-                    var targetY = hheight + 300;
-                    var targetX = x + (barWidth / 2)
-                    createFireworks(512, 1024,targetX,targetY, i) 
-                }
+                        if (i === data.fw.numberOfAttack && heartSizes[i] > 0) {                       
+                        
+                        var hheight = 1024 - (heartSizes[i] * 1024 / 128) 
+                        var targetY = hheight + 300;
+                        var targetX = x + (barWidth / 2)
+                        createFireworks(512, 1024,targetX,targetY, i) 
+                    }
 
-                x += barWidth + 1;
-                    
+                    x += barWidth + 1;                    
                 }
                 data.fw.numberOfAttack++;
             }  else {
                 data.fw.numberOfAttack = 0
             }
 
+            if (data.fw.stars.length === 0) {
+                for( let i = 0; i < n_stars; i++ ) {
+                    data.fw.stars.push( new Star( ) )
+                  }
+            }
+
+            data.fw.stars.forEach( s => s.update( data.fw.stars ))
+            ctx.stroke()
     return data
 }
 

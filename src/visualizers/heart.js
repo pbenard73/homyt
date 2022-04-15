@@ -6,6 +6,10 @@ const heartVisualizer = ({clear, analyzer, lastValue, canvas, bufferMemoryLength
     dataArray = new Uint8Array(bufferMemoryLength);
     analyzer.getByteFrequencyData(dataArray);
 
+    if (clear !== false) {
+        canvas.setAttribute('data-theme', 'heart');
+    }
+
 
     let feelingSizes = [
         [],
@@ -46,7 +50,7 @@ const heartVisualizer = ({clear, analyzer, lastValue, canvas, bufferMemoryLength
         var width = lw ;
         var height = hlen;
       
-        ctx.save();
+      //  ctx.save();
         ctx.beginPath();
         var topCurveHeight = height * 0.3;
         ctx.moveTo(x, y + topCurveHeight);
@@ -81,7 +85,8 @@ const heartVisualizer = ({clear, analyzer, lastValue, canvas, bufferMemoryLength
         ctx.closePath();
         ctx.fillStyle = color;
         ctx.fill();
-        ctx.restore();
+        ctx.stroke();
+      //  ctx.restore();
       }
 
     

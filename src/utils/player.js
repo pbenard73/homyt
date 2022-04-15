@@ -11,24 +11,40 @@ class Player {
     context = null
     playlistIndex=0
     playlist=[]
+    audioContext=null
+    gainNode=null
+    source=null
+
+    resetContext() {
+        this.context = null;
+        if (this.gainNode !== null) {
+            this.gainNode.disconnect();
+        }
+
+        return this.getContext()
+    }
 
     getContext() {
         if (this.context === null) {
             const audioElement = document.querySelector('#casper_video')
             const canvas = document.querySelector('#spectrum_canvas')
 
-            var audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            var analyzer = audioContext.createAnalyser();
-            let gainNode = audioContext.createGain();
-            
-            var source = audioContext.createMediaElementSource(audioElement);
-            source.connect(gainNode );
-            source.connect(analyzer  );
+            if (this.source === null) {
+                this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                this.source = this.audioContext.createMediaElementSource(audioElement);
+            }
 
-            gainNode.connect(audioContext.destination);
+
+            var analyzer = this.audioContext.createAnalyser();
+            this.gainNode = this.audioContext.createGain();
+            
+            this.source.connect(this.gainNode );
+            this.source.connect(analyzer  );
+
+            this.gainNode.connect(this.audioContext.destination);
 
             this.context = {
-                audioContext, gainNode, analyzer, canvas
+                audioContext: this.audioContext, gainNode: this.gainNode, analyzer, canvas
             }
         }
 

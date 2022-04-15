@@ -5,6 +5,8 @@ import listener, { EVENTS } from '../utils/listener';
 import spectrum from '../utils/spectrum';
 import './../visualizers/style.scss'
 import player, { STATE } from '../utils/player';
+import { useApp } from '../redux/appSlice';
+import { useSelector } from 'react-redux';
 
 const Canvas = styled.canvas`
     height:100vh;
@@ -15,21 +17,39 @@ const Canvas = styled.canvas`
 `
 
 const Vizualizer = () => {
+    const app = useApp();
+    const canvasIndex = useSelector(state => state.app.canvasIndex)
+
+    const resetCanvas = () => {
+        app.resetCanvas()
+    }
+
     useEffect(() => {
         listener.register('canvas_start', EVENTS.PLAYER_START, () => {  
             setTimeout(() => {      
-                const {analyzer, canvas} = player.getContext()
+                let {analyzer, canvas} = player.getContext()
                 
                 let lastValue = null
 
                 function draw() {                
+                    const rendererName = spectrum.getRendererName();
+                    if (lastValue !== null && lastValue.rendererName !== rendererName) {
+                        resetCanvas()
+                        canvas.width = canvas.width;
+                        const {analyzer: newAnalyser, canvas: newCanvas} = player.resetContext();
+                        analyzer = newAnalyser;
+                        canvas = newCanvas;
+                    }
+
                     analyzer.fftSize = 2048;
                     var bufferMemoryLength = analyzer.frequencyBinCount;
                     var dataArray = new Uint8Array(bufferMemoryLength);
                     analyzer.getByteTimeDomainData(dataArray);
                     canvas.removeAttribute('data-theme');  
-                    lastValue = spectrum.getRenderer()({analyzer, lastValue, canvas, bufferMemoryLength, dataArray})
-
+                    lastValue = {
+                        ...(spectrum.getRenderer()({analyzer, lastValue, canvas, bufferMemoryLength, dataArray}) || {}),
+                        rendererName
+                    }
                     if (player.getState() !== STATE.PLAYING) {
                         return
                     }
@@ -40,10 +60,10 @@ const Vizualizer = () => {
                 window.requestAnimationFrame(draw);
             })  
         })
-    }, [])
+    }, [canvasIndex])
 
     return (
-        <Canvas id="spectrum_canvas" height="1024" width="1024"></Canvas>
+        <Canvas id="spectrum_canvas" data-index={canvasIndex} height="1024" width="1024"></Canvas>
     )
 }
 

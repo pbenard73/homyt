@@ -10,7 +10,8 @@ const HumanStyled = styled.div`
     align-items:center;
     justify-content:center;
     font-size:56px;
-    color:white;
+    text-shadow: 5px 5px 6px #ffffff57;
+    color: transparent;
 `
 
 const Human = () => {

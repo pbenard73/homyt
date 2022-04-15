@@ -7,6 +7,9 @@ class Spectrum {
         storage.set(STORAGE.SPECTRUM, renderer)
         this.renderer = renderer
     }
+    getRendererName() {
+        return this.renderer;
+    }
     getRenderer() {
         return visualizers[this.renderer]
     }

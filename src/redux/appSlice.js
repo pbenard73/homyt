@@ -11,7 +11,8 @@ const initialState = {
   fullTree: null,
   playlist: [],
   playIndex: null,
-  radios: []
+  radios: [],
+  canvasIndex: 0
 }
 
 export const appSlice = createSlice({
@@ -22,7 +23,7 @@ export const appSlice = createSlice({
   },
 })
 
-export const { setTree, setFullTree, setPlaylist, setPlayIndex, setRadios } = appSlice.actions
+export const { setTree, setFullTree, setPlaylist, setPlayIndex, setRadios, setCanvasIndex } = appSlice.actions
 
 export default appSlice.reducer
 
@@ -42,6 +43,11 @@ const nextIndex = () => (dispatch, getState) => {
   dispatch(setPlayIndex(index + 1))
 }
 
+const resetCanvas = () => (dispatch, getState) => {
+  const canvasIndex = getState().app.canvasIndex  
+  dispatch(setCanvasIndex(canvasIndex + 1))
+}
+
 export const useApp = () => {
     const dispatch = useDispatch();
 
@@ -59,6 +65,7 @@ export const useApp = () => {
           const {files: tree, radios} = await getConfig()
           dispatch(setFullTree(tree))
           dispatch(setRadios(radios))
-        }
+        },
+        resetCanvas: () => dispatch(resetCanvas())
     }
 }
