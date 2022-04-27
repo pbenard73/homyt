@@ -17,7 +17,7 @@ RUN apt-get install nodejs -y
 RUN npm install -g npm
 RUN curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o /usr/local/bin/yt-dlp
 RUN chmod a+rx /usr/local/bin/yt-dlp
-RUN git clone https://github.com/pbenard73/homyt  && cd homyt && npm install --production
+RUN git clone --branch dev https://github.com/pbenard73/homyt  && cd homyt && npm install --production
 RUN useradd -rm -d /home/icecast -s /bin/bash -g root -G icecast -u 1001 icecast
 RUN mkdir -p /var/lib/mpd/music \
     && mkdir -p /var/lib/mpd/playlists \

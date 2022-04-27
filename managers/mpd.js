@@ -18,13 +18,9 @@ const COMMANDS = {
 }
 
 class MpdManager {
-    // config = {
-    //     host: "192.168.2.4",
-    //     port: '6600'          
-    // }
     config = {
         host: "localhost",
-        port: '3068'          
+        port: '6600'          
     }
 
     client = null;
@@ -140,7 +136,7 @@ class MpdManager {
         const filePath = req.body.path;
 
         await this.client.sendCommand('add ' + filePath).then(mpd.parseObject);   
-        
+
         this[COMMANDS.STATUS]()
     }
 }
