@@ -28,6 +28,11 @@ function GhostData() {
       }
     })
 
+    mySocket.on('mpd_status', data => {
+      console.log(data)
+      app.setMpdStatus(data);
+    })
+
     listener.register('remote_action_volume', EVENTS.REMOTE_ACTION_VOLUME , data => {
       mySocket.emit('volume', data)
     })

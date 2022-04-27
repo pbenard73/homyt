@@ -190,5 +190,13 @@
     {
         "name": "Hit Radio - Maroc",
         "path": "https://hitradio-maroc.ice.infomaniak.ch/hitradio-maroc-128.mp3"
+    },
+    {
+        "name": "1_docker",
+        "path": "http://localhost:3067/mpd"
+    },
+    {
+        "name": "LOCAL",
+        "path": "http://localhost:3069/"
     }
 ]

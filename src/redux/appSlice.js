@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { useDispatch } from 'react-redux'
-import { addradio, getConfig } from '../api';
+import { addradio, getConfig, mpdDatabase, mpdStatus } from '../api';
 import listener, { EVENTS } from '../utils/listener';
 const capitalize = string => string.replace(/([a-z])/i, (str, firstLetter) => firstLetter.toUpperCase())
 
@@ -12,7 +12,10 @@ const initialState = {
   playlist: [],
   playIndex: null,
   radios: [],
-  canvasIndex: 0
+  canvasIndex: 0,
+  mpdMode: false,
+  mpdStatus: {},
+  mpdPool: []
 }
 
 export const appSlice = createSlice({
@@ -23,7 +26,7 @@ export const appSlice = createSlice({
   },
 })
 
-export const { setTree, setFullTree, setPlaylist, setPlayIndex, setRadios, setCanvasIndex } = appSlice.actions
+export const { setTree, setFullTree, setPlaylist, setPlayIndex, setRadios, setCanvasIndex, setMpdMode, setMpdStatus, setMpdPool } = appSlice.actions
 
 export default appSlice.reducer
 
@@ -48,24 +51,46 @@ const resetCanvas = () => (dispatch, getState) => {
   dispatch(setCanvasIndex(canvasIndex + 1))
 }
 
+const toggleMpdMode = value => async (dispatch, getState) => {
+  if (value === false) {
+    setMpdStatus({})
+  } else {      
+    const [{ data: mpdPool }, {data: status}] = await Promise.all([
+      mpdDatabase(),
+      mpdStatus()
+    ]);
+
+    dispatch(setMpdPool(mpdPool))
+    dispatch(setMpdStatus(status))
+  }
+
+  dispatch(setMpdMode(value))
+}
+
 export const useApp = () => {
     const dispatch = useDispatch();
 
     return {
+      setMpdMode: value => dispatch(toggleMpdMode(value)),
+      setMpdStatus: value => dispatch(setMpdStatus(value)),
       setFullTree: value => dispatch(setFullTree(value)),
       setPlayIndex: value => dispatch(setPlayIndex(value)),
-        setPlaylist: value => {
-          dispatch(setPlaylist(value))
-          listener.dispatch(EVENTS.PLAYLIST_CHANGE, value)
-        },
-        setRadios: item => dispatch(setRadios(item)),
-        addToPlaylist: item => dispatch(addToPlaylist(item)),
-        nextIndex: () => dispatch(nextIndex()),
-        getFullTree: async () => {
-          const {files: tree, radios} = await getConfig()
-          dispatch(setFullTree(tree))
-          dispatch(setRadios(radios))
-        },
-        resetCanvas: () => dispatch(resetCanvas())
+      setPlaylist: value => {
+        dispatch(setPlaylist(value))
+        listener.dispatch(EVENTS.PLAYLIST_CHANGE, value)
+      },
+      setRadios: item => dispatch(setRadios(item)),
+      addToPlaylist: item => dispatch(addToPlaylist(item)),
+      nextIndex: () => dispatch(nextIndex()),
+      getFullTree: async () => {
+        const {files: tree, radios} = await getConfig()
+        dispatch(setFullTree(tree))
+        dispatch(setRadios(radios))
+      },
+      getMpdPool: async () => {
+        const { data } = await mpdDatabase()
+        dispatch(setMpdPool(data))
+      },
+      resetCanvas: () => dispatch(resetCanvas())
     }
 }

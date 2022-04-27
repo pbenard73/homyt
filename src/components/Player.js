@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import { IconButton } from '@mui/material'
-import { listen } from './../api'
+import { listen, mpdNext, mpdPause, mpdPlay, mpdPrevious, mpdVolumeDown, mpdVolumeUp } from './../api'
 import styled from 'styled-components'
 import { useSelector } from 'react-redux';
 import { useApp } from '../redux/appSlice';
@@ -65,6 +65,8 @@ const RoundPlayer = styled.div`
 const Player = () => {
   const [videoRef, setVideoRef] = useState(null)
   const app = useApp()
+  const mpdMode = useSelector(state => state.app.mpdMode)
+  const mpdStatus = useSelector(state => state.app.mpdStatus)
 
   const PLAY_TYPE = {
     PLAY: 'play',
@@ -173,18 +175,29 @@ const Player = () => {
   }
 
   const onPreviousClick = () => {
+    if (mpdMode) {
+      return mpdPrevious()
+    }
     if (playIndex > 0) {
       loadZix(playIndex - 1)
     }
   }
 
   const onNextClick = () => {
+    if (mpdMode) {
+      return mpdNext()
+    }
+
     if (playIndex + 1 < playlist.length) {
       loadZix(playIndex + 1)
     }
   }
 
   const onPlayClick = () => {
+    if (mpdMode) {
+      return mpdPlay()
+    }
+
     const playlistIndex = player.getPlaylistIndex()
     const playlist = player.getPlaylist();
 
@@ -195,9 +208,17 @@ const Player = () => {
     }
   }
 
-  const onPauseClick = () => document.querySelector('#casper_video').pause();
+  const onPauseClick = () => {
+    if (mpdMode) {
+      return mpdPause()
+    }
+    document.querySelector('#casper_video').pause();
+  }
 
   const onVolumeUpClick = () => {
+    if (mpdMode) {
+      return mpdVolumeUp()
+    }
     const source = document.querySelector('#casper_video')
     const mvolume = source.volume + 0.1;
 
@@ -209,6 +230,9 @@ const Player = () => {
   }
 
   const onVolumeDownClick = () => {
+    if (mpdMode) {
+      return mpdVolumeDown()
+    }
     const source = document.querySelector('#casper_video')
     const mvolume = source.volume - 0.1;
 
@@ -257,7 +281,7 @@ const Player = () => {
   return (
     <div style={{position:'fixed', bottom:'0'}}>
       <figure id="video_player"> 
-        <RoundPlayer id="round_player" volume={volume} percent={metadata?.progress || 0} onClick={onSeekClick}>
+        <RoundPlayer id="round_player" volume={mpdMode === true ? (mpdStatus?.volume || 0) / 100 : volume} percent={metadata?.progress || 0} onClick={onSeekClick}>
           <span className="inner">
 
           <span className="volume"></span>
@@ -270,7 +294,7 @@ const Player = () => {
               <IconButton onClick={onPreviousClick}>
                 <SkipPreviousIcon style={{width:'2em', height:'2em', color:'white'}} />
               </IconButton>
-              {state === PLAY_TYPE.PLAY ? (
+              {(mpdMode === true && mpdStatus.state === 'play') || state === PLAY_TYPE.PLAY ? (
                 <IconButton onClick={onPauseClick}><PauseIcon style={{width:'3em', height:'3em', color:'white'}}/></IconButton>
               ) : (
                 <IconButton onClick={onPlayClick}><PlayArrowIcon style={{width:'3em', height:'3em', color:'white'}}/></IconButton>
