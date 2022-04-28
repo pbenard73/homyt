@@ -24,5 +24,8 @@
     "spectrum_firework": "Firework",
     "spectrum_heart": "Heart",
     "spectrum_full": "Complex",
-    "spectrum_none": "No effect"
+    "spectrum_none": "No effect",
+    "username": "Username",
+    "password": "Password",
+    "login": "Login"
 }

@@ -4,6 +4,8 @@ import styled from 'styled-components'
 import Draggable from 'react-draggable';
 import { t } from 'i18next';
 import { useTranslation } from 'react-i18next';
+import ApiIcon from '@mui/icons-material/Api';
+
 const IconWrapper = styled.div`
     width: 90px;
     height:120px;
@@ -41,7 +43,7 @@ const DashboardIcon = ({Icon, label, position, onClick}) => {
             onClick?.()
         }
     }}>
-            <span className="handle">X</span>
+            <span className="handle"><ApiIcon /></span>
         <Icon />
         <span>{t(label)}</span>
     </IconWrapper>

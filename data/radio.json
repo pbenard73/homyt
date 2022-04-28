@@ -198,5 +198,9 @@
     {
         "name": "LOCAL",
         "path": "http://localhost:3069/"
+    },
+    {
+        "name": "11__dodo",
+        "path": "http://localhost:3600/mp3"
     }
 ]

@@ -5,12 +5,14 @@ import Intro from './pages/Intro';
 import * as serviceWorker from './serviceWorker';
 import { store } from './redux/store'
 import { Provider } from 'react-redux'
+import { ToastContainer } from 'react-toastify';
 import  './i18n';
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <Intro />
+      <ToastContainer />
     </Provider>
   </React.StrictMode>,
   document.getElementById('root')

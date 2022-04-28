@@ -32,5 +32,6 @@ RUN mkdir -p /var/lib/mpd/music \
 
 COPY docker.js /docker.js
 COPY nginx_default /etc/nginx/sites-available/default
+COPY error_40x.html /usr/share/nginx/html/error_40x.html
 EXPOSE 80
 CMD nginx && mpd && node docker.js

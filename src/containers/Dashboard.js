@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 import DashboardIcon from '../components/DashboardIcon';
+import { useAuth } from '../redux/authSlice';
 import { useDashboard , WINDOWS} from '../redux/dashboardSlice';
 
 const DashboardStyled = styled.div`
@@ -23,9 +24,11 @@ const PlaylistIcon = () => <img src="/icons/playlist.png" alt="Playlist icon" />
 const RadioIcon = () => <img src="/icons/radio.png" alt="Radio icon" />
 const ConfigIcon = () => <img src="/icons/config.png" alt="Config icon" />
 const RemoteIcon = () => <img src="/icons/remote.png" alt="Remote icon" />
+const LogoutIcon = () => <img src="/icons/logout.png" alt="Logout icon" />
 
 const Dashboard = () => {
     const dashboard = useDashboard()
+    const auth = useAuth()
 
     return (
         <DashboardStyled className="dashboard">           
@@ -36,6 +39,7 @@ const Dashboard = () => {
             <div><DashboardIcon Icon={RadioIcon} label={"window_radios"} onClick={() => dashboard.showWindow(WINDOWS.RADIO)} /></div>
             <div><DashboardIcon Icon={ConfigIcon} label={"window_config"} onClick={() => dashboard.showWindow(WINDOWS.CONFIG)} /></div>
             <div><DashboardIcon Icon={RemoteIcon} label={"window_remote"} onClick={() => dashboard.showWindow(WINDOWS.REMOTE)} /></div>
+            <div><DashboardIcon Icon={LogoutIcon} label={"window_logout"} onClick={() => auth.logout()} /></div>
         </DashboardStyled>
     )
 }

@@ -4,13 +4,24 @@ import socketIOClient from "socket.io-client";
 import { nanoid } from 'nanoid'
 import listener, { EVENTS } from "../utils/listener";
 import player from './../utils/player'
+import storage, { STORAGE } from "../utils/storage";
+import { useAuth } from "../redux/authSlice";
 
 function GhostData() {
   const app = useApp()
+  const auth = useAuth()
   const [uuid, setUuid] = useState(null)
 
   useEffect(() => {
-    app.getFullTree();
+    auth.refreshSession()
+    const savedMpdMode = storage.get(STORAGE.MPD_MODE)
+
+    if ([1, '1', true].indexOf(savedMpdMode) !== -1) {
+      app.setMpdMode(true)
+    } else {
+      app.getFullTree();
+    }
+
     const newUuid = nanoid()
     setUuid(nanoid(newUuid))
 

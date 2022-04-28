@@ -5,11 +5,23 @@ const logger = require("morgan");
 const cors = require("cors");
 const indexRouter = require("./routes/index");
 const mpdRouter = require("./routes/mpd");
-const mpdManager = require('./managers/mpd')
+const authRouter = require("./routes/auth");
+const mpdManager = require('./managers/mpd');
+const database = require('./database/db');
+const session = require('express-session')
+
 
 const app = express();
+app.set('trust proxy', 1)
 
-mpdManager.run();
+app.use(session({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: true
+}))
+
+//mpdManager.run();
+database.init();
 
 app.use(
   cors({
@@ -25,6 +37,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "build")));
 
 app.use("/", indexRouter);
+app.use("/auth", authRouter);
 app.use("/mpd", mpdRouter);
 
 module.exports = app;

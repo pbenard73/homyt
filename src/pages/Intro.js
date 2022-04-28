@@ -1,9 +1,20 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import App from '../App'
 import { AwesomeButton } from "react-awesome-button";
 import { useState } from 'react';
+import { useAuth } from '../redux/authSlice';
+import { useSelector } from 'react-redux';
+import Login from './Login';
+import Paper from '../components/Paper';
 
 const Intro = () => {
+    const auth = useAuth()
+    const user = useSelector(state => state.auth.user)
+
+    useEffect(() => {
+        auth.refreshSession()
+    }, [])
+
     const [open, setOpen] = useState(false)
 
     const openMp3 = () => {
@@ -14,13 +25,18 @@ const Intro = () => {
         window.location.href = "/radio"
     }
 
-    if (open) {
+    if (!user) {
+        return <Login />
+    }
+
+    if (open && user.role === 'ADMIN') {
         return <App />
     }
 
     return (
-        <div>
-                            <AwesomeButton
+        <div style={{display:'flex', alignItems:'center', justifyContent:'center', height:'100vh'}}>
+            <Paper style={{padding:'50px', display:'flex', flexDirection:'column', gap:'20px'}}>               
+                <AwesomeButton
                 className="nodrag"
                 type="instagram"
                 style={{marginRight:'20px'}}
@@ -36,14 +52,17 @@ const Intro = () => {
                 >
                     Ecouter Sortie Radio
                 </AwesomeButton>  
-                <AwesomeButton
-                className="nodrag"
-                type="instagram"
-                style={{marginRight:'20px'}}
-                onPress={() => setOpen(true)}
-                >
-                    Admin Area
-                </AwesomeButton>  
+                {user.role === 'ADMIN' && (
+                    <AwesomeButton
+                    className="nodrag"
+                    type="instagram"
+                    style={{marginRight:'20px'}}
+                    onPress={() => setOpen(true)}
+                    >
+                        Admin Area
+                    </AwesomeButton>  
+                )}
+            </Paper>    
         </div>
     )
 }

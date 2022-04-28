@@ -1,6 +1,9 @@
 import { makeApi } from "react-axios-api";
 
 const pool = {
+  login: { path:"/auth/login", method: "post" },
+  logout: { path:"/auth/logout" },
+  refreshSession: { path:"/auth/refresh" },
   search: { path: "/search/:query", method: "post" },
   addradio: { path: "/addradio", method: "post" },
   download: { path: "/download", method: "post" },
@@ -21,10 +24,13 @@ const pool = {
   mpdRepeat: {path:"/mpd/repeat", method:"put"},
   mpdRandom: {path:"/mpd/random", method:"put"},
   mpdDatabase: {path:"/mpd/database", method:"put"},
-  mpdAdd: {path:"/mpd/add", method:"put"}
+  mpdAdd: {path:"/mpd/add", method:"put"},
+  softwareUpdate: {path:"/update", method: "post"}
 };
 
 export const { 
   getConfig, download, search, readdir, deleteFile, moveFile, listen, addradio, getclients,
-  mpdVolumeUp, mpdVolumeDown, mpdNext, mpdPrevious, mpdStatus, mpdPause, mpdPlay, mpdShuffle, mpdRepeat, mpdRandom, mpdDatabase, mpdAdd
+  mpdVolumeUp, mpdVolumeDown, mpdNext, mpdPrevious, mpdStatus, mpdPause, mpdPlay, mpdShuffle, mpdRepeat, mpdRandom, mpdDatabase, mpdAdd,
+  login, logout, refreshSession,
+  softwareUpdate
 } = makeApi(pool, process.env.REACT_APP_API);

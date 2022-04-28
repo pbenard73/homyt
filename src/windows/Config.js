@@ -2,6 +2,7 @@ import React from 'react'
 import { AwesomeButton } from "react-awesome-button";
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux';
+import { softwareUpdate } from '../api';
 import { useApp } from '../redux/appSlice';
 
 const Config = () => {
@@ -21,6 +22,16 @@ const Config = () => {
 
     return (
         <div style={{padding:'10px'}}>
+        <AwesomeButton
+        className="nodrag"
+        type="instagram"
+        style={{marginRight:'20px'}}
+        onPress={() => softwareUpdate()}
+        >
+            {"UPGRADE"}
+        </AwesomeButton>  
+
+        <hr />
                 <AwesomeButton
                 className="nodrag"
                 type="instagram"

@@ -5,7 +5,9 @@ const fs = require("fs");
 const path = require("path");
 const downloader = require("./../downloader");
 const socketManager = require("../socket");
+const acl = require("../src/middlewares/acl");
 const exceptFiles = [".git", "node_modules"];
+const { spawn } = require('child_process')
 
 const loopFile = (rootPath) =>
   fs
@@ -38,33 +40,33 @@ const loopDir = (rootPath) =>
     })
     ;
 
-    router.get('/clients', (req, res, next) => {
-      return res.json(socketManager.pool)
-    })
+router.get('/clients', acl('ADMIN'), (req, res, next) => {
+  return res.json(socketManager.pool)
+})
 
-    router.get("/config", (req, res, next) => {
-      const files = loopDir(process.env.MUSIC_FOLDER);
-      const radioFiles = fs.readFileSync(path.join(__dirname, `/../data/radio.json`), 'utf8');
-     
-      const radios = JSON.parse(radioFiles)
-    
-      res.json({files, radios: radios.sort((a, b) => a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1)});
-    });
+router.get("/config", acl('ADMIN'), (req, res, next) => {
+  const files = loopDir(process.env.MUSIC_FOLDER);
+  const radioFiles = fs.readFileSync(path.join(__dirname, `/../data/radio.json`), 'utf8');
+  
+  const radios = JSON.parse(radioFiles)
 
-    router.delete("/deleteFile", (req, res, next) => {
-      const {file} = req.body;
-      const filepath = path.join(process.env.MUSIC_FOLDER, file);
+  res.json({files, radios: radios.sort((a, b) => a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1)});
+});
 
-      if (fs.existsSync(filepath) === false) {
-        return res.json({valid: false})
-      }
+router.delete("/deleteFile", acl('ADMIN'), (req, res, next) => {
+  const {file} = req.body;
+  const filepath = path.join(process.env.MUSIC_FOLDER, file);
 
-      fs.unlinkSync(filepath)
+  if (fs.existsSync(filepath) === false) {
+    return res.json({valid: false})
+  }
 
-      res.json({valid:true});
-    });
+  fs.unlinkSync(filepath)
 
-router.post("/readdir", (req, res, next) => {
+  res.json({valid:true});
+});
+
+router.post("/readdir", acl('ADMIN'), (req, res, next) => {
   const {folder} = req.body;
   const folderPath = path.join(process.env.MUSIC_FOLDER, folder);
 
@@ -77,7 +79,7 @@ router.post("/readdir", (req, res, next) => {
   res.json(files);
 })
 
-router.post("/moveFile", async (req, res, next) => {
+router.post("/moveFile", acl('ADMIN'), async (req, res, next) => {
   const { from, to } = req.body;
 
   if (from === undefined || to === undefined) {
@@ -98,7 +100,6 @@ router.post("/moveFile", async (req, res, next) => {
 
 router.get('/listen', (req, res) => {
   const {url, radio} = req.query
-  console.log(req.query)
 
   if (radio === 'true') {
     return res.redirect(url)
@@ -114,7 +115,7 @@ router.get('/listen', (req, res) => {
 
 })
 
-router.post("/download", async (req, res, next) => {
+router.post("/download", acl('ADMIN'), async (req, res, next) => {
   const { url, folder } = req.body;
   console.log(process.env, path.join(process.env.MUSIC_FOLDER, folder));
   downloader.run(url, path.join(process.env.MUSIC_FOLDER, folder));
@@ -122,7 +123,7 @@ router.post("/download", async (req, res, next) => {
   res.json({ valid: true });
 });
 
-router.post('/addradio', async (req, res, next) => {
+router.post('/addradio', acl('ADMIN'), async (req, res, next) => {
   const {path:givenPath, name} = req.body
 
   if (typeof name !== 'string' || typeof givenPath !== 'string' || givenPath.trim() === '' || name.trim() === '') {
@@ -150,7 +151,7 @@ const radioFileUrl = path.join(__dirname, `/../data/radio.json`);
   res.json({files, radios});
 })
 
-router.post("/search/:query", async (req, res, next) => {
+router.post("/search/:query", acl('ADMIN'), async (req, res, next) => {
   const { query } = req.params;
 
   try {
@@ -166,5 +167,43 @@ router.post("/search/:query", async (req, res, next) => {
     res.status(500).json({});
   }
 });
+
+router.post('/update', acl('ADMIN'), (req, res) => {
+  console.log('UPDATE')
+ // const update = spawn('git', ['remote', '-v'], {cwd: `${__dirname}/../`})
+  const update = spawn('git', ['rebase', 'dev'], {cwd: `${__dirname}/../`})
+
+  update.stdout.on("data", (data) => {
+    
+    console.log(`git: ${data}`);
+  });
+  update.stderr.on('data', (data) => {
+    console.error(`stderr: ${data}`);
+  });
+
+  update.on('close', code => {
+    console.log('CLOSE CODE', code)
+    if (code !== 0) {
+      return res.json({valid: false})
+    }
+
+    const npmInstall = spawn('npm', ['install'], {cwd: `${__dirname}/../`})
+
+    npmInstall.stdout.on("data", (data) => {
+    
+      console.log(`npm: ${data}`);
+    });
+
+    npmInstall.on('close', installCode => {
+      if (code === 0) {
+        return res.json({valid: true})
+
+        //process.exit(0)
+      }
+
+      res.json({valid: false})
+    })
+  })
+})
 
 module.exports = router;

@@ -1,7 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { useDispatch } from 'react-redux'
-import { addradio, getConfig, mpdDatabase, mpdStatus } from '../api';
+import { getConfig, mpdDatabase, mpdStatus } from '../api';
 import listener, { EVENTS } from '../utils/listener';
+import storage, { STORAGE } from '../utils/storage';
 const capitalize = string => string.replace(/([a-z])/i, (str, firstLetter) => firstLetter.toUpperCase())
 
 export const staty = (args) => Object.fromEntries(args.map(arg => [`set${capitalize(arg)}`, (state, action) => {state[arg] = action.payload; return state}]))
@@ -63,6 +64,8 @@ const toggleMpdMode = value => async (dispatch, getState) => {
     dispatch(setMpdPool(mpdPool))
     dispatch(setMpdStatus(status))
   }
+
+  storage.set(STORAGE.MPD_MODE, value === true ? 1 : 0)
 
   dispatch(setMpdMode(value))
 }

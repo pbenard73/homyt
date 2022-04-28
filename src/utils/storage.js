@@ -1,6 +1,7 @@
 export const STORAGE = {
     VOLUME: 'volume',
     SPECTRUM: 'spectrum',
+    MPD_MODE: 'mpd_mode'
 }
 
 class Storage {

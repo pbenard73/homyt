@@ -5,7 +5,7 @@
     "window_radios": "Radios",
     "window_playlist": "Liste de lecture",
     "window_config": "Configuration",
-    "window_remote": "Télécommande",
+    "window_remote": "Télé commande",
     "convert_succesfull": "Operation terminée avec succès",
     "error": "Une erreur est survenue",
     "mode_search_video": "Rechercher une vidéo",
@@ -24,5 +24,9 @@
     "spectrum_firework": "Feu d'artifice",
     "spectrum_heart": "Coeur",
     "spectrum_full": "Multiple",
-    "spectrum_none": "Aucun effect"
+    "spectrum_none": "Aucun effect",
+    "username": "Nom d'utilisateur",
+    "password": "Mot de passe",
+    "login": "Se connecter",
+    "window_logout": "Déconnexion"
 }
