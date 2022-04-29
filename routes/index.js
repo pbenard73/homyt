@@ -173,35 +173,35 @@ router.post('/update', acl('ADMIN'), (req, res) => {
  // const update = spawn('git', ['remote', '-v'], {cwd: `${__dirname}/../`})
   const update = spawn('git', ['rebase', 'dev'], {cwd: `${__dirname}/../`})
 
-  update.stdout.on("data", (data) => {
-    
+  update.stdout.on("data", (data) => {    
     console.log(`git: ${data}`);
   });
+
   update.stderr.on('data', (data) => {
     console.error(`stderr: ${data}`);
   });
 
   update.on('close', code => {
-    console.log('CLOSE CODE', code)
+    res.json({valid: code === 0})
+
     if (code !== 0) {
-      return res.json({valid: false})
-    }
+      return
+    }    
 
     const npmInstall = spawn('npm', ['install'], {cwd: `${__dirname}/../`})
 
-    npmInstall.stdout.on("data", (data) => {
-    
+    npmInstall.stdout.on("data", (data) => {    
       console.log(`npm: ${data}`);
     });
 
     npmInstall.on('close', installCode => {
-      if (code === 0) {
-        return res.json({valid: true})
+      if (installCode === 0) {
+        socketManager.emit('update', {})
 
-        //process.exit(0)
+        setTimeout(() => {
+          process.exit(7895)
+        }, 2000);
       }
-
-      res.json({valid: false})
     })
   })
 })

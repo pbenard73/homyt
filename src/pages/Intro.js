@@ -10,12 +10,18 @@ import Paper from '../components/Paper';
 const Intro = () => {
     const auth = useAuth()
     const user = useSelector(state => state.auth.user)
+    const [open, setOpen] = useState(false)
 
     useEffect(() => {
         auth.refreshSession()
     }, [])
 
-    const [open, setOpen] = useState(false)
+    useEffect(() => {
+        if (user === null) {
+            setOpen(false)
+        }
+    }, [user])
+
 
     const openMp3 = () => {
         window.location.href = "/mp3"

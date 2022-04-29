@@ -41,10 +41,10 @@ class UserManager {
         })
     }
 
-    async createUser(username, givenPassword) {
+    async createUser(username, givenPassword, role = null) {
         const password = await this.encrypt(givenPassword)
 
-        return database.models.user.create({username, password})
+        return database.models.user.create({username, password, role})
     }
 
 }

@@ -9,7 +9,9 @@ const authRouter = require("./routes/auth");
 const mpdManager = require('./managers/mpd');
 const database = require('./database/db');
 const session = require('express-session')
+const dataManager = require('./managers/data')
 
+dataManager.checkPresence()
 
 const app = express();
 app.set('trust proxy', 1)

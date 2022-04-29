@@ -14,17 +14,24 @@ icecast.on('close', (code) => {
    // process.exit(1)
 });
 
+const runServer = () => {
+  const server = spawn('node', ['/homyt/bin/www'])
 
-const server = spawn('node', ['/homyt/bin/www'])
-
-server.stdout.on('data', (data) => {
-    console.log(`stdout: ${data}`);
-});
-
-server.stderr.on('data', (data) => {
-    console.error(`stderr: ${data}`);
-});
-
-server.on('close', (code) => {
+  server.stdout.on('data', (data) => {
+      console.log(`stdout: ${data}`);
+  });
+  
+  server.stderr.on('data', (data) => {
+      console.error(`stderr: ${data}`);
+  });
+  
+  server.on('close', (code) => {
+    if (process.code === 7895) {
+      return runServer()
+    }
+      
     process.exit(1)
-});
+  });
+}
+
+

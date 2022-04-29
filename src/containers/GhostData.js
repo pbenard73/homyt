@@ -39,6 +39,12 @@ function GhostData() {
       }
     })
 
+    mySocket.on('update', () => {
+      setTimeout(() => {
+        window.location.reload()
+      }, 2000)
+    })
+
     mySocket.on('mpd_status', data => {
       console.log(data)
       app.setMpdStatus(data);

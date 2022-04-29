@@ -1,11 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { useDispatch } from 'react-redux'
-import { login, logout, refreshSession } from '../api'
+import { login, logout, refreshSession, softwareInstall } from '../api'
 import { staty } from './appSlice'
 import { toast } from 'react-toastify';
 
 const initialState = {
   user: null,
+  install: false
 }
 
 export const dashboardSlice = createSlice({
@@ -16,14 +17,18 @@ export const dashboardSlice = createSlice({
   },
 })
 
-export const { setUser } = dashboardSlice.actions
+export const { setUser, setInstall } = dashboardSlice.actions
 
 export default dashboardSlice.reducer
 
 const loginAction = (t, username, password) => async (dispatch, getState) => {
-  const data = await login({}, {username, password});
+  const state = getState();
+  const action = state.auth.install === false ? login : softwareInstall
+
+  const data = await action({}, {username, password});
 
   if (data.valid === true) {
+    dispatch(setInstall(false))
     return dispatch(setUser(data.user))
   }
 
@@ -43,6 +48,10 @@ const refreshAction = async dispatch => {
 
   if (data.valid === true) {
     dispatch(setUser(data.user))
+  }
+  
+  if (data.install) {
+    dispatch(setInstall(data.install))
   }
 }
 

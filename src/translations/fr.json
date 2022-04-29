@@ -28,5 +28,6 @@
     "username": "Nom d'utilisateur",
     "password": "Mot de passe",
     "login": "Se connecter",
-    "window_logout": "Déconnexion"
+    "window_logout": "Déconnexion",
+    "install_create_user": "Créer le compte Administrateur"
 }

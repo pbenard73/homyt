@@ -25,12 +25,13 @@ const pool = {
   mpdRandom: {path:"/mpd/random", method:"put"},
   mpdDatabase: {path:"/mpd/database", method:"put"},
   mpdAdd: {path:"/mpd/add", method:"put"},
-  softwareUpdate: {path:"/update", method: "post"}
+  softwareUpdate: {path:"/update", method: "post"},
+  softwareInstall: {path:"/auth/install", method: "post"}
 };
 
 export const { 
   getConfig, download, search, readdir, deleteFile, moveFile, listen, addradio, getclients,
   mpdVolumeUp, mpdVolumeDown, mpdNext, mpdPrevious, mpdStatus, mpdPause, mpdPlay, mpdShuffle, mpdRepeat, mpdRandom, mpdDatabase, mpdAdd,
   login, logout, refreshSession,
-  softwareUpdate
+  softwareUpdate, softwareInstall
 } = makeApi(pool, process.env.REACT_APP_API);
