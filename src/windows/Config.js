@@ -3,6 +3,7 @@ import { AwesomeButton } from "react-awesome-button";
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux';
 import { softwareUpdate } from '../api';
+import Button from '../components/Button';
 import { useApp } from '../redux/appSlice';
 
 const Config = () => {
@@ -22,37 +23,31 @@ const Config = () => {
 
     return (
         <div style={{padding:'10px'}}>
-        <AwesomeButton
-        className="nodrag"
-        type="instagram"
+        <Button
         style={{marginRight:'20px'}}
-        onPress={() => softwareUpdate()}
+        onClick={() => softwareUpdate()}
         >
             {"UPGRADE"}
-        </AwesomeButton>  
+        </Button>  
 
         <hr />
-                <AwesomeButton
-                className="nodrag"
-                type="instagram"
+                <Button
                 style={{marginRight:'20px'}}
-                onPress={() => app.setMpdMode(!mpdMode)}
+                onClick={() => app.setMpdMode(!mpdMode)}
                 >
                     {`MPD Status : ${mpdMode ? 'active' : 'not active'}`}
-                </AwesomeButton>  
+                </Button>  
 
                 <hr />
 
             {languages.map(([locale, label]) => (
-                <AwesomeButton
+                <Button
                 key={locale}
-                className="nodrag"
-                type="instagram"
                 style={{marginRight:'20px'}}
-                onPress={() => i18n.changeLanguage(locale)}
+                onClick={() => i18n.changeLanguage(locale)}
                 >
                     {label}
-                </AwesomeButton>
+                </Button>
             ))}        
         </div>
     )

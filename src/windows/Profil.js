@@ -4,6 +4,7 @@ import { AwesomeButton } from "react-awesome-button";
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux';
 import { softwareUpdate } from '../api';
+import Button from '../components/Button';
 import { THEMES } from '../data/theme';
 import { useApp } from '../redux/appSlice';
 import { useAuth } from '../redux/authSlice';
@@ -27,14 +28,12 @@ const Profil = () => {
 
     return (
         <div style={{padding:'10px'}}>
-        <AwesomeButton
-        className="nodrag"
-        type="instagram"
+        <Button
         style={{marginRight:'20px'}}
-        onPress={() => softwareUpdate()}
+        onClick={() => softwareUpdate()}
         >
             {"UPGRADE"}
-        </AwesomeButton>  
+        </Button>  
 
         <hr />
 
@@ -54,14 +53,12 @@ const Profil = () => {
         </Select>
                 </FormGroup>
 
-                <AwesomeButton
-                className="nodrag"
-                type="instagram"
+                <Button
                 style={{marginRight:'20px'}}
-                onPress={() => app.setMpdMode(!mpdMode)}
+                onClick={() => app.setMpdMode(!mpdMode)}
                 >
                     {`MPD Status : ${mpdMode ? 'active' : 'not active'}`}
-                </AwesomeButton>  
+                </Button>  
 
                 <hr />
         </div>

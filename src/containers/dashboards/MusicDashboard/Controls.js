@@ -20,13 +20,13 @@ export const HoverButton = styled.span`
 `
 
 const Controls = () => {
-    const status = useSelector(state => state.app.mpdStatus)
+    const status = useSelector(state => state.app.mpdStatus?.state)
 
     return (
         <>
             <HoverButton><TuneIcon /></HoverButton>
             <HoverButton><SkipPreviousIcon onClick={() => mpdPrevious()}/></HoverButton>
-            <HoverButton>{status.state === 'play' ? <PauseIcon onClick={() => mpdPause()}/> : <PlayArrowIcon onClick={() => mpdPlay()}/>}</HoverButton>
+            <HoverButton>{status === 'play' ? <PauseIcon onClick={() => mpdPause()}/> : <PlayArrowIcon onClick={() => mpdPlay()}/>}</HoverButton>
             <HoverButton><SkipNextIcon onClick={() => mpdNext()}/></HoverButton>
         </>
     )

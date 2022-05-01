@@ -4,10 +4,10 @@ import { useSelector } from 'react-redux'
 import { useApp } from '../redux/appSlice'
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import listener, { EVENTS } from '../utils/listener';
-import { AwesomeButton } from "react-awesome-button";
 import { addradio } from '../api'
 import Form from '../components/Form'
 import { useTranslation } from 'react-i18next'
+import Button from '../components/Button';
 
 const Radio = () => {
     const { t } = useTranslation()
@@ -31,26 +31,21 @@ const Radio = () => {
 
     return (
     <div style={{padding:'10px'}}>
-        <AwesomeButton
-        type="instagram"
+        <Button
         style={{marginRight:'20px'}}
-        onPress={() => setAdd(!add)}
-        className="nodrag"
+        onClick={() => setAdd(!add)}
         >
         {t('add_radio')}
-        </AwesomeButton>
+        </Button>
         {add && (
             <Form onSubmit={onSubmit} className="nodrag">
                 <div>
                     <TextField label="Radio name" value={newRadio.name} onChange={e => setNewRadio({...newRadio, name: e.target.value})} />
                     <TextField label="Radio URL" value={newRadio.url} onChange={e => setNewRadio({...newRadio, path: e.target.value})} />
                     <div>
-                        <AwesomeButton
-                        type="instagram"
-                        style={{marginTop:'20px'}}
-                        >
+                        <Button style={{marginTop:'20px'}}>
                         {t('add')}
-                        </AwesomeButton>
+                        </Button>
                     </div>
 
                 </div>

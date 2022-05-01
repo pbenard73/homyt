@@ -16,42 +16,47 @@ const ProgressToolBarThemed = styled(Toolbar)`
         left: 0;
         pointer-events:none;
     }
-    &:after{
+`
+
+const ThemedSeekHandler = styled.div`
+    position: absolute;
+    bottom: 100%;
+    height: 6px;
+    left:0;
+    width:100%;
+    background:transparent;
+    cursor:pointer;
+    &:before{
         content: '';
         position: absolute;
-        bottom: 100%;
+        top: 0;
         height: 6px;
         background: #007ed7;
         width: ${props => props.progress || 0 }%;
         left: 0;
         pointer-events:none;
     }
-
-    #progress_handler{
-        position: absolute;
-        bottom: 100%;
-        height: 6px;
-        left:0;
-        width:100%;
-        background:transparent;
-        cursor:pointer;
-    }
 `
 
-const ProgressToolBar = ({children, ...props}) => {
-    const time = useSelector(state => state.app.mpdStatus.time)
-
+const SeekHandler = () => {
+    const mpdStatus = useSelector(state => state.app.mpdStatus)
+    const percent = mpdStatus?.time?.elapsed * 100 / mpdStatus?.time?.total
+    
     const onSeek = e => {
-        const percent = Math.floor(e.pageX * time.total / document.body.offsetWidth);
+        const percent = Math.floor(e.pageX * mpdStatus?.time?.total / document.body.offsetWidth);
         mpdSeek({}, {percent});
     }
 
     return (
-        <ProgressToolBarThemed {...props}>
-            {children}
-            <div id="progress_handler" onClick={onSeek}></div>
-        </ProgressToolBarThemed>
+        <ThemedSeekHandler progress={percent} onClick={onSeek} />
     )
 }
+
+const ProgressToolBar = ({children, ...props}) => (
+        <ProgressToolBarThemed {...props}>
+            {children}
+            <SeekHandler />
+        </ProgressToolBarThemed>
+    )
 
 export default ProgressToolBar;
