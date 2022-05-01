@@ -1,8 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { useDispatch } from 'react-redux'
-import { login, logout, refreshSession, softwareInstall } from '../api'
+import { setTheme } from '../api'
 import { staty } from './appSlice'
 import { toast } from 'react-toastify';
+import { defaultTheme } from '../data/theme';
+import { login, logout, refreshSession, softwareInstall } from '../apis/authApi';
 
 const initialState = {
   user: null,
@@ -29,6 +31,9 @@ const loginAction = (t, username, password) => async (dispatch, getState) => {
 
   if (data.valid === true) {
     dispatch(setInstall(false))
+    if (!data.user.theme) {
+      data.user.theme = defaultTheme;
+    }
     return dispatch(setUser(data.user))
   }
 
@@ -40,13 +45,16 @@ const loginAction = (t, username, password) => async (dispatch, getState) => {
     pauseOnHover: true,
     draggable: true,
     progress: undefined,
-    });
+  });
 }
 
 const refreshAction = async dispatch => {
   const data = await refreshSession();
 
   if (data.valid === true) {
+    if (!data.user.theme) {
+      data.user.theme = defaultTheme;
+    }
     dispatch(setUser(data.user))
   }
   
@@ -63,6 +71,18 @@ const logoutAction = async dispatch => {
   }
 }
 
+const setUserTheme = themeValue => async (dispatch, getState) => {
+  const result = await setTheme({}, {theme: themeValue});
+
+  if (result.valid === true) {
+    const state = getState();
+    const user = { ...state.auth.user}
+    user.theme = themeValue;
+
+    dispatch(setUser(user))
+  }
+}
+
 
 export const useAuth = () => {
     const dispatch = useDispatch();
@@ -70,6 +90,7 @@ export const useAuth = () => {
     return {
       login: (t, username, password) => dispatch(loginAction(t, username, password)),
       logout: () => dispatch(logoutAction),
-      refreshSession: () => dispatch(refreshAction)
+      refreshSession: () => dispatch(refreshAction),
+      setTheme: theme => dispatch(setUserTheme(theme))
     }
 }

@@ -3,6 +3,7 @@ const socket = require('./../socket')
 const { cmd } = mpd
 
 const COMMANDS = {
+    VOLUME: 'setVolume',
     VOLUME_UP: 'setVolumeUp',
     VOLUME_DOWN: 'setVolumeDown',
     NEXT: 'next',
@@ -10,6 +11,7 @@ const COMMANDS = {
     PLAY: 'play',
     PAUSE: 'pause',
     STATUS: 'getStatus',
+    SEEK: 'seek',
     SHUFFLE: 'shuffle',
     REPEAT: 'repeat',
     RANDOM: 'random',
@@ -18,11 +20,16 @@ const COMMANDS = {
 }
 
 class MpdManager {
-    config = {
+    confisg = {
         host: "localhost",
         port: '6600'          
     }
+    config = {
+        host: "192.168.2.4",
+        port: '6600'          
+    }
 
+    progressInterval = null;
     client = null;
     status = null;
     playlist = null;
@@ -38,6 +45,22 @@ class MpdManager {
         this.client.on('system-playlist', (...args) => this.onSystemPlaylist(...args))
         this.getStatus();
         this.database();
+
+        this.progressInterval = async () => {
+            if (this.fullStatus?.state === 'play') {
+                const status = await this.client.sendCommand('status').then(mpd.parseObject);
+                delete status.playlist_info;
+                const newStatus = {...this.fullStatus, ...status}
+                this.fullStatus = newStatus;
+                socket.emit('mpd_status', newStatus)
+            }
+
+            setTimeout(() => {
+                this.progressInterval();
+            }, 500)
+        }
+
+        this.progressInterval();
     }
 
     async [COMMANDS.STATUS]() {
@@ -45,10 +68,13 @@ class MpdManager {
             this.client.sendCommand('status').then(mpd.parseObject),
             this.client.sendCommand('playlistinfo').then(mpd.parseList)
         ]);
-
         this.status = status;   
-        this.playlist = playlist;     
-        this.current = await this.client.sendCommand('playlistid', this.status.songid).then(mpd.parseObject)    
+        this.playlist = playlist;  
+        this.current = null;
+
+        if (this.status.songid) {
+            this.current = await this.client.sendCommand(`playlistid ${this.status.songid}`).then(mpd.parseObject)  
+        }   
 
         this.fullStatus = {
             ...this.status, 
@@ -80,11 +106,17 @@ class MpdManager {
     async [COMMANDS.DATABASE](req) {
         if (this.pool === null || req.body.refresh === true) {
             const lsAllParser = mpd.parseListAndAccumulate(['directory', 'file'])
-            const lsAllString = await this.client.sendCommand('listallinfo')
-            this.pool = lsAllParser(lsAllString)   
+            const lsAllString = await this.client.sendCommand('listallinfo')     
+            this.pool = lsAllParser(lsAllString)  
         }
 
         return this.pool;
+    }
+
+    async [COMMANDS.VOLUME](req) {
+        const volume = req.body.volume
+
+        await this.client.sendCommand(`setvol ${volume}`).then(mpd.parseObject)    
     }
 
     async [COMMANDS.VOLUME_UP]() {
@@ -93,7 +125,7 @@ class MpdManager {
             newVolume = 100;
         }
 
-        await this.client.sendCommand('setvol '+ newVolume).then(mpd.parseObject)    
+        await this.client.sendCommand(`setvol ${newVolume}`).then(mpd.parseObject)    
     }
 
     async [COMMANDS.VOLUME_DOWN]() {
@@ -102,18 +134,21 @@ class MpdManager {
             newVolume = 0;
         }
 
-        await this.client.sendCommand('setvol ' + newVolume).then(mpd.parseObject)    
+        await this.client.sendCommand(`setvol ${newVolume}`).then(mpd.parseObject)    
     }
     async [COMMANDS.NEXT]() {
         await this.client.sendCommand('next').then(mpd.parseObject);   
+    }
+    async [COMMANDS.SEEK](req) {
+        const percent = req.body.percent;
+        await this.client.sendCommand(`seekcur ${percent}`).then(mpd.parseObject);   
     }
     async [COMMANDS.PREVIOUS]() {
         await this.client.sendCommand('previous').then(mpd.parseObject);   
     }
     async [COMMANDS.PLAY](req) {
         const index = req.body.index || '';
-        console.log('IONDE', index)
-        await this.client.sendCommand('play ' + index).then(mpd.parseObject);   
+        await this.client.sendCommand(`play ${index}`).then(mpd.parseObject);   
     }
     async [COMMANDS.PAUSE]() {
         await this.client.sendCommand('pause').then(mpd.parseObject);   
@@ -123,19 +158,19 @@ class MpdManager {
     }
     async [COMMANDS.REPEAT]() {
         const newStatus = (this.status?.repeat || false) === false ? 1 : 0;
-        await this.client.sendCommand('repeat ' + newStatus).then(mpd.parseObject);   
+        await this.client.sendCommand(`repeat ${newStatus}`).then(mpd.parseObject);   
         this[COMMANDS.STATUS]()
     }
     async [COMMANDS.RANDOM]() {
         const newStatus = (this.status?.random || false) === false ? 1 : 0;
-        await this.client.sendCommand('random ' + newStatus).then(mpd.parseObject);   
+        await this.client.sendCommand(`random ${newStatus}`).then(mpd.parseObject);   
         this[COMMANDS.STATUS]()
     }
 
     async [COMMANDS.ADD](req) {
         const filePath = req.body.path;
 
-        await this.client.sendCommand('add ' + filePath).then(mpd.parseObject);   
+        await this.client.sendCommand(`add ${filePath}`).then(mpd.parseObject);   
 
         this[COMMANDS.STATUS]()
     }

@@ -1,15 +1,16 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import DashboardIcon from '../components/DashboardIcon';
-import { useAuth } from '../redux/authSlice';
-import { useDashboard , WINDOWS} from '../redux/dashboardSlice';
+import DashboardIcon from '../../components/DashboardIcon';
+import RoundPlayer from '../../components/RoundPlayer';
+import { useAuth } from '../../redux/authSlice';
+import { useDashboard , WINDOWS} from '../../redux/dashboardSlice';
 
 const DashboardStyled = styled.div`
     height:100vh;
     width:100vw;
     position:relative;
-    > div {
+    > div:not(.player) {
         width: 90px;
         height:120px;
         display:inline-block;
@@ -38,8 +39,10 @@ const Dashboard = () => {
             <div><DashboardIcon Icon={PlaylistIcon} label={"window_playlist"} onClick={() => dashboard.showWindow(WINDOWS.PLAYLIST)} /></div>
             <div><DashboardIcon Icon={RadioIcon} label={"window_radios"} onClick={() => dashboard.showWindow(WINDOWS.RADIO)} /></div>
             <div><DashboardIcon Icon={ConfigIcon} label={"window_config"} onClick={() => dashboard.showWindow(WINDOWS.CONFIG)} /></div>
+            <div><DashboardIcon Icon={ConfigIcon} label={"window_profil"} onClick={() => dashboard.showWindow(WINDOWS.PROFIL)} /></div>
             <div><DashboardIcon Icon={RemoteIcon} label={"window_remote"} onClick={() => dashboard.showWindow(WINDOWS.REMOTE)} /></div>
             <div><DashboardIcon Icon={LogoutIcon} label={"window_logout"} onClick={() => auth.logout()} /></div>
+            <RoundPlayer />
         </DashboardStyled>
     )
 }

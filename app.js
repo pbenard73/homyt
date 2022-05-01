@@ -5,6 +5,7 @@ const logger = require("morgan");
 const cors = require("cors");
 const indexRouter = require("./routes/index");
 const mpdRouter = require("./routes/mpd");
+const themeRouter = require("./routes/theme");
 const authRouter = require("./routes/auth");
 const mpdManager = require('./managers/mpd');
 const database = require('./database/db');
@@ -22,7 +23,7 @@ app.use(session({
   saveUninitialized: true
 }))
 
-//mpdManager.run();
+mpdManager.run();
 database.init();
 
 app.use(
@@ -41,5 +42,6 @@ app.use(express.static(path.join(__dirname, "build")));
 app.use("/", indexRouter);
 app.use("/auth", authRouter);
 app.use("/mpd", mpdRouter);
+app.use("/theme", themeRouter);
 
 module.exports = app;

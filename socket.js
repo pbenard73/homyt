@@ -40,7 +40,7 @@ class SocketManager {
   }
 
   emit(channel, data) {
-    console.log(channel, data)
+    //console.log(channel, data)
     this.#io?.emit?.(channel, data);
   }
 }

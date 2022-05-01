@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import { useDispatch } from 'react-redux'
 import Browser from '../windows/Browser'
 import Config from '../windows/Config'
+import Profil from '../windows/Profil'
 import Downloader from '../windows/Downloader'
 import Playlist from '../windows/Playlist'
 import Radio from '../windows/Radio'
@@ -11,10 +12,11 @@ import { staty } from './appSlice'
 
 export const WINDOWS = {
   BROWSER: 'browser',
+  CONFIG: 'config',
   DOWNLOADER: 'downloader',
   SPECTRUM: 'spectrum',
   RADIO: 'radio',
-  CONFIG: 'config',
+  PROFIL: 'profil',
   REMOTE: 'remote',
   PLAYLIST: 'playlist'
 }
@@ -24,6 +26,11 @@ const windowsList = {
     uuid: WINDOWS.REMOTE,
     title: 'window_remote',
     component: <Remote />
+  },
+  [WINDOWS.CONFIG]: {
+    uuid: WINDOWS.CONFIG,
+    title: 'window_config',
+    component: <Config />
   },
   [WINDOWS.BROWSER]: {
     uuid: WINDOWS.BROWSER,
@@ -57,10 +64,10 @@ const windowsList = {
     title: 'window_spectrum',
     component: <SpectrumConfig />
   },
-  [WINDOWS.CONFIG]: {
-    uuid: WINDOWS.CONFIG,
-    title: 'window_config',
-    component: <Config />
+  [WINDOWS.PROFIL]: {
+    uuid: WINDOWS.PROFIL,
+    title: 'window_profil',
+    component: <Profil />
   }
 }
 

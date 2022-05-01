@@ -1,6 +1,7 @@
 const { Sequelize } = require('sequelize');
 const initUser = require('./models/user')
-
+const initMigration = require('./models/migration')
+const migrationManager = require('./../managers/migration')
 
 
 class Database {
@@ -12,6 +13,10 @@ class Database {
             dialect: 'sqlite',
             storage: `${__dirname}/db.sqlite`
         });
+
+        const Migration = initMigration(sequelize);
+        await sequelize.sync();
+        await migrationManager.migrate(sequelize, Migration);
 
         const User = initUser(sequelize)
         this.models.user = User;

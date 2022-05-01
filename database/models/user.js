@@ -11,6 +11,12 @@ const userModel = {
   },
   role: {
     type: DataTypes.STRING
+  },
+  theme: {
+    type: DataTypes.STRING
+  },
+  background: {
+    type: DataTypes.STRING
   }
 }
 

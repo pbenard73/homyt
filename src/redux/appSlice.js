@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { useDispatch } from 'react-redux'
-import { getConfig, mpdDatabase, mpdStatus } from '../api';
+import { getConfig } from '../api';
+import { mpdDatabase, mpdStatus } from '../apis/mpdApi';
 import listener, { EVENTS } from '../utils/listener';
 import storage, { STORAGE } from '../utils/storage';
 const capitalize = string => string.replace(/([a-z])/i, (str, firstLetter) => firstLetter.toUpperCase())

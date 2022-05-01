@@ -46,7 +46,6 @@ function GhostData() {
     })
 
     mySocket.on('mpd_status', data => {
-      console.log(data)
       app.setMpdStatus(data);
     })
 

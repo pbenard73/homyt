@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import { IconButton } from '@mui/material'
-import { listen, mpdNext, mpdPause, mpdPlay, mpdPrevious, mpdVolumeDown, mpdVolumeUp } from './../api'
+import { listen } from '../api'
+import { mpdNext, mpdPause, mpdPlay, mpdPrevious, mpdVolumeDown, mpdVolumeUp } from '../apis/mpdApi'
 import styled from 'styled-components'
 import { useSelector } from 'react-redux';
 import { useApp } from '../redux/appSlice';
@@ -15,7 +16,7 @@ import VolumeDownIcon from '@mui/icons-material/VolumeDown';
 import player from '../utils/player';
 import storage, { STORAGE } from '../utils/storage';
 
-const RoundPlayer = styled.div`
+const RoundPlayerWrapper = styled.div`
   position:relative;
   width:250px;
   height:250px;
@@ -62,10 +63,10 @@ const RoundPlayer = styled.div`
   }
 `
 
-const Player = () => {
+const RoundPlayer = () => {
   const [videoRef, setVideoRef] = useState(null)
   const app = useApp()
-  const mpdMode = useSelector(state => state.app.mpdMode)
+  const mpdMode = true; //useSelector(state => state.app.mpdMode)
   const mpdStatus = useSelector(state => state.app.mpdStatus)
 
   const PLAY_TYPE = {
@@ -278,10 +279,12 @@ const Player = () => {
     }
   }
 
+  const percent = mpdStatus?.time?.elapsed * 100 / mpdStatus?.time?.total
+
   return (
-    <div style={{position:'fixed', bottom:'0'}}>
+    <div className="player" style={{position:'fixed', bottom:'0', left:'0'}}>
       <figure id="video_player"> 
-        <RoundPlayer id="round_player" volume={mpdMode === true ? (mpdStatus?.volume || 0) / 100 : volume} percent={metadata?.progress || 0} onClick={onSeekClick}>
+        <RoundPlayerWrapper id="round_player" volume={mpdMode === true ? (mpdStatus?.volume || 0) / 100 : volume} percent={percent || 0} onClick={onSeekClick}>
           <span className="inner">
 
           <span className="volume"></span>
@@ -311,10 +314,10 @@ const Player = () => {
             
           </span>
           <i></i>
-          </RoundPlayer>
+          </RoundPlayerWrapper>
       </figure>
     </div>
   );
 }
 
-export default Player;
+export default RoundPlayer;

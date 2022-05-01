@@ -34,4 +34,4 @@ const runServer = () => {
   });
 }
 
-
+runServer()

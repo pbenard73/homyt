@@ -4,7 +4,7 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import listener, { EVENTS } from '../utils/listener';
-import { mpdPlay, mpdRandom, mpdRepeat, mpdShuffle } from '../api';
+import { mpdPlay, mpdRandom, mpdRepeat, mpdShuffle } from '../apis/mpdApi';
 
 const Playlist = () => {
     const {playlist, playIndex} = useSelector(state => ({
