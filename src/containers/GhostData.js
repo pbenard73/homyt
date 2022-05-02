@@ -15,13 +15,6 @@ function GhostData() {
   useEffect(() => {
     app.getConfig();
     auth.refreshSession()
-    const savedMpdMode = storage.get(STORAGE.MPD_MODE)
-
-    if ([1, '1', true].indexOf(savedMpdMode) !== -1) {
-      app.setMpdMode(true)
-    } else {
-      app.getFullTree();
-    }
 
     const newUuid = nanoid()
     setUuid(nanoid(newUuid))
