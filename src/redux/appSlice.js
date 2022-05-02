@@ -9,10 +9,10 @@ const capitalize = string => string.replace(/([a-z])/i, (str, firstLetter) => fi
 export const staty = (args) => Object.fromEntries(args.map(arg => [`set${capitalize(arg)}`, (state, action) => {state[arg] = action.payload; return state}]))
 
 const initialState = {
+  audioUrl: null,
   tree: null,
   config: [],
   fullTree: null,
-  playlist: [],
   playIndex: null,
   radios: [],
   canvasIndex: 0,
@@ -30,14 +30,13 @@ export const appSlice = createSlice({
   },
 })
 
-export const { setTree, setFullTree, setPlaylist, setPlayIndex, setRadios, setCanvasIndex, setMpdMode, setMpdStatus, setMpdPool, setError, setConfig } = appSlice.actions
+export const { setTree, setFullTree, setAudioUrl, setPlayIndex, setRadios, setCanvasIndex, setMpdMode, setMpdStatus, setMpdPool, setError, setConfig } = appSlice.actions
 
 export default appSlice.reducer
 
 const addToPlaylist = (item) => (dispatch, getState) => {
   const playlist = getState().app.playlist
   const newPlaylist = [...playlist, item]
-  dispatch(setPlaylist(newPlaylist))
   listener.dispatch(EVENTS.PLAYLIST_CHANGE, newPlaylist)
   if (newPlaylist.length === 1) {
     listener.dispatch(EVENTS.ACTION_PLAY_SONG, {...item, index: 0});
@@ -80,7 +79,6 @@ const updateError = value => (dispatch, getState) => {
     dispatch(setError(value))
     if (value !== null) {
       dispatch(setMpdStatus({}))
-      dispatch(setPlaylist([]))
     }
   }
 }
@@ -94,15 +92,23 @@ export const useApp = () => {
       setMpdStatus: value => dispatch(setMpdStatus(value)),
       setFullTree: value => dispatch(setFullTree(value)),
       setPlayIndex: value => dispatch(setPlayIndex(value)),
-      setPlaylist: value => {
-        dispatch(setPlaylist(value))
-        listener.dispatch(EVENTS.PLAYLIST_CHANGE, value)
-      },
       setRadios: item => dispatch(setRadios(item)),
       addToPlaylist: item => dispatch(addToPlaylist(item)),
       nextIndex: () => dispatch(nextIndex()),
       getConfig: async () => {
         const data = await getConfig()
+        const actualServer = data.servers.find(i => i.default === true)
+
+        if (actualServer) {
+          if (actualServer.internal === true) {
+            dispatch(setAudioUrl(`${process.env.REACT_APP_API}/mp3`))
+          } else if (actualServer.audioUrl) {
+            dispatch(setAudioUrl(actualServer.audioUrl))
+          } else {
+            dispatch(setAudioUrl(null))
+          }
+        }
+
         dispatch(setConfig(data))
       },
       getMpdPool: async () => {
