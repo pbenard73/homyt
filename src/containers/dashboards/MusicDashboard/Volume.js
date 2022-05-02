@@ -8,9 +8,9 @@ import storage, { STORAGE } from "../../../utils/storage";
 import { HoverButton } from './Controls';
 
 const Volume = () => {
-    const [volumeOpen, setVolumOpen] = useState(false);
+    const [volumeOpen, setVolumeOpen] = useState(false);
     const mpdMode = useSelector(state => state.app.mpdMode)
-    const volume = useSelector(state => state.app.mpdStatus.volume)
+    const volume = useSelector(state => state.app.mpdStatus?.volume || 0)
 
     const onVolumeChange = (e, volume) => {       
         mpdVolume({}, {volume})   
@@ -21,12 +21,12 @@ const Volume = () => {
     }   
 
     
-    const toggleVolumeOpen = (e) => setVolumOpen(volumeOpen ? false : e.target);
+    const toggleVolumeOpen = (e) => setVolumeOpen(volumeOpen ? false : e.target);
 
     return (
         <>
             <HoverButton>
-                <VolumeUpIcon style={{color:'white'}} onClick={toggleVolumeOpen}/>
+                <VolumeUpIcon style={{color:'white'}} onClick={toggleVolumeOpen} tooltip={volume}/>
             </HoverButton>
             {volumeOpen && (
                 <Popper

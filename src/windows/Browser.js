@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import TreeView from '../TreeView'
 
 const Browser = () => {
-    const fullTree = useSelector(state => state.app.fullTree)
+    const fullTree = useSelector(state => state.app.mpdPool)
 
     return (
         <div className="nodrag">

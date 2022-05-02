@@ -2,6 +2,7 @@
 
 # assets
 /data/radio.json
+/data/server.json
 /database/db.sqlite
 
 # dependencies

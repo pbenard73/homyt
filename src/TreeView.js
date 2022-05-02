@@ -9,6 +9,8 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import styled from "styled-components";
 import { deleteFile } from "./api";
 import { useApp } from "./redux/appSlice";
+import PlayArrow from "@mui/icons-material/PlayArrow";
+import { mpdAdd } from "./apis/mpdApi";
 
 
 const LeafItem = styled(ListItem)`
@@ -22,7 +24,7 @@ const LeafItem = styled(ListItem)`
   }
 `;
 
-const TreeView = ({ setFolder, select, setPlaylist, mode, tree, refresh, copyFile, setCopyFile, copyAction }) => {
+const TreeView = ({ tree }) => {
   const [open, setOpen] = useState([])
   const app = useApp()
 
@@ -36,76 +38,65 @@ const TreeView = ({ setFolder, select, setPlaylist, mode, tree, refresh, copyFil
     setOpen(o => [...o, leafPath])
   }
 
-  const deleteFileAction = async (filePath) => {
-    const result = await deleteFile({}, {file: filePath})
+  // const deleteFileAction = async (filePath) => {
+  //   const result = await deleteFile({}, {file: filePath})
 
-    if (result.valid === true) {
-      return refresh?.()
+  //   if (result.valid === true) {
+  //     return refresh?.()
+  //   }
+  // }
+
+  // const addAllFolder = leaf => {
+  //   const loop = obj => {
+  //     if (obj.children === undefined) {
+  //       return app.addToPlaylist(obj)
+  //     }
+
+  //     obj.children.forEach(i => loop(i))
+  //   }
+
+  //   loop(leaf)
+  // }
+
+  const renderName = (item, parentPath = '') => {
+    if (item.directory) {
+      return item.directory.replace(parentPath, '')
+    }
+
+    if (item.title) {
+      return `${item.title} - ${item.artist}`
+    }
+
+    if (item.file) {
+      return item.file.replace(parentPath, '')
     }
   }
 
-  const addAllFolder = leaf => {
-    const loop = obj => {
-      if (obj.children === undefined) {
-        return app.addToPlaylist(obj)
-      }
-
-      obj.children.forEach(i => loop(i))
-    }
-
-    loop(leaf)
-  }
-
-  const renderTree = children => children.filter(i => setFolder !== undefined ? Array.isArray(i.children) : i).map(leaf => (
-    <LeafItem key={leaf.path}>
+  const renderTree = (children, parentName = '', files = false) => children.map(leaf => (
+    <LeafItem key={files === false ? leaf.directory : leaf.file }>
       <div style={{flexDirection:'row', display:'flex'}}>
 
-      {Array.isArray(leaf.children) === true && (
+      {files === false && (
         <ListItemIcon style={{color:'white', alignItems:'center'}}>
           <FolderIcon />
         </ListItemIcon>
       )}
-      <ListItemText primary={leaf.name} style={{color:'white'}} onClick={() => toggle(leaf.path)}/>
+      <ListItemText primary={renderName(leaf, parentName)} style={{color:'white'}} onClick={files === true ? undefined : () => toggle(leaf.directory)}/>
       </div>
       <ListItemSecondaryAction>
         <>
-          {setFolder !== undefined && (
-            <IconButton onClick={() => setFolder(leaf)} style={{color:'white'}}>
-              S
-            </IconButton>
-          )}
-          {}
-          {select !== true && leaf.children === undefined ? (
-            <>
-          
-            <IconButton onClick={() => app.addToPlaylist(leaf)} style={{color:'white'}}>
-              <AddCircleOutlineIcon />
-            </IconButton>
-            {/* <IconButton onClick={() => setCopyFile(leaf.path)} style={{color: copyFile === leaf.path ? 'red' : 'white'}}>
-              <FileCopyIcon />
-            </IconButton> */}
-            <IconButton onClick={() => deleteFileAction(leaf.path)} style={{color:'white'}}>
-              <DeleteIcon />
-            </IconButton>
-            </>
-          ) : (
-            <IconButton onClick={() => addAllFolder(leaf)} style={{color:'white'}}>
-              <AddCircleIcon />
-            </IconButton>
-          )}
-          {select !== true && leaf.children !== undefined && copyFile !== null && (
-            <>
-            <IconButton onClick={() => copyAction(leaf.path)} style={{color: 'white'}}>
-              <ContentPasteIcon />
-            </IconButton>
-            </>
-          )}
+          <IconButton onClick={() => {
+            mpdAdd({}, {path: files === true ? leaf.file : leaf.directory})
+          }}>
+            <PlayArrow />
+          </IconButton>
         </>
       </ListItemSecondaryAction>
-      {Array.isArray(leaf.children) === true && open.indexOf(leaf.path) !== -1 && (
+      {files === false && (
        <div className="children_leaf">
          <List>
-           {renderTree(leaf.children)}
+          {Array.isArray(leaf.directories) === true && leaf.directories.length > 0 && open.indexOf(leaf.directory) !== -1 && renderTree(leaf.directories, leaf.directory)}
+          {Array.isArray(leaf.file) === true && leaf.file.length > 0 && open.indexOf(leaf.directory) !== -1 && renderTree(leaf.file, leaf.directory, true)}
          </List>
        </div>
       )}

@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { useDispatch } from 'react-redux'
-import { getConfig } from '../api';
+import { getConfig } from '../apis/configApi';
 import { mpdDatabase, mpdStatus } from '../apis/mpdApi';
 import listener, { EVENTS } from '../utils/listener';
 import storage, { STORAGE } from '../utils/storage';
@@ -10,6 +10,7 @@ export const staty = (args) => Object.fromEntries(args.map(arg => [`set${capital
 
 const initialState = {
   tree: null,
+  config: [],
   fullTree: null,
   playlist: [],
   playIndex: null,
@@ -17,7 +18,8 @@ const initialState = {
   canvasIndex: 0,
   mpdMode: false,
   mpdStatus: {},
-  mpdPool: []
+  mpdPool: [],
+  error: null,
 }
 
 export const appSlice = createSlice({
@@ -28,7 +30,7 @@ export const appSlice = createSlice({
   },
 })
 
-export const { setTree, setFullTree, setPlaylist, setPlayIndex, setRadios, setCanvasIndex, setMpdMode, setMpdStatus, setMpdPool } = appSlice.actions
+export const { setTree, setFullTree, setPlaylist, setPlayIndex, setRadios, setCanvasIndex, setMpdMode, setMpdStatus, setMpdPool, setError, setConfig } = appSlice.actions
 
 export default appSlice.reducer
 
@@ -71,10 +73,23 @@ const toggleMpdMode = value => async (dispatch, getState) => {
   dispatch(setMpdMode(value))
 }
 
+const updateError = value => (dispatch, getState) => {
+  const state = getState();
+
+  if (JSON.stringify(value) !== JSON.stringify(state.app.error)) {
+    dispatch(setError(value))
+    if (value !== null) {
+      dispatch(setMpdStatus({}))
+      dispatch(setPlaylist([]))
+    }
+  }
+}
+
 export const useApp = () => {
     const dispatch = useDispatch();
 
     return {
+      setError: value => dispatch(updateError(value)),
       setMpdMode: value => dispatch(toggleMpdMode(value)),
       setMpdStatus: value => dispatch(setMpdStatus(value)),
       setFullTree: value => dispatch(setFullTree(value)),
@@ -86,10 +101,9 @@ export const useApp = () => {
       setRadios: item => dispatch(setRadios(item)),
       addToPlaylist: item => dispatch(addToPlaylist(item)),
       nextIndex: () => dispatch(nextIndex()),
-      getFullTree: async () => {
-        const {files: tree, radios} = await getConfig()
-        dispatch(setFullTree(tree))
-        dispatch(setRadios(radios))
+      getConfig: async () => {
+        const data = await getConfig()
+        dispatch(setConfig(data))
       },
       getMpdPool: async () => {
         const { data } = await mpdDatabase()

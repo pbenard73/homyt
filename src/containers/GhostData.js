@@ -13,6 +13,7 @@ function GhostData() {
   const [uuid, setUuid] = useState(null)
 
   useEffect(() => {
+    app.getConfig();
     auth.refreshSession()
     const savedMpdMode = storage.get(STORAGE.MPD_MODE)
 
@@ -32,6 +33,14 @@ function GhostData() {
     const mySocket = socketIOClient(`${socketPath}?uuid=${newUuid}`, {
       withCredentials: true,
     });
+
+    mySocket.on('server_connection_error', data => {
+      app.setError(data)
+    })
+
+    mySocket.on('config_change', data => {
+      app.getConfig()
+    })
 
     mySocket.on('volume', data => {
       if (data.target === newUuid) {

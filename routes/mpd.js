@@ -9,6 +9,7 @@ Object.values(mpdManager.COMMANDS).forEach(command => {
       const data = await mpdManager[command](req)
       res.send({valid: true, data})
     } catch (e) {
+      console.log(e)
       res.json({valid: false})
     }
   })

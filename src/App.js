@@ -8,6 +8,7 @@ import Human from "./components/Human";
 
 import AwesomeButtonStyles from "react-awesome-button/src/styles/styles.scss";
 import './App.scss';
+import ErrorPanel from "./components/ErrorPanel";
 
 const AppStyled = styled.div`
   @media screen and (max-width:768px) {
@@ -27,10 +28,10 @@ const App = () => (
     <GhostPlayer />
     <Suspense callback={"loading"}>
     <Vizualizer />
-    <Main />
-   
+    <Main />   
     </Suspense>
     <Human />
+    <ErrorPanel />
   </AppStyled>
 )
 

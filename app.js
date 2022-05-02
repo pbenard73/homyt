@@ -4,6 +4,7 @@ const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const cors = require("cors");
 const indexRouter = require("./routes/index");
+const configRouter = require("./routes/config");
 const mpdRouter = require("./routes/mpd");
 const themeRouter = require("./routes/theme");
 const authRouter = require("./routes/auth");
@@ -41,6 +42,7 @@ app.use(express.static(path.join(__dirname, "build")));
 
 app.use("/", indexRouter);
 app.use("/auth", authRouter);
+app.use("/config", configRouter);
 app.use("/mpd", mpdRouter);
 app.use("/theme", themeRouter);
 

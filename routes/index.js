@@ -44,15 +44,6 @@ router.get('/clients', acl('ADMIN'), (req, res, next) => {
   return res.json(socketManager.pool)
 })
 
-router.get("/config", acl('ADMIN'), (req, res, next) => {
-  const files = loopDir(process.env.MUSIC_FOLDER);
-  const radioFiles = fs.readFileSync(path.join(__dirname, `/../data/radio.json`), 'utf8');
-  
-  const radios = JSON.parse(radioFiles)
-
-  res.json({files, radios: radios.sort((a, b) => a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1)});
-});
-
 router.delete("/deleteFile", acl('ADMIN'), (req, res, next) => {
   const {file} = req.body;
   const filepath = path.join(process.env.MUSIC_FOLDER, file);

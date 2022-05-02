@@ -8,12 +8,13 @@ import { mpdPlay, mpdRandom, mpdRepeat, mpdShuffle } from '../apis/mpdApi';
 
 const InnerPlaylist = () => {
     const mpdPlaylist = useSelector(state => JSON.stringify(state.app.mpdStatus?.playlist_info || []))
+    const current = useSelector(state => state.app.mpdStatus?.current?.id || null)
 
     const playlistMemo = useMemo(() => (
         <List className="nodrag">
         {JSON.parse(mpdPlaylist).map((song, songIndex) => (
             <ListItem key={song.path}>
-                <ListItemText primary={song.title || song.file.split('/').reverse()[0]} secondary={song.artist}/>
+                <ListItemText primary={song.title || song.file.split('/').reverse()[0]} secondary={song.artist} style={{ color: song.id === current ? 'red' : undefined }}/>
                 <ListItemSecondaryAction>
                     <IconButton onClick={() => mpdPlay({}, {index: songIndex}) } style={{color:'white'}}>
                         <PlayArrowIcon />
@@ -22,7 +23,7 @@ const InnerPlaylist = () => {
             </ListItem>
         ))} 
         </List>
-    ), [mpdPlaylist])
+    ), [mpdPlaylist, current])
 
     return playlistMemo
 }
