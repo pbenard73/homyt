@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef } from 'react';
+import React, {  useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components'
 import listener, { EVENTS } from '../utils/listener';
@@ -10,38 +10,19 @@ const CasperVideo = styled.video`
 const GhostPlayer = () => {
   const audioUrl = useSelector(state => state.app.audioUrl)
   const mpdState = useSelector(state => state.app.mpdStatus?.state)
-  const ref = useRef()
-  
-  useEffect(() => {
-    if (mpdState === 'play') {
-      const videoElement = ref.current
-      if (videoElement) {
-        const isVideoPlaying = videoElement => !!(videoElement.currentTime > 0 && !videoElement.paused && !videoElement.ended && videoElement.readyState > 2);
-        if (!isVideoPlaying) {
-          videoElement.play()
-        }
-      }
-    }
-  }, [ref.current])
 
   const memoizedVideo = useMemo(() => audioUrl && mpdState === 'play' && (
     <>
     <CasperVideo
       controls 
-      ref={ref}
       id="casper_video"
-      onPlay={(...args) => listener.dispatch(EVENTS.PLAYER_START, ...args)} 
-      onPause={(...args) => listener.dispatch(EVENTS.PLAYER_PAUSE, ...args)} 
-      onEnded={(...args) => listener.dispatch(EVENTS.PLAYER_END, ...args)}
-      onTimeUpdate={(...args) => listener.dispatch(EVENTS.PLAYER_TIME_UPDATE, ...args)}
-      onLoadedMetadata={(...args) => listener.dispatch(EVENTS.PLAYER_META, ...args)}
       crossOrigin="anonymous"
       autoplay
       >
       <source src={audioUrl}/>       
     </CasperVideo>
     <script>
-      document.getElementById('#casper_video').play()
+      document.getElementById('casper_video').play()
     </script>
         </>
 
