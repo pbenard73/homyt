@@ -13,17 +13,15 @@ const GhostPlayer = () => {
 
   const memoizedVideo = useMemo(() => audioUrl && mpdState === 'play' && (
     <>
-    <CasperVideo
-      controls 
-      id="casper_video"
-      crossOrigin="anonymous"
-      autoplay
-      >
-      <source src={audioUrl}/>       
-    </CasperVideo>
-    <script>
-      document.getElementById('casper_video').play()
-    </script>
+      <CasperVideo
+        controls 
+        id="casper_video"
+        onLoadedMetadata={(...args) => document.getElementById('casper_video').play()}
+        crossOrigin="anonymous"
+        autoplay
+        >
+        <source src={audioUrl}/>       
+      </CasperVideo>
         </>
 
   ), [audioUrl, mpdState])
