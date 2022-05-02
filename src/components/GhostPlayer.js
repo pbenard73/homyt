@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components'
 import listener, { EVENTS } from '../utils/listener';
@@ -10,10 +10,11 @@ const CasperVideo = styled.video`
 const GhostPlayer = () => {
   const audioUrl = useSelector(state => state.app.audioUrl)
   const mpdState = useSelector(state => state.app.mpdStatus?.state)
+  const ref = useRef()
   
   useEffect(() => {
     if (mpdState === 'play') {
-      const videoElement = document.getElementById('casper_video')
+      const videoElement = ref.current
       if (videoElement) {
         const isVideoPlaying = videoElement => !!(videoElement.currentTime > 0 && !videoElement.paused && !videoElement.ended && videoElement.readyState > 2);
         if (!isVideoPlaying) {
@@ -21,11 +22,12 @@ const GhostPlayer = () => {
         }
       }
     }
-  })
+  }, [ref.current])
 
   const memoizedVideo = useMemo(() => audioUrl && mpdState === 'play' && (
     <CasperVideo
       controls 
+      ref={ref}
       id="casper_video"
       onPlay={(...args) => listener.dispatch(EVENTS.PLAYER_START, ...args)} 
       onPause={(...args) => listener.dispatch(EVENTS.PLAYER_PAUSE, ...args)} 
