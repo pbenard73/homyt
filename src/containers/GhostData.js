@@ -14,7 +14,8 @@ function GhostData() {
 
   useEffect(() => {
     app.getConfig();
-    auth.refreshSession()
+    auth.refreshSession();
+    app.getFullTree();
 
     const newUuid = nanoid()
     setUuid(nanoid(newUuid))

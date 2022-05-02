@@ -25,9 +25,13 @@ const Controls = () => {
     return (
         <>
             <HoverButton><TuneIcon /></HoverButton>
-            <HoverButton><SkipPreviousIcon onClick={() => mpdPrevious()}/></HoverButton>
-            <HoverButton>{status === 'play' ? <PauseIcon onClick={() => mpdPause()}/> : <PlayArrowIcon onClick={() => mpdPlay()}/>}</HoverButton>
-            <HoverButton><SkipNextIcon onClick={() => mpdNext()}/></HoverButton>
+            <HoverButton onClick={() => mpdPrevious()}><SkipPreviousIcon/></HoverButton>
+            {status === 'play' ? (
+                <HoverButton onClick={() => mpdPause()}><PauseIcon /></HoverButton>
+            ) : (
+                <HoverButton onClick={() => mpdPlay()}><PlayArrowIcon /></HoverButton>
+            )}
+            <HoverButton onClick={() => mpdNext()}><SkipNextIcon /></HoverButton>
         </>
     )
 }

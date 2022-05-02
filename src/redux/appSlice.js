@@ -83,6 +83,12 @@ const updateError = value => (dispatch, getState) => {
   }
 }
 
+const getFullTree = async dispatch => {
+  const pool = await  mpdDatabase();
+
+  dispatch(setMpdPool(pool))
+}
+
 export const useApp = () => {
     const dispatch = useDispatch();
 
@@ -90,7 +96,7 @@ export const useApp = () => {
       setError: value => dispatch(updateError(value)),
       setMpdMode: value => dispatch(toggleMpdMode(value)),
       setMpdStatus: value => dispatch(setMpdStatus(value)),
-      setFullTree: value => dispatch(setFullTree(value)),
+      getFullTree: value => dispatch(getFullTree),
       setPlayIndex: value => dispatch(setPlayIndex(value)),
       setRadios: item => dispatch(setRadios(item)),
       addToPlaylist: item => dispatch(addToPlaylist(item)),
