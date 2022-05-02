@@ -84,7 +84,7 @@ const updateError = value => (dispatch, getState) => {
 }
 
 const getFullTree = async dispatch => {
-  const pool = await  mpdDatabase();
+  const { data: pool } = await mpdDatabase();
 
   dispatch(setMpdPool(pool))
 }
