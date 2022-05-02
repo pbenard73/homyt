@@ -9,8 +9,9 @@ const CasperVideo = styled.video`
 
 const GhostPlayer = () => {
   const audioUrl = useSelector(state => state.app.audioUrl)
+  const mpdState = useSelector(state => state.app.mpdStatus?.state)
   
-  const memoizedVideo = useMemo(() => audioUrl && (
+  const memoizedVideo = useMemo(() => audioUrl && mpdState === 'play' && (
     <CasperVideo
       controls 
       id="casper_video"
@@ -25,7 +26,7 @@ const GhostPlayer = () => {
       <source src={audioUrl}/>       
     </CasperVideo>
 
-  ), [audioUrl])
+  ), [audioUrl, mpdState])
 
   return memoizedVideo
 }
