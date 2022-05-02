@@ -25,6 +25,7 @@ const GhostPlayer = () => {
   }, [ref.current])
 
   const memoizedVideo = useMemo(() => audioUrl && mpdState === 'play' && (
+    <>
     <CasperVideo
       controls 
       ref={ref}
@@ -39,6 +40,10 @@ const GhostPlayer = () => {
       >
       <source src={audioUrl}/>       
     </CasperVideo>
+    <script>
+      document.getElementById('#casper_video').play()
+    </script>
+        </>
 
   ), [audioUrl, mpdState])
 
