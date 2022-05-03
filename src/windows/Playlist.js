@@ -1,10 +1,9 @@
 
-import { IconButton, List, ListItem, ListItemSecondaryAction, ListItemText, Tooltip } from '@mui/material'
+import { IconButton, List, ListItem, ListItemSecondaryAction, ListItemText } from '@mui/material'
 import React, { useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
-import listener, { EVENTS } from '../utils/listener';
 import { mpdClear, mpdPlay, mpdRandom, mpdRepeat, mpdShuffle } from '../apis/mpdApi';
 
 
