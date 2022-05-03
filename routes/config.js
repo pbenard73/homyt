@@ -30,7 +30,7 @@ router.post("/server", acl('ADMIN'), (req, res, next) => {
   res.json({valid:true});
 });
 
-router.put("/setDefaultServer", acl('ADMIN'), (req, res, next) => {
+router.put("/setDefaultServer", acl('ADMIN'), async (req, res, next) => {
   let servers = require('./../data/server.json');
   const index = req.body.index;
 
@@ -48,7 +48,7 @@ router.put("/setDefaultServer", acl('ADMIN'), (req, res, next) => {
 
   fs.writeFileSync(path.join(__dirname, '/../data/server.json'), JSON.stringify(servers, null, 4))
 
-  mpdManager.run();
+  await mpdManager.run(true);
 
   socketManager.emit('config_change');
 

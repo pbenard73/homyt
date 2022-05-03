@@ -1,10 +1,12 @@
 
-import { IconButton, List, ListItem, ListItemSecondaryAction, ListItemText } from '@mui/material'
+import { IconButton, List, ListItem, ListItemSecondaryAction, ListItemText, Tooltip } from '@mui/material'
 import React, { useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
 import listener, { EVENTS } from '../utils/listener';
-import { mpdPlay, mpdRandom, mpdRepeat, mpdShuffle } from '../apis/mpdApi';
+import { mpdClear, mpdPlay, mpdRandom, mpdRepeat, mpdShuffle } from '../apis/mpdApi';
+
 
 const InnerPlaylist = () => {
     const mpdPlaylist = useSelector(state => JSON.stringify(state.app.mpdStatus?.playlist_info || []))
@@ -44,12 +46,17 @@ const Playlist = () => {
       ), [mpdIsRandom])
 
     return (
-        <>
-        <button onClick={() => mpdShuffle()}>shuff</button>
-        {repeatMemo}
-        {randomMemo}
-        <InnerPlaylist />
-        </>
+        <div className="nodrag">
+            <button onClick={() => mpdShuffle()}>shuff</button>
+            {repeatMemo}
+            {randomMemo}
+            <div style={{textAlign: 'right'}}>
+                <IconButton onClick={() => mpdClear()}>
+                    <DeleteSweepIcon />
+                </IconButton>
+            </div>
+            <InnerPlaylist />
+        </div>
     )
 
 }

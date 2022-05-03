@@ -15,6 +15,8 @@ const pool = {
   mpdDatabase: {path:"/database", method:"put"},
   mpdAdd: {path:"/add", method:"put"},
   mpdSeek: {path:"/seek", method:"put"},
+  mpdUpdate: {path:"/update", method:"put"},
+  mpdClear: {path:"/clear", method:"put"},
 };
 
 export const { 
@@ -31,5 +33,7 @@ export const {
   mpdRandom, 
   mpdDatabase, 
   mpdAdd,
-  mpdSeek
+  mpdSeek,
+  mpdUpdate,
+  mpdClear,
  } = makeApi(pool, `${process.env.REACT_APP_API}/mpd`);

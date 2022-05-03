@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { useDispatch } from 'react-redux'
 import { getConfig } from '../apis/configApi';
-import { mpdDatabase, mpdStatus } from '../apis/mpdApi';
+import { mpdDatabase, mpdStatus, mpdUpdate } from '../apis/mpdApi';
 import listener, { EVENTS } from '../utils/listener';
 import storage, { STORAGE } from '../utils/storage';
 const capitalize = string => string.replace(/([a-z])/i, (str, firstLetter) => firstLetter.toUpperCase())
@@ -89,6 +89,39 @@ const getFullTree = async dispatch => {
   dispatch(setMpdPool(pool))
 }
 
+const getMpdDatabase = async (dispatch, refresh = false) => {
+  const result = await mpdDatabase({}, {refresh})
+  dispatch(setMpdPool(result.valid === true ? result.data : []))
+}
+
+const getMpdConfig = async (dispatch, getState) => {
+  const state = getState();
+  const stateConfig = state.app.config?.servers || [];
+  const actualStateServerIndex = stateConfig.findIndex(i => i.default === true)
+
+
+  const data = await getConfig()
+  const actualServer = data.servers.find(i => i.default === true)
+  const actualServerIndex = data.servers.findIndex(i => i.default === true)
+
+  if (actualServer) {
+    if (actualServer.internal === true) {
+      dispatch(setAudioUrl(`${process.env.REACT_APP_API}/mp3`))
+    } else if (actualServer.audioUrl) {
+      dispatch(setAudioUrl(actualServer.audioUrl))
+    } else {
+      dispatch(setAudioUrl(null))
+    }
+  }
+
+  if (actualServerIndex !== actualStateServerIndex) {
+    await getMpdDatabase(dispatch, true)
+    await mpdStatus()
+  }
+
+  dispatch(setConfig(data))
+}
+
 export const useApp = () => {
     const dispatch = useDispatch();
 
@@ -101,25 +134,13 @@ export const useApp = () => {
       setRadios: item => dispatch(setRadios(item)),
       addToPlaylist: item => dispatch(addToPlaylist(item)),
       nextIndex: () => dispatch(nextIndex()),
-      getConfig: async () => {
-        const data = await getConfig()
-        const actualServer = data.servers.find(i => i.default === true)
-
-        if (actualServer) {
-          if (actualServer.internal === true) {
-            dispatch(setAudioUrl(`${process.env.REACT_APP_API}/mp3`))
-          } else if (actualServer.audioUrl) {
-            dispatch(setAudioUrl(actualServer.audioUrl))
-          } else {
-            dispatch(setAudioUrl(null))
-          }
-        }
-
-        dispatch(setConfig(data))
+      getConfig: () => dispatch(getMpdConfig),
+      update: async () => {
+        await mpdUpdate();
+        await getMpdDatabase(dispatch, true)
       },
       getMpdPool: async () => {
-        const { data } = await mpdDatabase()
-        dispatch(setMpdPool(data))
+        await getMpdDatabase(dispatch)
       },
       resetCanvas: () => dispatch(resetCanvas())
     }

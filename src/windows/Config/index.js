@@ -17,7 +17,7 @@ const Config = () => {
     }
 
     return (
-        <div style={{display:'flex', flexDirection:'row', width:'100%'}} >
+        <div style={{display:'flex', flexDirection:'row', width:'100%'}} className="nodrag">
             <div style={{width:'60px', display:'flex', flexDirection:'column'}}>
                 <IconButton onClick={tabulation(0)} style={{color: tabIndex === 0 ? 'white' : undefined}}>
                     <StorageIcon />

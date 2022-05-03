@@ -35,7 +35,12 @@ const windowsList = {
   [WINDOWS.BROWSER]: {
     uuid: WINDOWS.BROWSER,
     title: 'window_browser',
-    component: <Browser />
+    component: <Browser />,
+    center:true,
+    options: {
+      size:[550, 600],
+      minSize:[300, 400],
+    }
   },
   [WINDOWS.RADIO]: {
     uuid: WINDOWS.RADIO,
@@ -47,7 +52,7 @@ const windowsList = {
     title: 'window_playlist',
     component: <Playlist />,
     options: {
-      size:[400, 400],
+      size:[400, 400]
     }
   },
   [WINDOWS.DOWNLOADER]: {

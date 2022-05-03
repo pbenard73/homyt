@@ -10,7 +10,6 @@ const Servers = () => {
         port:6600,
     }
     
-
     const createNewServer = async (e) => {
         console.log(typeof e, e)
         e.preventDefault()

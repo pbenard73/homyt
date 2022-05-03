@@ -17,7 +17,9 @@ const COMMANDS = {
     REPEAT: 'repeat',
     RANDOM: 'random',
     DATABASE: 'database',
-    ADD: "add"
+    ADD: "add",
+    UPDATE: "update",
+    CLEAR: "clear"
 }
 
 class MpdManager {
@@ -28,7 +30,11 @@ class MpdManager {
     current = null;
     pool = null;
 
-    async run() {
+    async run(reset = false) {
+        if (reset === true) {
+            await this.client?.disconnect?.();
+        }
+
         const configs = require('./../data/server.json')
         const config = configs.find(i => i.default === true)
 
@@ -106,44 +112,39 @@ class MpdManager {
 
     async [COMMANDS.DATABASE](req) {
         if (this.pool === null || req?.body?.refresh === true) {
-            try {
-                const lsAllParser = mpd.parseListAndAccumulate(['directory', 'file'])
-                const lsAllString = await this.client.sendCommand('listallinfo')     
-                const pool = lsAllParser(lsAllString)
-                
-                let processedFolder = []
-                let newPool = []
-                const cleanFilter = i => i !== null && i !== undefined
+            const lsAllParser = mpd.parseListAndAccumulate(['directory', 'file'])
+            const lsAllString = await this.client.sendCommand('listallinfo')     
+            const pool = lsAllParser(lsAllString)
+            
+            let processedFolder = []
+            let newPool = []
+            const cleanFilter = i => i !== null && i !== undefined
 
-                const nestThePool = (poolItem) => {
-                    if (processedFolder.indexOf(poolItem.directory) !== -1) {
-                        return undefined
-                    }
-
-                    const children = pool
-                        .filter(i => i.directory.indexOf(poolItem.directory) === 0 && i.directory !== poolItem.directory)
-                        .map(child => nestThePool(child))
-                        .filter(cleanFilter)
-
-                    children.forEach(i => processedFolder.push(i.directory))
-
-                    const newItem = {
-                        ...poolItem,
-                        directories: children
-                    }
-
-                    processedFolder.push(poolItem.directory);
-
-                    return newItem;                    
+            const nestThePool = (poolItem) => {
+                if (processedFolder.indexOf(poolItem.directory) !== -1) {
+                    return undefined
                 }
 
-                newPool = pool.map(item => nestThePool(item)).filter(cleanFilter)
+                const children = pool
+                    .filter(i => i.directory.indexOf(poolItem.directory) === 0 && i.directory !== poolItem.directory)
+                    .map(child => nestThePool(child))
+                    .filter(cleanFilter)
 
-                this.pool = newPool;
-                
-            } catch (e) {
-                console.error(e)
+                children.forEach(i => processedFolder.push(i.directory))
+
+                const newItem = {
+                    ...poolItem,
+                    directories: children
+                }
+
+                processedFolder.push(poolItem.directory);
+
+                return newItem;                    
             }
+
+            newPool = pool.map(item => nestThePool(item)).filter(cleanFilter)
+
+            this.pool = newPool;
         }
 
         return this.pool;
@@ -153,6 +154,10 @@ class MpdManager {
         const volume = req.body.volume
 
         await this.client.sendCommand(`setvol ${volume}`).then(mpd.parseObject)    
+    }
+
+    async [COMMANDS.UPDATE]() {
+        await this.client.sendCommand('update');
     }
 
     async [COMMANDS.VOLUME_UP]() {
@@ -192,6 +197,9 @@ class MpdManager {
     async [COMMANDS.SHUFFLE]() {
         await this.client.sendCommand('shuffle').then(mpd.parseObject);   
     }
+    async [COMMANDS.CLEAR]() {
+        await this.client.sendCommand('clear');
+    }
     async [COMMANDS.REPEAT]() {
         const newStatus = (this.status?.repeat || false) === false ? 1 : 0;
         await this.client.sendCommand(`repeat ${newStatus}`).then(mpd.parseObject);   
@@ -204,10 +212,17 @@ class MpdManager {
     }
 
     async [COMMANDS.ADD](req) {
-        const filePath = req.body.path;
-        console.log(`PLAYLIST add ${filePath}`)
-        console.log(`add \`${filePath}\``)
+        const {path:filePath , play, clear} = req.body;
+
+        if (clear === true) {
+            await this.client.sendCommand('clear');
+        }
+
         await this.client.sendCommand(mpd.cmd('add', filePath)).then(mpd.parseObject);   
+
+        if (play === true) {
+            await this.client.sendCommand(`play`).then(mpd.parseObject); 
+        }
 
         this[COMMANDS.STATUS]()
     }

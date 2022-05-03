@@ -5,6 +5,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import ContentPasteIcon from '@mui/icons-material/ContentPaste';
 import FileCopyIcon from '@mui/icons-material/FileCopy';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
+import PlaylistPlayIcon from '@mui/icons-material/PlaylistPlay';
+import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import styled from "styled-components";
 import { deleteFile } from "./api";
@@ -16,11 +18,21 @@ import { mpdAdd } from "./apis/mpdApi";
 const LeafItem = styled(ListItem)`
   flex-direction: column;
   align-items: start !important;
+  position:relative;
   .MuiListItemSecondaryAction-root {
     top: 26px;
   }
   .children_leaf {
     width: 100%;
+  }
+  .actions {   
+     svg {
+       fill: white;
+     }
+  }
+  .MuiListItemIcon-root,
+  .MuiListItemText-root{
+    color: white
   }
 `;
 
@@ -77,18 +89,28 @@ const TreeView = ({ tree }) => {
       <div style={{flexDirection:'row', display:'flex'}}>
 
       {files === false && (
-        <ListItemIcon style={{color:'white', alignItems:'center'}}>
+        <ListItemIcon style={{alignItems:'center'}}>
           <FolderIcon />
         </ListItemIcon>
       )}
-      <ListItemText primary={renderName(leaf, parentName)} style={{color:'white'}} onClick={files === true ? undefined : () => toggle(leaf.directory)}/>
+      <ListItemText primary={renderName(leaf, parentName)} onClick={files === true ? undefined : () => toggle(leaf.directory)}/>
       </div>
-      <ListItemSecondaryAction>
+      <ListItemSecondaryAction className="actions">
         <>
           <IconButton onClick={() => {
             mpdAdd({}, {path: files === true ? leaf.file : leaf.directory})
           }}>
-            <PlayArrow />
+            <AddCircleIcon />
+          </IconButton>
+          <IconButton onClick={() => {
+            mpdAdd({}, {path: files === true ? leaf.file : leaf.directory, play:true})
+          }}>
+            <PlaylistPlayIcon />
+          </IconButton>
+          <IconButton onClick={() => {
+            mpdAdd({}, {path: files === true ? leaf.file : leaf.directory, play:true, clear: true})
+          }}>
+            <PlayCircleIcon />
           </IconButton>
         </>
       </ListItemSecondaryAction>
@@ -105,7 +127,7 @@ const TreeView = ({ tree }) => {
 
   return (
     <>
-    <List className="nodrag" style={{maxHeight:'75vh', overflow:'auto'}}>
+    <List className="nodrag">
       {renderTree(tree)}
     </List>
     </>
