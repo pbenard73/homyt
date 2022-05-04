@@ -16,6 +16,9 @@ function GhostData() {
 
   useEffect(() => {
     player.setState(state || 'pause')
+    if (state !== 'play') {
+      player.context = null;
+    }
   }, [state])
 
   useEffect(() => {

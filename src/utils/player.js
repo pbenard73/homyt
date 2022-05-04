@@ -27,6 +27,7 @@ class Player {
     getContext() {
         if (this.context === null) {
             const audioElement = document.querySelector('#casper_video')
+
             const canvas = document.querySelector('#spectrum_canvas')
 
             if (this.source === null) {
