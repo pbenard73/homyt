@@ -12,6 +12,7 @@ import { mpdNext, mpdPause, mpdPlay, mpdPrevious, mpdSeek } from '../apis/mpdApi
 import { useState } from 'react';
 import { IconButton, Paper, Popper, Slider, Typography } from '@mui/material';
 import { mpdVolume } from '../apis/mpdApi';
+import { getPicture } from '../api';
 
 const CoverImage = styled('div')({
     width: 100,
@@ -86,7 +87,9 @@ const Tune = () => {
     return(
         <TuneWrapper>
             <div>
-                <CoverImage></CoverImage>
+                <CoverImage>
+                    <img src={getPicture.url({path: file?.replace?.(/\./g, '_'), query: title})} alt="cover"/>
+                </CoverImage>
                 <div>
                     <Typography variant="caption">{artist}</Typography>
                     <Typography noWrap><b>{title}</b></Typography>

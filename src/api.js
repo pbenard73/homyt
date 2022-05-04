@@ -11,11 +11,13 @@ const pool = {
   getclients: {path:"/clients"},
   softwareUpdate: {path:"/update", method: "post"},
   softwareInstall: {path:"/auth/install", method: "post"},
-  setTheme: {path:"/theme", method: "put"}
+  setTheme: {path:"/theme", method: "put"},
+  getPicture: {path: "/cover"}
 };
 
 export const { 
   download, search, readdir, deleteFile, moveFile, listen, addradio, getclients,
   softwareUpdate, softwareInstall,
-  setTheme
+  setTheme,
+  getPicture
 } = makeApi(pool, process.env.REACT_APP_API);
