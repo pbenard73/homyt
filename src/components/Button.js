@@ -9,6 +9,7 @@ const Awesome = ({children, ...props}) => (
         type="instagram"
         style={{marginRight:'20px'}}
         className="nodrag"
+        onPress={props?.onClick}
         {...props}
     >
         {children}

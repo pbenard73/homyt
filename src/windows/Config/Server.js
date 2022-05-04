@@ -1,6 +1,23 @@
+import { IconButton } from "@mui/material";
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import AddIcon from '@mui/icons-material/Add';
+import styled from 'styled-components'
 import { addServer, setDefaultServer } from "../../apis/configApi";
+
+const ServerBox = styled.div`
+    display:flex;
+    width: 200px;
+    padding:10px;
+    flex-direction: column;
+    border: 1px solid white;
+    &.active{
+        border-color: #007ed7;
+    }
+    &:not(.active) {
+        cursor:pointer;
+    }
+`
 
 const Servers = () => {
     const [newServer, setNewServer] = useState(null);
@@ -24,8 +41,12 @@ const Servers = () => {
     
     return (
         <div style={{width:'100%'}}>
-        <p>Servers</p>
-        <button onClick={() => setNewServer({...defaultServer})}>+ server</button>
+        <h5>Servers</h5>
+        <div style={{textAlign:'right', marginBottom: '20px'}}>
+            <IconButton onClick={() => setNewServer({...defaultServer})}>
+                <AddIcon style={{color:'white'}} />
+            </IconButton>
+        </div>
 
         {newServer && (
             <form onSubmit={e => createNewServer(e)}>
@@ -35,11 +56,19 @@ const Servers = () => {
             </form>
         )}
 
+        <div style={{display:'flex', flexWrap:'wrap', gap:'10px'}}>
         {servers.map((server, serverIndex) => (
-            <div key={`${server.host}:${server.port}`}>
-                <p onClick={() => setDefaultServer({}, {index: serverIndex})}>{server.host} - {server.port} => {server.default === true ? 'O' : '-'}</p>
-            </div>
+            <ServerBox 
+            key={`${server.host}:${server.port}`}
+             className={server.default === true ? 'active' : ''}
+             onClick={() => server.default !== true && setDefaultServer({}, {index: serverIndex})}
+
+             >
+             <p><b>{server.host}</b></p>
+             <p><b>{server.port}</b></p>
+            </ServerBox>
         ))}
+        </div>
         </div>
     )
 }

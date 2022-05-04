@@ -36,7 +36,7 @@ const LeafItem = styled(ListItem)`
   }
 `;
 
-const TreeView = ({ tree }) => {
+const TreeView = ({ tree, setFolder }) => {
   const [open, setOpen] = useState([])
   const app = useApp()
 
@@ -96,25 +96,31 @@ const TreeView = ({ tree }) => {
       <ListItemText primary={renderName(leaf, parentName)} onClick={files === true ? undefined : () => toggle(leaf.directory)}/>
       </div>
       <ListItemSecondaryAction className="actions">
-        <>
-          <IconButton onClick={() => {
-            mpdAdd({}, {path: files === true ? leaf.file : leaf.directory})
-          }}>
-            <AddCircleIcon />
-          </IconButton>
-          <IconButton onClick={() => {
-            mpdAdd({}, {path: files === true ? leaf.file : leaf.directory, play:true})
-          }}>
-            <PlaylistPlayIcon />
-          </IconButton>
-          <IconButton onClick={() => {
-            mpdAdd({}, {path: files === true ? leaf.file : leaf.directory, play:true, clear: true})
-          }}>
-            <PlayCircleIcon />
-          </IconButton>
-        </>
+          {setFolder ? (
+              <IconButton onClick={() => setFolder(leaf.directory)}>
+                <PlaylistPlayIcon />
+              </IconButton>
+            ) : (
+            <>
+              <IconButton onClick={() => {
+                mpdAdd({}, {path: files === true ? leaf.file : leaf.directory})
+              }}>
+                <AddCircleIcon />
+              </IconButton>
+              <IconButton onClick={() => {
+                mpdAdd({}, {path: files === true ? leaf.file : leaf.directory, play:true})
+              }}>
+                <PlaylistPlayIcon />
+              </IconButton>
+              <IconButton onClick={() => {
+                mpdAdd({}, {path: files === true ? leaf.file : leaf.directory, play:true, clear: true})
+              }}>
+                <PlayCircleIcon />
+              </IconButton>
+            </>
+          )}
       </ListItemSecondaryAction>
-      {files === false && (
+      {files === false && !setFolder && (
        <div className="children_leaf">
          <List>
           {Array.isArray(leaf.directories) === true && leaf.directories.length > 0 && open.indexOf(leaf.directory) !== -1 && renderTree(leaf.directories, leaf.directory)}

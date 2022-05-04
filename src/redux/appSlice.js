@@ -105,11 +105,11 @@ const getMpdConfig = async (dispatch, getState) => {
   const actualServerIndex = data.servers.findIndex(i => i.default === true)
 
   if (actualServer) {
-    if (actualServer.internal === true) {
-      dispatch(setAudioUrl(`${process.env.REACT_APP_API}/mp3`))
-    } else if (actualServer.audioUrl) {
+    if (actualServer.audioUrl) {
       dispatch(setAudioUrl(actualServer.audioUrl))
-    } else {
+    } else if (actualServer.internal === true) {
+      dispatch(setAudioUrl(`${process.env.REACT_APP_API}/mp3`))
+    } else  {
       dispatch(setAudioUrl(null))
     }
   }

@@ -4,9 +4,14 @@ const mpdManager = require("../managers/mpd");
 const acl = require("../src/middlewares/acl");
 
 Object.values(mpdManager.COMMANDS).forEach(command => {
-  router.put(`/${command}`, acl('ADMIN'),  async (req, res) => {
+  router.put(`/${command.label}`, acl('ADMIN'),  async (req, res) => {
     try {
-      const data = await mpdManager[command](req)
+      const data = await mpdManager[command.label](req)
+
+      if (data?.valid === false) {
+        return res.send(data);
+      }
+      
       res.send({valid: true, data})
     } catch (e) {
       console.log(e)

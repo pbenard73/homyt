@@ -190,7 +190,7 @@ router.post('/update', acl('ADMIN'), (req, res) => {
         socketManager.emit('update', {})
 
         setTimeout(() => {
-          process.exit(7895)
+          process.send('restart')
         }, 2000);
       }
     })

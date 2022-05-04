@@ -44,7 +44,7 @@ const SeekHandler = () => {
     
     const onSeek = e => {
         const percent = Math.floor(e.pageX * mpdStatus?.time?.total / document.body.offsetWidth);
-        mpdSeek({}, {percent});
+        mpdSeek({}, {params: [percent]});
     }
 
     return (

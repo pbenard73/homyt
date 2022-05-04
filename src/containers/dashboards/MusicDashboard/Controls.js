@@ -7,6 +7,9 @@ import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
 import TuneIcon from '@mui/icons-material/Tune';
 import { useSelector } from 'react-redux';
 import { mpdNext, mpdPause, mpdPlay, mpdPrevious } from '../../../apis/mpdApi';
+import { useState } from 'react';
+import { IconButton, Paper, Popper } from '@mui/material';
+import Tune from '../../../components/Tune';
 
 export const HoverButton = styled.span`
     cursor:pointer;
@@ -21,10 +24,19 @@ export const HoverButton = styled.span`
 
 const Controls = () => {
     const status = useSelector(state => state.app.mpdStatus?.state)
+    const [openTune, setOpenTune] = useState(null)
+
+    const toggleTune = e => {
+        if (openTune === null) {
+            return setOpenTune(e.target.closest('#app_toolbar'))
+        }
+
+        setOpenTune(null)
+    }
 
     return (
         <>
-            <HoverButton><TuneIcon /></HoverButton>
+            <HoverButton onClick={toggleTune}><TuneIcon /></HoverButton>
             <HoverButton onClick={() => mpdPrevious()}><SkipPreviousIcon/></HoverButton>
             {status === 'play' ? (
                 <HoverButton onClick={() => mpdPause()}><PauseIcon /></HoverButton>
@@ -32,6 +44,15 @@ const Controls = () => {
                 <HoverButton onClick={() => mpdPlay()}><PlayArrowIcon /></HoverButton>
             )}
             <HoverButton onClick={() => mpdNext()}><SkipNextIcon /></HoverButton>
+            {openTune && (
+                <Popper
+                open
+                anchorEl={openTune}
+                placement="top"
+                >
+                    <Tune />
+                </Popper>
+            )}
         </>
     )
 }

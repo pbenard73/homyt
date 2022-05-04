@@ -15,6 +15,7 @@ icecast.on('close', (code) => {
 });
 
 const runServer = () => {
+  const now = Date.now()
   const server = spawn('node', ['/homyt/bin/www'])
 
   server.stdout.on('data', (data) => {
@@ -25,8 +26,15 @@ const runServer = () => {
       console.error(`stderr: ${data}`);
   });
   
+  server.on('message', msg => {
+    if (msg === 'restart') {
+      server.stdin.pause();
+      server.kill('SIGKILL');
+    }
+  })
+
   server.on('close', (code) => {
-    if (process.code === 7895) {
+    if (now < Date.now() + 60) {
       return runServer()
     }
       

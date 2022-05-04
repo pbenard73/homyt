@@ -1,6 +1,5 @@
 import { FormGroup, InputLabel, MenuItem, Select } from '@mui/material';
 import React from 'react'
-import { AwesomeButton } from "react-awesome-button";
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux';
 import { softwareUpdate } from '../api';

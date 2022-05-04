@@ -12,7 +12,7 @@ const Volume = () => {
     const volume = useSelector(state => state.app.mpdStatus?.volume || 0)
 
     const onVolumeChange = (e, volume) => {       
-        mpdVolume({}, {volume})   
+        mpdVolume({}, {params: [volume]})   
         const source = document.querySelector('#casper_video')
         const mvolume = volume / 100;
         source.volume = mvolume
