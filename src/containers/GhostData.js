@@ -6,16 +6,24 @@ import listener, { EVENTS } from "../utils/listener";
 import player from './../utils/player'
 import storage, { STORAGE } from "../utils/storage";
 import { useAuth } from "../redux/authSlice";
+import { useSelector } from "react-redux";
 
 function GhostData() {
   const app = useApp()
   const auth = useAuth()
+  const state = useSelector(state => state.app.mpdStatus?.state)
   const [uuid, setUuid] = useState(null)
+
+  useEffect(() => {
+    player.setState(state || 'pause')
+  }, [state])
 
   useEffect(() => {
     app.getConfig();
     auth.refreshSession();
     app.getFullTree();
+
+
 
     const newUuid = nanoid()
     setUuid(nanoid(newUuid))
