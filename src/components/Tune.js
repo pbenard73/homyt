@@ -90,7 +90,7 @@ const Tune = () => {
                 <CoverImage>
                     <img src={getPicture.url({path: file?.replace?.(/\./g, '_'), query: title})} alt="cover"/>
                 </CoverImage>
-                <div>
+                <div style={{padding:'5px 16px'}}>
                     <Typography variant="caption">{artist}</Typography>
                     <Typography noWrap><b>{title}</b></Typography>
                 </div>
