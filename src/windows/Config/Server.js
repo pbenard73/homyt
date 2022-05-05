@@ -1,9 +1,13 @@
-import { IconButton } from "@mui/material";
+import { IconButton, TextField } from "@mui/material";
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import StorageIcon from '@mui/icons-material/Storage';
+import CloseIcon from '@mui/icons-material/Close';
 import AddIcon from '@mui/icons-material/Add';
 import styled from 'styled-components'
 import { addServer, setDefaultServer } from "../../apis/configApi";
+import Button from "../../components/Button";
+import Form from "../../components/Form";
 
 const ServerBox = styled.div`
     display:flex;
@@ -17,7 +21,43 @@ const ServerBox = styled.div`
     &:not(.active) {
         cursor:pointer;
     }
+    > div {
+        display:flex;
+        align-items:center;
+        svg {
+            height: .75em;
+            margin-right: 10px;
+        }
+    }
 `
+
+const SmallField = styled(TextField)`
+    margin-bottom: 15px !important;
+    input{
+        padding: 5px 14px;
+    }
+    .MuiInputLabel-root:not(.Mui-focused):not(.MuiFormLabel-filled){
+        top: -10px;
+    }
+`
+
+const ServerForm = ({value: initialValue, onSubmit}) => {
+    const [value, setValue] = useState(initialValue)
+
+    const changeValue = field => e => setValue({...value, [field]: e.target.value})
+
+    return (
+        <Form onSubmit={e => onSubmit(e, value)}>
+            <div>
+                <SmallField label={"Name"} value={value.name} onChange={changeValue('name')} />
+                <SmallField label={"Host"} value={value.host} onChange={changeValue('host')} />
+                <SmallField label={"Port"} value={value.port} onChange={changeValue('port')} />
+                <SmallField label={"Audio Url"} value={value.audioUrl} onChange={changeValue('audioUrl')} />
+                <Button type="submit">{'Save'}</Button>
+            </div>
+        </Form>
+    )
+}
 
 const Servers = () => {
     const [newServer, setNewServer] = useState(null);
@@ -27,11 +67,17 @@ const Servers = () => {
         port:6600,
     }
     
-    const createNewServer = async (e) => {
+    const ToggleIcon = newServer === null ? AddIcon : CloseIcon;
+
+    const toggleNewServer = () => {
+        setNewServer(oldValue => oldValue === null ? {...defaultServer} : null);
+    }
+
+    const createNewServer = async (e, value) => {
         console.log(typeof e, e)
         e.preventDefault()
 
-        const data = await addServer({}, newServer) 
+        const data = await addServer({}, value) 
 
         if (data.valid === true) {
             setNewServer(null)
@@ -41,20 +87,13 @@ const Servers = () => {
     
     return (
         <div style={{width:'100%'}}>
-        <h5>Servers</h5>
         <div style={{textAlign:'right', marginBottom: '20px'}}>
-            <IconButton onClick={() => setNewServer({...defaultServer})}>
-                <AddIcon style={{color:'white'}} />
-            </IconButton>
+            <Button onClick={toggleNewServer}>
+                <ToggleIcon style={{color:'white'}} />
+            </Button>
         </div>
 
-        {newServer && (
-            <form onSubmit={e => createNewServer(e)}>
-                <input value={newServer.host} onChange={e => setNewServer({...newServer, host: e.target.value})} />
-                <input value={newServer.port} onChange={e => setNewServer({...newServer, port: e.target.value})} />
-                <input type='submit' value="save" />
-            </form>
-        )}
+        {newServer && <ServerForm value={newServer} onSubmit={createNewServer} />}
 
         <div style={{display:'flex', flexWrap:'wrap', gap:'10px'}}>
         {servers.map((server, serverIndex) => (
@@ -64,8 +103,9 @@ const Servers = () => {
              onClick={() => server.default !== true && setDefaultServer({}, {index: serverIndex})}
 
              >
-             <p><b>{server.host}</b></p>
-             <p><b>{server.port}</b></p>
+             <div>
+                 <StorageIcon /> {`${server.host}:${server.port}`}
+             </div>
             </ServerBox>
         ))}
         </div>

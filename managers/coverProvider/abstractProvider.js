@@ -11,9 +11,9 @@ class AbstractCoverProvider {
         return data
     }
 
-    async search(album) {
+    async search(album, isRadio) {
         const {data} = await axios.get(this.generateUrl(album))
-        const finalData = await this.performResponse(data)
+        const finalData = await this.performResponse(data, isRadio)
 
         return finalData
     }

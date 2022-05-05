@@ -4,6 +4,7 @@ import Main from "./containers/Main";
 import GhostData from "./containers/GhostData";
 import Vizualizer from "./components/Vizualizer";
 import GhostPlayer from "./components/GhostPlayer";
+import UserBackground from "./components/UserBackground";
 import Human from "./components/Human";
 
 import AwesomeButtonStyles from "react-awesome-button/src/styles/styles.scss";
@@ -27,6 +28,7 @@ const App = () => (
     <GhostData />
     <GhostPlayer />
     <Suspense callback={"loading"}>
+      <UserBackground />
     <Vizualizer />
     <Main />   
     </Suspense>

@@ -6,6 +6,7 @@ const coverManager = require('../managers/cover');
 var router = express.Router();
 
 const UNKNOW_PICTURE = path.join(__dirname, '/../public/unknow_album.png')
+const TRANSPARENT_PIXEL = path.join(__dirname, '/../public/transparent_pixel.png')
 
 const download = (url, dest) => new Promise((resolve, reject) => {
   var file = fs.createWriteStream(dest);
@@ -22,11 +23,15 @@ const download = (url, dest) => new Promise((resolve, reject) => {
 
 router.get("/", async (req, res, next) => {
   try {
-    let {query, path:givenPath} = req.query;
+    let {query, path:givenPath, radio, big} = req.query;
+
+    const isRadio = [true, 'true'].indexOf(radio) !== -1;
+    const isBig = [true, 'true'].indexOf(big) !== -1;
 
     if (!query || !path) {
-      return res.sendFile(UNKNOW_PICTURE)
+      return res.sendFile(isBig ? TRANSPARENT_PIXEL : UNKNOW_PICTURE)
     }
+
 
     let safe_path = path.basename(givenPath)
     safe_path = safe_path.replace(/\//g, '_');
@@ -36,12 +41,16 @@ router.get("/", async (req, res, next) => {
       return res.sendFile(filePath)
     }
 
-    const data = await coverManager.search(query)
+    const data = await coverManager.search(query, isBig)
 
     if (Array.isArray(data) === false || data.length === 0) {
       return res.sendFile(UNKNOW_PICTURE)
     }
     
+    if (isRadio === true) {
+      return res.redirect(data[0])
+    }
+
     await download(data[0], filePath)
     return res.sendFile(filePath)
   } catch(e) {

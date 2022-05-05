@@ -1,7 +1,9 @@
 import React, {  useMemo } from 'react';
+import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components'
 import listener, { EVENTS } from '../utils/listener';
+import player from '../utils/player';
 
 const CasperVideo = styled.video`
     display:none;
@@ -11,7 +13,26 @@ const GhostPlayer = () => {
   const audioUrl = useSelector(state => state.app.audioUrl)
   const mpdState = useSelector(state => state.app.mpdStatus?.state)
 
-  const memoizedVideo = useMemo(() => audioUrl && mpdState === 'play' && (
+  useEffect(() => {
+    const casperVideo = document.getElementById('casper_video');
+
+    if (mpdState === 'play') {
+      if (audioUrl) {
+        casperVideo.src = audioUrl;
+        casperVideo.play()
+        player.setState('play')
+      } else {
+        casperVideo.src = null;
+        casperVideo.pause();
+        player.setState('pause')
+      }
+    } else {
+      casperVideo.pause();
+      player.setState('pause')
+    }
+  }, [audioUrl, mpdState])
+
+  const memoizedVideo = useMemo(() => (
     <CasperVideo
       controls 
       id="casper_video"
@@ -28,8 +49,7 @@ const GhostPlayer = () => {
       >
       <source src={audioUrl}/>       
     </CasperVideo>
-
-  ), [audioUrl, mpdState])
+  ), [])
 
   return memoizedVideo
 }

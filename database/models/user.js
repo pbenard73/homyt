@@ -17,6 +17,9 @@ const userModel = {
   },
   background: {
     type: DataTypes.STRING
+  },
+  settings: {
+    type: DataTypes.JSON
   }
 }
 

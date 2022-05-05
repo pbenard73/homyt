@@ -4,29 +4,17 @@ import socketIOClient from "socket.io-client";
 import { nanoid } from 'nanoid'
 import listener, { EVENTS } from "../utils/listener";
 import player from './../utils/player'
-import storage, { STORAGE } from "../utils/storage";
 import { useAuth } from "../redux/authSlice";
-import { useSelector } from "react-redux";
 
-function GhostData() {
+const GhostData = () => {
   const app = useApp()
   const auth = useAuth()
-  const state = useSelector(state => state.app.mpdStatus?.state)
   const [uuid, setUuid] = useState(null)
-
-  useEffect(() => {
-    player.setState(state || 'pause')
-    if (state !== 'play') {
-      player.context = null;
-    }
-  }, [state])
 
   useEffect(() => {
     app.getConfig();
     auth.refreshSession();
     app.getFullTree();
-
-
 
     const newUuid = nanoid()
     setUuid(nanoid(newUuid))
@@ -88,8 +76,7 @@ function GhostData() {
 
       if (newIndex > -1 && newIndex <= playlist.length -1) {
         listener.dispatch(EVENTS.ACTION_PLAY_SONG, {...playlist[newIndex], index: newIndex})
-      }
-      
+      }      
     })
 
     return () => mySocket.close()

@@ -30,8 +30,8 @@ class UserManager {
                     }
     
                     if (result === true) {
-                        req.session.user = user;
-                        return resolve({valid: true, user: {...user, password: undefined}})
+                        req.session.user = {...user, settings: JSON.parse(user.settings)};
+                        return resolve({valid: true, user: {...user, password: undefined, settings: JSON.parse(user.settings)}})
                     }
 
                     resolve(result)
@@ -44,7 +44,7 @@ class UserManager {
     async createUser(username, givenPassword, role = null) {
         const password = await this.encrypt(givenPassword)
 
-        return database.models.user.create({username, password, role})
+        return database.models.user.create({username, password, role, theme: 'music', settings: {}})
     }
 
 }

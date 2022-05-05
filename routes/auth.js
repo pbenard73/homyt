@@ -21,13 +21,13 @@ const createUserRouter = (install = false) => async (req, res, next) => {
     return res.json({valid: false})
   }
 
-  const {id, username} = await userManager.createUser(givenUsername, password, install === true ? 'ADMIN' : null)
+  const {id, username, settings, theme} = await userManager.createUser(givenUsername, password, install === true ? 'ADMIN' : null)
 
   if (install === true) {
     return next();
   }
 
-  return res.json({valid: true, user: {id, username}})
+  return res.json({valid: true, user: {id, username, settings, theme}})
 }
 
 const loginRoute = async (req, res) => {
@@ -67,6 +67,15 @@ router.get("/refresh", async (req, res) => {
   const userCount = await database.models.user.count();
 
   return res.json({valid: req.session.user !== undefined, user: {...req.session.user, password: undefined}, install: userCount === 0})
+})
+
+router.put("/settings", async (req, res) => {
+
+  await database.models.user.update({settings: req.body}, {where: {id: req.session.user.id}});
+
+  req.session.user.settings = req.body;
+
+  return res.json({valid: true})
 })
 
 module.exports = router;

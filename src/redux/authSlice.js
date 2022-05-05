@@ -83,6 +83,14 @@ const setUserTheme = themeValue => async (dispatch, getState) => {
   }
 }
 
+const updateUserSettings = (field, value) => (dispatch, getState) => {
+  const state = getState()
+  const user = {...state.auth.user};
+
+  user.settings = {...user.settings, [field]: value};
+
+  dispatch(setUser(user));
+}
 
 export const useAuth = () => {
     const dispatch = useDispatch();
@@ -91,6 +99,7 @@ export const useAuth = () => {
       login: (t, username, password) => dispatch(loginAction(t, username, password)),
       logout: () => dispatch(logoutAction),
       refreshSession: () => dispatch(refreshAction),
-      setTheme: theme => dispatch(setUserTheme(theme))
+      setTheme: theme => dispatch(setUserTheme(theme)),
+      updateUserSettings: (field, value) => dispatch(updateUserSettings(field, value))
     }
 }

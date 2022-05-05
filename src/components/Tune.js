@@ -84,11 +84,13 @@ const Tune = () => {
         mpdSeek({}, {params: [percent]});
     }
 
+    const isRadio = file.indexOf('http') === 0;
+
     return(
         <TuneWrapper>
             <div>
                 <CoverImage>
-                    <img src={getPicture.url({path: file?.replace?.(/\./g, '_'), query: title})} alt="cover"/>
+                    <img src={getPicture.url({path: file?.replace?.(/\./g, '_'), query: title, radio: isRadio})} alt="cover"/>
                 </CoverImage>
                 <div style={{padding:'5px 16px'}}>
                     <Typography variant="caption">{artist}</Typography>

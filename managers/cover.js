@@ -1,8 +1,8 @@
 const deezerProvider = require("./coverProvider/deezer");
 
 class CoverManager {
-    search(query) {
-        return deezerProvider.search(query)
+    search(query, isRadio) {
+        return deezerProvider.search(query, isRadio)
     }
 }
 
