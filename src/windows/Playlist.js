@@ -80,13 +80,14 @@ const Playlist = () => {
 
       const consumeMemo = useMemo(() => (
         <Button onClick={() => mpdConsume()}>{mpdIsConsume ? 'ON CONSUME': 'NO CONSUME'}</Button>
-      ), [consumeMemo])
+      ), [mpdIsConsume])
 
     return (
         <div className="nodradg">
             <button onClick={() => mpdShuffle()}>shuff</button>
             {repeatMemo}
             {randomMemo}
+            {consumeMemo}
             <div style={{textAlign: 'right'}}>
                 <IconButton onClick={() => mpdClear()}>
                     <DeleteSweepIcon />
