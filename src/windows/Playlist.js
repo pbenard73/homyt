@@ -6,7 +6,8 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
-import { mpdClear, mpdDeleteId, mpdMoveId, mpdPlay, mpdRandom, mpdRepeat, mpdShuffle } from '../apis/mpdApi';
+import { mpdClear, mpdConsume, mpdDeleteId, mpdMoveId, mpdPlay, mpdRandom, mpdRepeat, mpdShuffle } from '../apis/mpdApi';
+import Button from '../components/Button'
 
 import {SortableContainer, SortableElement, sortableHandle} from 'react-sortable-hoc';
 
@@ -65,17 +66,21 @@ const InnerPlaylist = () => {
 const Playlist = () => {
       const mpdIsRepeating = useSelector(state => state.app.mpdStatus?.repeat) === true
       const mpdIsRandom = useSelector(state => state.app.mpdStatus?.random) === true
+      const mpdIsConsume = useSelector(state => state.app.mpdStatus?.consume) === true
 
     //const playAction = songIndex => listener.dispatch(EVENTS.ACTION_PLAY_SONG, {...playlist[songIndex], index: songIndex})
 
     const repeatMemo = useMemo(() => (
-        <button onClick={() => mpdRepeat()}>{mpdIsRepeating ? 'ON REPEAT': 'NO REPEAT'}</button>
+        <Button onClick={() => mpdRepeat()}>{mpdIsRepeating ? 'ON REPEAT': 'NO REPEAT'}</Button>
       ), [mpdIsRepeating])
 
       const randomMemo = useMemo(() => (
-        <button onClick={() => mpdRandom()}>{mpdIsRandom ? 'ON RANDOM': 'NO RANDOM'}</button>
-
+        <Button onClick={() => mpdRandom()}>{mpdIsRandom ? 'ON RANDOM': 'NO RANDOM'}</Button>
       ), [mpdIsRandom])
+
+      const consumeMemo = useMemo(() => (
+        <Button onClick={() => mpdConsume()}>{mpdIsConsume ? 'ON CONSUME': 'NO CONSUME'}</Button>
+      ), [consumeMemo])
 
     return (
         <div className="nodradg">

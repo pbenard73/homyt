@@ -12,6 +12,7 @@ const pool = {
   mpdShuffle: {path:"/shuffle", method:"put"},
   mpdRepeat: {path:"/repeat", method:"put"},
   mpdRandom: {path:"/random", method:"put"},
+  mpdConsume: {path:"/consume", method:"put"},
   mpdDatabase: {path:"/database", method:"put"},
   mpdAdd: {path:"/add", method:"put"},
   mpdSeek: {path:"/seek", method:"put"},
@@ -40,4 +41,5 @@ export const {
   mpdClear,
   mpdMoveId,
   mpdDeleteId,
+  mpdConsume,
  } = makeApi(pool, `${process.env.REACT_APP_API}/mpd`);
