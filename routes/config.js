@@ -15,15 +15,27 @@ router.get("/", acl('ADMIN'), (req, res, next) => {
 router.post("/server", acl('ADMIN'), (req, res, next) => {
   const servers = require('./../data/server.json');
 
-  const {host, port} = req.body;
+  const {host, port, audioUrl, name} = req.body;
 
   if (!host || !port) {
     return res.json({valid: false})
   }
 
-  servers.push({host, port});
+  servers.push({host, port, audioUrl, name});
 
   fs.writeFileSync(path.join(__dirname, '/../data/server.json'), JSON.stringify(servers, null, 4))
+
+  socketManager.emit('config_change');
+
+  res.json({valid:true});
+});
+
+router.delete("/server/:serverIndex", acl('ADMIN'), (req, res, next) => {
+  const servers = require('./../data/server.json');
+
+  const newServers = servers.filter((a, i) => (i !== req.params.serverIndex) && (a.default !== true))
+
+  fs.writeFileSync(path.join(__dirname, '/../data/server.json'), JSON.stringify(newServers, null, 4))
 
   socketManager.emit('config_change');
 

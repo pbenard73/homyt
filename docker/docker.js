@@ -19,11 +19,11 @@ const runServer = () => {
   const server = spawn('node', ['/homyt/bin/www'])
 
   server.stdout.on('data', (data) => {
-      console.log(`stdout: ${data}`);
+    console.log(`stdout: ${data}`);
   });
   
   server.stderr.on('data', (data) => {
-      console.error(`stderr: ${data}`);
+    console.error(`stderr: ${data}`);
   });
   
   server.on('message', msg => {

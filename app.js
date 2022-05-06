@@ -11,20 +11,15 @@ const authRouter = require("./routes/auth");
 const coverRouter = require("./routes/cover");
 const mpdManager = require('./managers/mpd');
 const database = require('./database/db');
-const session = require('express-session')
-const dataManager = require('./managers/data')
+const dataManager = require('./managers/data');
+const sessionManager = require("./managers/session");
 
 dataManager.checkPresence()
 
 const app = express();
 app.set('trust proxy', 1)
 
-app.use(session({
-  secret: 'keyboard cat',
-  resave: false,
-  saveUninitialized: true
-}))
-
+sessionManager.init(app);
 mpdManager.run();
 database.init();
 

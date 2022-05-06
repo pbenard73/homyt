@@ -13,6 +13,7 @@
     "express": "~4.16.1",
     "express-session": "^1.17.2",
     "https-localhost": "^4.7.1",
+    "memorystore": "^1.6.7",
     "morgan": "~1.9.1",
     "mpd2": "^1.0.5",
     "pm2": "^5.2.0",

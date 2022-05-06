@@ -27,6 +27,10 @@ const GhostData = () => {
       withCredentials: true,
     });
 
+    mySocket.on('user_delete', data => {
+      auth.checkUserDeletion(data)
+    })
+
     mySocket.on('server_connection_error', data => {
       app.setError(data)
     })

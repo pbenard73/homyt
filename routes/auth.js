@@ -1,27 +1,39 @@
 var express = require("express");
+const { Op } = require("sequelize");
 const database = require("../database/db");
+const socketManager = require("../socket");
 const acl = require("../src/middlewares/acl");
 var router = express.Router();
 const userManager = require('./../managers/user')
+const listener = require('./../utils/listener')
 
 router.get("/", async (req, res, next) => {
-  console.log(req.session);
-
   if (req.session.user) {
     return res.status(200).send()
+  }
+
+  if (req.query.token) {
+    const user = await database.models.user.findOne({where: {token: req.query.token}});
+
+    if (user) {
+      return res.status(200).send()
+    }
   }
 
   return res.status(403).send()
 })
 
 const createUserRouter = (install = false) => async (req, res, next) => {
-  const {username: givenUsername, password} = req.body
+  const {username: givenUsername, password, ...extra} = req.body
 
   if (!givenUsername || !password) {
     return res.json({valid: false})
   }
 
-  const {id, username, settings, theme} = await userManager.createUser(givenUsername, password, install === true ? 'ADMIN' : null)
+  const {id, username, settings, theme} = await userManager.createUser(givenUsername, password, {
+    role: install === true ? 'ADMIN' : null,
+    ...extra
+  })
 
   if (install === true) {
     return next();
@@ -39,6 +51,36 @@ const loginRoute = async (req, res) => {
 }
 
 router.post("/user/create", acl('ADMIN'), createUserRouter())
+
+router.delete("/user/:id", acl('ADMIN'), async (req, res) => {
+  if (req.params.id === req.session.user.id) {
+    return res.json({valid: false})
+  }
+
+  await database.models.user.destroy({where: {id: req.params.id}});
+
+  listener.trigger('USER_DELETE', parseInt(req.params.id));
+
+  socketManager.emit('user_delete', parseInt(req.params.id));
+
+  return res.json({valid: true})
+})
+
+router.put("/user/:id", acl('ADMIN'), async (req, res) => {
+  const data = {...req.body, id: undefined}
+
+  data.role = data.isAdmin === true ? 'ADMIN' : null;
+
+  if ((data.password?.trim?.() || '') === '') {
+    delete data.password;
+  } else (
+    data.password = userManager.encrypt(data.password)
+  )
+
+  const result = await database.models.user.update(data, {where: {id: req.params.id}})
+
+  return res.json({valid: true})  
+})
 
 router.post(
   "/install",
@@ -76,6 +118,12 @@ router.put("/settings", async (req, res) => {
   req.session.user.settings = req.body;
 
   return res.json({valid: true})
+})
+
+router.get('/users', acl('ADMIN'), async (req, res) => {
+  const users = await database.models.user.findAll({raw: true, where: {id: {[Op.ne]: req.session.user.id}}, attributes: ['id', 'username', 'role', 'token']})
+
+  res.json({valid: true, users})
 })
 
 module.exports = router;

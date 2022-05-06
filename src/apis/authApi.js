@@ -6,6 +6,20 @@ const pool = {
   refreshSession: { path:"/refresh" },
   softwareInstall: {path:"/install", method: "post"},
   updateUserSettings: {path:"/settings", method: "put"},
+  getUsers: {path:"/users"},
+  createUser: {path:"/user/create", method: "post"},
+  editUser: {path: "/user/:id", method: "put"},
+  deleteUser: {path: "/user/:id", method: "delete"},
 };
 
-export const { login, logout, refreshSession, softwareInstall, updateUserSettings } = makeApi(pool, `${process.env.REACT_APP_API}/auth`);
+export const {
+  login, 
+  logout, 
+  refreshSession, 
+  softwareInstall, 
+  updateUserSettings,
+  getUsers,
+  createUser,
+  editUser,
+  deleteUser,
+ } = makeApi(pool, `${process.env.REACT_APP_API}/auth`);

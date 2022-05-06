@@ -4,6 +4,8 @@ import { useSelector } from "react-redux";
 import StorageIcon from '@mui/icons-material/Storage';
 import CloseIcon from '@mui/icons-material/Close';
 import AddIcon from '@mui/icons-material/Add';
+import MusicNoteIcon from '@mui/icons-material/MusicNote';
+import BadgeIcon from '@mui/icons-material/Badge';
 import styled from 'styled-components'
 import { addServer, setDefaultServer } from "../../apis/configApi";
 import Button from "../../components/Button";
@@ -24,9 +26,19 @@ const ServerBox = styled.div`
     > div {
         display:flex;
         align-items:center;
+        width:100%;
         svg {
             height: .75em;
             margin-right: 10px;
+        }
+        span {
+            text-overflow: ellipsis;
+            overflow: hidden;
+            display:inline-block;
+            font-size:.75em;
+            &:before{
+                content: attr(title);
+            }
         }
     }
 `
@@ -104,7 +116,13 @@ const Servers = () => {
 
              >
              <div>
-                 <StorageIcon /> {`${server.host}:${server.port}`}
+                 <BadgeIcon /> <span title={server.name}>{server.name}</span>
+             </div>
+             <div>
+                 <StorageIcon /> <span title={`${server.host}:${server.port}`}></span>
+             </div>
+             <div>
+                 <MusicNoteIcon /> <span title={server.audioUrl}></span>
              </div>
             </ServerBox>
         ))}

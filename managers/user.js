@@ -12,7 +12,6 @@ class UserManager {
                 
                 resolve(hash)
             });
-
         })
     }
 
@@ -41,10 +40,15 @@ class UserManager {
         })
     }
 
-    async createUser(username, givenPassword, role = null) {
+    async createUser(username, givenPassword, extraData = {}) {
         const password = await this.encrypt(givenPassword)
+        const extra = {
+            theme: 'music',
+            settings: {},
+            ...extraData
+        }
 
-        return database.models.user.create({username, password, role, theme: 'music', settings: {}})
+        return database.models.user.create({username, password, ...extra})
     }
 
 }

@@ -92,10 +92,20 @@ const updateUserSettings = (field, value) => (dispatch, getState) => {
   dispatch(setUser(user));
 }
 
+const checkUserDeletion = userId => (dispatch, getState) => {
+  const state = getState();
+  const actualUserId = state.auth.user.id
+
+  if (actualUserId === userId) {
+    dispatch(logoutAction)
+  }
+}
+
 export const useAuth = () => {
     const dispatch = useDispatch();
 
     return {
+      checkUserDeletion: userId => dispatch(checkUserDeletion(userId)),
       login: (t, username, password) => dispatch(loginAction(t, username, password)),
       logout: () => dispatch(logoutAction),
       refreshSession: () => dispatch(refreshAction),
