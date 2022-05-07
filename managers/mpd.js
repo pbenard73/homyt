@@ -6,6 +6,7 @@ const COMMANDS = {
     VOLUME: {label: 'setVolume', command: 'setvol', auto: true},
     NEXT: {label: 'next', auto: true},
     PLAY: {label: 'play', auto: true},
+    SAVE: {label: "save", auto: true},
     PAUSE: {label: 'pause', auto: true},
     CLEAR: {label: "clear", auto: true},
     UPDATE: {label: "update", auto: true},
@@ -23,7 +24,8 @@ const COMMANDS = {
     DATABASE: {label: 'database'},
     ADD: {label: "add"},
     LOAD_PLAYLIST: {label: "load"},
-    MOVE_PLAYLIST: {label: "playlistmove"}
+    MOVE_PLAYLIST: {label: "playlistmove"},
+    DELETE_PLAYLIST: {label: "deleteplaylist", command: "rm", auto: true}
 }
 
 class MpdManager {

@@ -4,6 +4,7 @@ const pool = {
   mpdVolume: {path:"/setVolume", method:"put"},
   mpdVolumeUp: {path:"/setVolumeUp", method:"put"},
   mpdVolumeDown: {path:"/setVolumeDown", method:"put"},
+  mpdSave: {path:"/save", method:"put"},
   mpdNext: {path:"/next", method:"put"},
   mpdPrevious: {path:"/previous", method:"put"},
   mpdStatus: {path:"/getStatus", method:"put"},
@@ -23,6 +24,7 @@ const pool = {
   mpdListPlaylists: {path:"/listplaylists", method:"put"},
   mpdLoadPlaylist: {path:"/load", method:"put"},
   mpdMovePlaylist: {path:"/playlistmove", method:"put"},
+  mpdDeletePlaylist: {path:"/deleteplaylist", method:"put"},
 };
 
 export const { 
@@ -47,5 +49,7 @@ export const {
   mpdConsume,
   mpdListPlaylists,
   mpdLoadPlaylist,
-  mpdMovePlaylist
+  mpdMovePlaylist,
+  mpdSave,
+  mpdDeletePlaylist
  } = makeApi(pool, `${process.env.REACT_APP_API}/mpd`);

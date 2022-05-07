@@ -4,12 +4,14 @@ import React from 'react'
 import EditIcon from '@mui/icons-material/Edit';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import CloseIcon from '@mui/icons-material/Close';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import { useSelector } from 'react-redux'
-import { mpdLoadPlaylist, mpdMovePlaylist } from '../apis/mpdApi';
+import { mpdDeletePlaylist, mpdLoadPlaylist, mpdMovePlaylist } from '../apis/mpdApi';
 import { useState } from 'react';
 import {SortableContainer, SortableElement, sortableHandle} from 'react-sortable-hoc';
 import Button from '../components/Button';
+import { useApp } from '../redux/appSlice';
 
 const DragHandle = sortableHandle(() =>(
   <ListItemIcon className="dragger" style={{cursor:'grab'}}>
@@ -39,8 +41,17 @@ const SortableList = SortableContainer(({items}) => {
 });
 
 const StoredPlaylist = () => {
+  const app = useApp()
   const playlists = useSelector(state => state.app.playlists)
   const [edit, setEdit] = useState(null)
+
+  const deletePlaylistAction = playlistName => async () => {
+    const { valid } = await mpdDeletePlaylist({}, {params: [playlistName]});
+
+    if (valid === true) {
+      app.getPlaylists()
+    }
+  }
 
   const renderPlaylist = () => (
     <>
@@ -66,6 +77,9 @@ const StoredPlaylist = () => {
         <ListItem key={playlist.name}>
           <ListItemText primary={playlist.name} />
           <ListItemSecondaryAction>
+            <IconButton onClick={deletePlaylistAction(playlist.name)}>
+              <DeleteForeverIcon />
+            </IconButton>
             <IconButton onClick={() => setEdit(playlist.name)}>
               <EditIcon />
             </IconButton>
