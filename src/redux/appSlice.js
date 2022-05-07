@@ -123,8 +123,8 @@ const getMpdConfig = async (dispatch, getState) => {
   dispatch(setConfig(data))
 }
 
-const getPlaylists = async dispatch => {
-  let {valid, data: dbPlaylists} = await mpdListPlaylists();
+const getPlaylists = force => async dispatch => {
+  let {valid, data: dbPlaylists} = await mpdListPlaylists({}, {force});
 
   if (valid === true) {
     dispatch(setPlaylists(dbPlaylists))
@@ -144,7 +144,7 @@ export const useApp = () => {
       addToPlaylist: item => dispatch(addToPlaylist(item)),
       nextIndex: () => dispatch(nextIndex()),
       getConfig: () => dispatch(getMpdConfig),
-      getPlaylists: () => dispatch(getPlaylists),
+      getPlaylists: force => dispatch(getPlaylists(force)),
       update: async () => {
         await mpdUpdate();
         await getMpdDatabase(dispatch, true)

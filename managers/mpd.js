@@ -22,7 +22,8 @@ const COMMANDS = {
     STATUS: {label: 'getStatus'},
     DATABASE: {label: 'database'},
     ADD: {label: "add"},
-    LOAD_PLAYLIST: {label: "load"}
+    LOAD_PLAYLIST: {label: "load"},
+    MOVE_PLAYLIST: {label: "playlistmove"}
 }
 
 class MpdManager {
@@ -81,6 +82,7 @@ class MpdManager {
             this.client.on('system-playlist', refreshStatus)
             this.getStatus();
             this.database();
+            this.listplaylists({body: {force: true}});
     
             this.progressInterval = async () => {
                 try {
@@ -132,8 +134,10 @@ class MpdManager {
         return this.fullStatus
     }
 
-    async onSystem(s) {
-       
+    async onSystem(systemLabel) {
+        if (systemLabel === 'stored_playlist') {
+            socket.emit('stored_playlist', {})
+        }
     }
 
     async onSystemPlayer() {
@@ -223,7 +227,7 @@ class MpdManager {
     }
 
     async [COMMANDS.PLAYLISTS.label](req) {
-        if (req.body.force === true || this.playlists === null) {
+        if (req?.body?.force === true || this.playlists === null) {
 
             const dbPlaylists = await this.client.sendCommand(mpd.cmd(COMMANDS.PLAYLISTS.label)).then(mpd.parseList)
             
@@ -240,7 +244,7 @@ class MpdManager {
 
         return this.playlists;        
     }
-
+    
     async [COMMANDS.LOAD_PLAYLIST.label](req) {
         const { name } = req.body;
 
@@ -248,8 +252,11 @@ class MpdManager {
         await this.clear()
         await this.client.sendCommand(mpd.cmd(COMMANDS.LOAD_PLAYLIST.label, [name]))
         await this.play();
-        
+
         this.getStatus()
+    }
+    async [COMMANDS.MOVE_PLAYLIST.label](req) {
+        await this.client.sendCommand(mpd.cmd(COMMANDS.MOVE_PLAYLIST.label, req.body.params))
     }
 }
 

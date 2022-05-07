@@ -5,6 +5,7 @@ import { nanoid } from 'nanoid'
 import listener, { EVENTS } from "../utils/listener";
 import player from './../utils/player'
 import { useAuth } from "../redux/authSlice";
+import { ContactSupportOutlined } from "@mui/icons-material";
 
 const GhostData = () => {
   const app = useApp()
@@ -27,6 +28,10 @@ const GhostData = () => {
     const mySocket = socketIOClient(`${socketPath}?uuid=${newUuid}`, {
       withCredentials: true,
     });
+
+    mySocket.on('stored_playlist', data => {
+      app.getPlaylists(true)
+    })
 
     mySocket.on('user_delete', data => {
       auth.checkUserDeletion(data)
