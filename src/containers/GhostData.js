@@ -15,6 +15,7 @@ const GhostData = () => {
     app.getConfig();
     auth.refreshSession();
     app.getFullTree();
+    app.getPlaylists();
 
     const newUuid = nanoid()
     setUuid(nanoid(newUuid))

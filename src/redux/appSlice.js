@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { useDispatch } from 'react-redux'
 import { getConfig } from '../apis/configApi';
-import { mpdDatabase, mpdStatus, mpdUpdate } from '../apis/mpdApi';
+import { mpdDatabase, mpdListPlaylists, mpdStatus, mpdUpdate } from '../apis/mpdApi';
 import listener, { EVENTS } from '../utils/listener';
 import storage, { STORAGE } from '../utils/storage';
 const capitalize = string => string.replace(/([a-z])/i, (str, firstLetter) => firstLetter.toUpperCase())
@@ -19,6 +19,7 @@ const initialState = {
   mpdMode: false,
   mpdStatus: {},
   mpdPool: [],
+  playlists: [],
   error: null,
 }
 
@@ -30,7 +31,7 @@ export const appSlice = createSlice({
   },
 })
 
-export const { setTree, setFullTree, setAudioUrl, setPlayIndex, setRadios, setCanvasIndex, setMpdMode, setMpdStatus, setMpdPool, setError, setConfig } = appSlice.actions
+export const { setTree, setFullTree, setAudioUrl, setPlayIndex, setRadios, setCanvasIndex, setMpdMode, setMpdStatus, setMpdPool, setError, setConfig, setPlaylists } = appSlice.actions
 
 export default appSlice.reducer
 
@@ -122,6 +123,14 @@ const getMpdConfig = async (dispatch, getState) => {
   dispatch(setConfig(data))
 }
 
+const getPlaylists = async dispatch => {
+  let {valid, data: dbPlaylists} = await mpdListPlaylists();
+
+  if (valid === true) {
+    dispatch(setPlaylists(dbPlaylists))
+  }
+}
+
 export const useApp = () => {
     const dispatch = useDispatch();
 
@@ -135,6 +144,7 @@ export const useApp = () => {
       addToPlaylist: item => dispatch(addToPlaylist(item)),
       nextIndex: () => dispatch(nextIndex()),
       getConfig: () => dispatch(getMpdConfig),
+      getPlaylists: () => dispatch(getPlaylists),
       update: async () => {
         await mpdUpdate();
         await getMpdDatabase(dispatch, true)

@@ -9,6 +9,7 @@ import Radio from '../windows/Radio'
 import Remote from '../windows/Remote'
 import SpectrumConfig from '../windows/SpectrumConfig'
 import { staty } from './appSlice'
+import StoredPlaylist from '../windows/StoredPlaylist'
 
 export const WINDOWS = {
   BROWSER: 'browser',
@@ -18,7 +19,8 @@ export const WINDOWS = {
   RADIO: 'radio',
   PROFIL: 'profil',
   REMOTE: 'remote',
-  PLAYLIST: 'playlist'
+  PLAYLIST: 'playlist',
+  STORED_PLAYLISTS: 'stored_playlists'
 }
 
 const windowsList = {
@@ -51,6 +53,14 @@ const windowsList = {
     uuid: WINDOWS.PLAYLIST,
     title: 'window_playlist',
     component: <Playlist />,
+    options: {
+      size:[400, 400]
+    }
+  },
+  [WINDOWS.STORED_PLAYLISTS]: {
+    uuid: WINDOWS.STORED_PLAYLISTS,
+    title: 'window_stored_playlists',
+    component: <StoredPlaylist />,
     options: {
       size:[400, 400]
     }

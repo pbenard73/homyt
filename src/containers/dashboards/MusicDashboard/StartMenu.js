@@ -111,6 +111,9 @@ const StartMenu = () => {
                                     <HoverListItem onClick={show(WINDOWS.RADIO)}>
                                         <ListItemText primary="Radio" />
                                     </HoverListItem>
+                                    <HoverListItem onClick={show(WINDOWS.STORED_PLAYLISTS)}>
+                                        <ListItemText primary="Stored Playlists" />
+                                    </HoverListItem>
                                     <HoverListItem onClick={show(WINDOWS.SPECTRUM)}>
                                         <ListItemText primary="Spectrum" />
                                     </HoverListItem>

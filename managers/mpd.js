@@ -16,11 +16,13 @@ const COMMANDS = {
     PREVIOUS: {label: 'previous', auto: true},
     CONSUME: {label: 'consume', toggle: true},
     DELETE_ID: {label: "deleteid", auto: true},
+    PLAYLISTS: {label: 'listplaylists'},
     VOLUME_UP: {label: 'setVolumeUp'},
     VOLUME_DOWN: {label: 'setVolumeDown'},
     STATUS: {label: 'getStatus'},
     DATABASE: {label: 'database'},
     ADD: {label: "add"},
+    LOAD_PLAYLIST: {label: "load"}
 }
 
 class MpdManager {
@@ -30,22 +32,29 @@ class MpdManager {
     playlist = null;
     current = null;
     pool = null;
+    playlists = null;
 
     constructor() {
         Object.values(COMMANDS).filter(i => i.auto === true || i.toggle === true).forEach(command => {
             this[command.label] = async req => {
                 try {
-                    let args = req.body.params || [];
+                    let args = req?.body?.params || [];
                     
                     if (command.toggle === true) {
                         args = (this.status?.[command.label] || false) === false ? 1 : 0;
                     }
 
-                    await this.client.sendCommand(mpd.cmd(command.command ? command.command : command.label, args))
+                    let data = await this.client.sendCommand(mpd.cmd(command.command ? command.command : command.label, args))
+
+                    if (command.list === true) {
+                        data = await mpd.parseList(data);
+                    }
                     
                     if (command.toggle === true) {
                         this.getStatus()
                     }
+
+                    return data;
                 } catch (e) {
                     return {valid: false};
                 }
@@ -211,6 +220,36 @@ class MpdManager {
         }
 
         this[COMMANDS.STATUS.label]()
+    }
+
+    async [COMMANDS.PLAYLISTS.label](req) {
+        if (req.body.force === true || this.playlists === null) {
+
+            const dbPlaylists = await this.client.sendCommand(mpd.cmd(COMMANDS.PLAYLISTS.label)).then(mpd.parseList)
+            
+            const promises = dbPlaylists.map(({playlist: name}) => {
+                return new Promise(async resolve => {
+                    const songs = await this.client.sendCommand(mpd.cmd('listplaylistinfo', [name])).then(mpd.parseList);
+                    
+                    resolve({name, songs})                
+                })
+           })
+        
+            this.playlists = await Promise.all(promises)
+        }
+
+        return this.playlists;        
+    }
+
+    async [COMMANDS.LOAD_PLAYLIST.label](req) {
+        const { name } = req.body;
+
+        await this.pause();
+        await this.clear()
+        await this.client.sendCommand(mpd.cmd(COMMANDS.LOAD_PLAYLIST.label, [name]))
+        await this.play();
+        
+        this.getStatus()
     }
 }
 
