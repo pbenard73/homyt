@@ -25,7 +25,8 @@ const COMMANDS = {
     ADD: {label: "add"},
     LOAD_PLAYLIST: {label: "load"},
     MOVE_PLAYLIST: {label: "playlistmove"},
-    DELETE_PLAYLIST: {label: "deleteplaylist", command: "rm", auto: true}
+    DELETE_PLAYLIST: {label: "deleteplaylist", command: "rm", auto: true},
+    LISTEN_RADIO: {label: "listenradio", command: 'load'},
 }
 
 class MpdManager {
@@ -241,7 +242,7 @@ class MpdManager {
                 })
            })
         
-            this.playlists = await Promise.all(promises)
+           this.playlists = await Promise.all(promises)
         }
 
         return this.playlists;        
@@ -257,6 +258,18 @@ class MpdManager {
 
         this.getStatus()
     }
+    
+    async [COMMANDS.LISTEN_RADIO.label](req) {
+        const { params } = req.body;
+
+        await this.pause();
+        await this.clear()
+        await this.client.sendCommand(mpd.cmd(COMMANDS.LISTEN_RADIO.command, params))
+        await this.play();
+
+        this.getStatus()
+    }
+
     async [COMMANDS.MOVE_PLAYLIST.label](req) {
         await this.client.sendCommand(mpd.cmd(COMMANDS.MOVE_PLAYLIST.label, req.body.params))
     }

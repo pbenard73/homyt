@@ -11,7 +11,7 @@ import { mpdDeletePlaylist, mpdLoadPlaylist, mpdMovePlaylist } from '../apis/mpd
 import { useState } from 'react';
 import {SortableContainer, SortableElement, sortableHandle} from 'react-sortable-hoc';
 import Button from '../components/Button';
-import { useApp } from '../redux/appSlice';
+import { RADIO_PLAYLIST_NAME, useApp } from '../redux/appSlice';
 
 const DragHandle = sortableHandle(() =>(
   <ListItemIcon className="dragger" style={{cursor:'grab'}}>
@@ -73,7 +73,7 @@ const StoredPlaylist = () => {
 
   const getList = (
     <List>
-      {playlists.map(playlist => (
+      {playlists.filter(i => i.name !== RADIO_PLAYLIST_NAME).map(playlist => (
         <ListItem key={playlist.name}>
           <ListItemText primary={playlist.name} />
           <ListItemSecondaryAction>

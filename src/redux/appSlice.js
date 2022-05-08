@@ -8,6 +8,8 @@ const capitalize = string => string.replace(/([a-z])/i, (str, firstLetter) => fi
 
 export const staty = (args) => Object.fromEntries(args.map(arg => [`set${capitalize(arg)}`, (state, action) => {state[arg] = action.payload; return state}]))
 
+export const RADIO_PLAYLIST_NAME = "[Radio Streams]"
+
 const initialState = {
   audioUrl: null,
   tree: null,

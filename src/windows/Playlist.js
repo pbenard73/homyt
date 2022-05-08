@@ -22,20 +22,28 @@ const DragHandle = sortableHandle(() =>(
 ));
 
 
-const SortableItem = SortableElement(({value: song}) => (
-    <ListItem key={song.id}>
-        <DragHandle />
-        <ListItemText primary={song.title || song.file.split('/').reverse()[0]} secondary={song.artist} style={{ color: song.id === song.current ? '#38d7fb' : undefined }}/>
-        <ListItemSecondaryAction>
-            <IconButton onClick={() => mpdDeleteId({}, {params: [song.id]}) } style={{color:'white'}}>
-                <DeleteForeverIcon />
-            </IconButton>
-            <IconButton onClick={() => mpdPlay({}, {params: [song.songIndex]}) } style={{color:'white'}}>
-                <PlayArrowIcon />
-            </IconButton>
-        </ListItemSecondaryAction>                    
-    </ListItem>
-));
+const SortableItem = SortableElement(({value: song}) => {
+  const isRadio = (song.file || '').indexOf('http') === 0;
+
+  const radioName = isRadio ? song.file.split('#').reverse()[0] : null;
+
+  const title = radioName ? radioName : song.title || song.file.split('/').reverse()[0]
+
+  return (
+        <ListItem key={song.id}>
+            <DragHandle />
+            <ListItemText primary={title} secondary={song.artist} style={{ color: song.id === song.current ? '#38d7fb' : undefined }}/>
+            <ListItemSecondaryAction>
+                <IconButton onClick={() => mpdDeleteId({}, {params: [song.id]}) } style={{color:'white'}}>
+                    <DeleteForeverIcon />
+                </IconButton>
+                <IconButton onClick={() => mpdPlay({}, {params: [song.songIndex]}) } style={{color:'white'}}>
+                    <PlayArrowIcon />
+                </IconButton>
+            </ListItemSecondaryAction>                    
+        </ListItem>
+    )
+  });
 
 
 const SortableList = SortableContainer(({items}) => {
