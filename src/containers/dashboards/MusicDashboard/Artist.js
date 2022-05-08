@@ -33,7 +33,7 @@ const Artist = () => {
                 </span>
             )}
         </div>
-    ), [artist, title, file])
+    ), [artist, title, file, servers])
 
     return memoArtist;
 }

@@ -96,7 +96,7 @@ const Radio = () => {
                             <IconButton onClick={deleteRadio(radio)} style={{color:'white'}}>
                                 <DeleteForeverIcon />
                             </IconButton>
-                            <IconButton onClick={listenRadio(radio, radioIndex)} style={{color:'white'}}>
+                            <IconButton onClick={listenRadio(radio, radio.baseIndex)} style={{color:'white'}}>
                                 <PlayArrowIcon />
                             </IconButton>
                         </ListItemSecondaryAction>
