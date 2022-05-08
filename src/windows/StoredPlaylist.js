@@ -7,7 +7,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import { useSelector } from 'react-redux'
-import { mpdDeletePlaylist, mpdLoadPlaylist, mpdMovePlaylist } from '../apis/mpdApi';
+import { mpdDeleteFromPlaylist, mpdDeletePlaylist, mpdLoadPlaylist, mpdMovePlaylist } from '../apis/mpdApi';
 import { useState } from 'react';
 import {SortableContainer, SortableElement, sortableHandle} from 'react-sortable-hoc';
 import Button from '../components/Button';
@@ -20,21 +20,23 @@ const DragHandle = sortableHandle(() =>(
 ));
 
 
-const SortableItem = SortableElement(({value: song}) => (
+const SortableItem = SortableElement(({value: song, songIndex, edit}) => (
     <ListItem key={song.id}>
         <DragHandle />
         <ListItemText primary={song.title || song.file.split('/').reverse()[0]} secondary={song.artist} />
         <ListItemSecondaryAction>
-          
+          <IconButton onClick={() => mpdDeleteFromPlaylist({}, {params: [edit, songIndex]}) }>
+            <DeleteForeverIcon />
+          </IconButton>
         </ListItemSecondaryAction>                    
     </ListItem>
 ));
 
-const SortableList = SortableContainer(({items}) => {
+const SortableList = SortableContainer(({items, edit}) => {
   return (
     <List className="nodrag">
       {items.map((value, index) => (
-        <SortableItem key={`item-${value.id}`} index={index} value={value} />
+        <SortableItem key={`item-${value.id}`} edit={edit} songIndex={index} index={index} value={value} />
       ))}
     </List>
   );
@@ -63,6 +65,7 @@ const StoredPlaylist = () => {
       </div>
       <SortableList 
         items={playlists.find(i => i.name === edit).songs} 
+        edit={edit}
         useDragHandle
         onSortEnd={({oldIndex, newIndex}) => {
           mpdMovePlaylist({}, {params: [edit, oldIndex, newIndex]})

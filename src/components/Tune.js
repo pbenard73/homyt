@@ -7,12 +7,16 @@ import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
 import VolumeDownIcon from '@mui/icons-material/VolumeDown';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import TuneIcon from '@mui/icons-material/Tune';
+import RepeatIcon from '@mui/icons-material/Repeat';
+import ShuffleIcon from '@mui/icons-material/Shuffle';
+import CancelScheduleSendIcon from '@mui/icons-material/CancelScheduleSend';
 import { useSelector } from 'react-redux';
-import { mpdNext, mpdPause, mpdPlay, mpdPrevious, mpdSeek } from '../apis/mpdApi';
+import { mpdConsume, mpdNext, mpdPause, mpdPlay, mpdPrevious, mpdRandom, mpdRepeat, mpdSeek } from '../apis/mpdApi';
 import { useState } from 'react';
-import { IconButton, Paper, Popper, Slider, Typography } from '@mui/material';
+import { IconButton, Paper, Popper, Slider, Tooltip, Typography } from '@mui/material';
 import { mpdVolume } from '../apis/mpdApi';
 import { getPicture } from '../api';
+import { useMemo } from 'react';
 
 const CoverImage = styled('div')({
     width: 100,
@@ -36,7 +40,7 @@ const CoverImage = styled('div')({
 
 const TuneWrapper = styled(Paper)`
     width: 400px;
-    height:250px;
+    height:280px;
     padding:20px;
     border-radius: 0px !important;
     background-color: rgba(0,0,0,.9) !important;
@@ -71,6 +75,10 @@ const TuneWrapper = styled(Paper)`
 
 const Tune = () => {
     const mpdStatus = useSelector(state => state.app.mpdStatus) || {}
+    const mpdIsRepeating = useSelector(state => state.app.mpdStatus?.repeat) === true
+    const mpdIsRandom = useSelector(state => state.app.mpdStatus?.random) === true
+    const mpdIsConsume = useSelector(state => state.app.mpdStatus?.consume) === true
+
     const percent = mpdStatus?.time?.elapsed * 100 / mpdStatus?.time?.total
     const {artist, title, file} = (mpdStatus?.current || {})
 
@@ -85,6 +93,31 @@ const Tune = () => {
     }
 
     const isRadio = file.indexOf('http') === 0;
+
+    const repeatMemo = useMemo(() => (
+        <Tooltip title={"Mode repeat"} placement="top">
+            <IconButton onClick={() => mpdRepeat()} style={{color: mpdIsRepeating ? 'white': 'grey'}}>
+                <RepeatIcon style={{height:'.8em'}}/>
+            </IconButton>
+        </Tooltip>
+      ), [mpdIsRepeating])
+
+      const randomMemo = useMemo(() => (
+        <Tooltip title={"Mode Random"} placement="top">
+         <IconButton onClick={() => mpdRandom()} style={{color: mpdIsRandom ? 'white': 'grey'}}>
+             <ShuffleIcon style={{height:'.8em'}}/>
+        </IconButton>
+        </Tooltip>
+      ), [mpdIsRandom])
+
+      const consumeMemo = useMemo(() => (
+        <Tooltip title={"Mode Consume"} placement="top">
+        <IconButton onClick={() => mpdConsume()}  style={{color: mpdIsConsume ? 'white': 'grey'}}>
+            <CancelScheduleSendIcon style={{height:'.8em'}}/>
+            </IconButton>
+        </Tooltip>
+      ), [mpdIsConsume])
+
 
     return(
         <TuneWrapper>
@@ -119,7 +152,11 @@ const Tune = () => {
                 onChange={onVolumeChange} 
                 />
                 <VolumeUpIcon />
-
+            </div>
+            <div>
+                    {repeatMemo}
+                    {randomMemo}
+                    {consumeMemo}
             </div>
         </TuneWrapper>                
     )

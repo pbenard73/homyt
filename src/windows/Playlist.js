@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux'
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
+import CasinoIcon from '@mui/icons-material/Casino';
 import SaveAsIcon from '@mui/icons-material/SaveAs';
 import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
 import { mpdClear, mpdConsume, mpdDeleteId, mpdMoveId, mpdPlay, mpdRandom, mpdRepeat, mpdSave, mpdShuffle } from '../apis/mpdApi';
@@ -78,10 +79,6 @@ const InnerPlaylist = () => {
 const Playlist = () => {
       const app = useApp()
 
-      const mpdIsRepeating = useSelector(state => state.app.mpdStatus?.repeat) === true
-      const mpdIsRandom = useSelector(state => state.app.mpdStatus?.random) === true
-      const mpdIsConsume = useSelector(state => state.app.mpdStatus?.consume) === true
-
       const [newPlaylistName, setNewPlaylistName] = useState(null)
 
       const toggleSave = () => setNewPlaylistName(old => old === null ? '' : null);
@@ -96,38 +93,24 @@ const Playlist = () => {
           setNewPlaylistName(null)
         }
       }
-
-    //const playAction = songIndex => listener.dispatch(EVENTS.ACTION_PLAY_SONG, {...playlist[songIndex], index: songIndex})
-
-    const repeatMemo = useMemo(() => (
-        <Button onClick={() => mpdRepeat()}>{mpdIsRepeating ? 'ON REPEAT': 'NO REPEAT'}</Button>
-      ), [mpdIsRepeating])
-
-      const randomMemo = useMemo(() => (
-        <Button onClick={() => mpdRandom()}>{mpdIsRandom ? 'ON RANDOM': 'NO RANDOM'}</Button>
-      ), [mpdIsRandom])
-
-      const consumeMemo = useMemo(() => (
-        <Button onClick={() => mpdConsume()}>{mpdIsConsume ? 'ON CONSUME': 'NO CONSUME'}</Button>
-      ), [mpdIsConsume])
-
     return (
-        <div className="nodradg">
-            <button onClick={() => mpdShuffle()}>shuff</button>
-            {repeatMemo}
-            {randomMemo}
-            {consumeMemo}
-            <div style={{textAlign: 'right'}}>
-              <Tooltip title="Save as playlist" placement='top'>
-                <IconButton onClick={toggleSave}>
-                    <SaveAsIcon />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title="clear all" placement="top">
-                <IconButton onClick={() => mpdClear()}>
-                    <DeleteSweepIcon />
-                </IconButton>
-              </Tooltip>
+        <div className="nodrag">
+            <div style={{display:'flex', alignItems: 'center'}}>
+              <Button onClick={() => mpdShuffle()}>
+                <CasinoIcon />
+              </Button>
+              <span style={{marginLeft:'auto'}}>
+                <Tooltip title="Save as playlist" placement='top'>
+                  <IconButton onClick={toggleSave}>
+                      <SaveAsIcon />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="clear all" placement="top">
+                  <IconButton onClick={() => mpdClear()}>
+                      <DeleteSweepIcon />
+                  </IconButton>
+                </Tooltip>
+              </span>
             </div>
             {newPlaylistName !== null && (
               <>

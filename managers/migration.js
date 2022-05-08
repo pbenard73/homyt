@@ -4,6 +4,7 @@ const path = require('path')
 class MigrationManager {
     async migrate(sequelize, Migration) {
         console.log(`Migration Start`)
+        
         let actualMigration = await Migration.findOne();
         const now = new Date()
         
@@ -29,12 +30,15 @@ class MigrationManager {
             if (index >= validFiles.length) {
                 return;
             }
+
             lastFile = validFiles[index];
             const queries = require(path.join(__dirname, '/../migrations/', validFiles[index].toString()))
+
             console.log(`Executing migration '${validFiles[index]}'`)
 
             for (const query of queries) {
                 console.log('QUERY', validFiles[index].toString(), query)
+
                 await sequelize.query(query);
             }
 

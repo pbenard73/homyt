@@ -40,6 +40,7 @@ const Downloader = () => {
     const [folderModal, setFolderModal] = useState(false)
     const fullTree = useSelector(state => state.app.mpdPool)
     const servers = useSelector(state => state.app.config?.servers) || []
+    const searchDownload = useSelector(state => state.app.searchDownload)
 
     const actualServer = servers.find(server => server.default === true && server.internal === true);
 
@@ -49,6 +50,16 @@ const Downloader = () => {
     const [query, setQuery] = useState('')
     const [results, setResults] = useState(null)
     const [preview, setPreview] = useState(null)
+
+    useEffect(() => {
+      if (searchDownload === null) {
+        return
+      }
+
+      setMode(MODE.SEARCH);
+      setQuery(searchDownload);
+      app.eraseSearchDownload();
+    }, [searchDownload])
 
     useEffect(() => {
       const apiPath = process.env.REACT_APP_API
@@ -207,7 +218,7 @@ const Downloader = () => {
                       <div>
                       <TextField autoComplete="off" label={t('video_keywords')} value={query} required onChange={e => setQuery(e.target.value)} />
                       <div>
-                          <Button style={{marginTop:'20px'}}>
+                          <Button type="submit" style={{marginTop:'20px'}}>
                           {t('search')}
                           </Button>
                       </div>

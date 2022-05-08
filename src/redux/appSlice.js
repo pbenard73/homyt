@@ -4,6 +4,7 @@ import { getConfig } from '../apis/configApi';
 import { mpdDatabase, mpdListPlaylists, mpdStatus, mpdUpdate } from '../apis/mpdApi';
 import listener, { EVENTS } from '../utils/listener';
 import storage, { STORAGE } from '../utils/storage';
+import { useDashboard, WINDOWS } from './dashboardSlice';
 const capitalize = string => string.replace(/([a-z])/i, (str, firstLetter) => firstLetter.toUpperCase())
 
 export const staty = (args) => Object.fromEntries(args.map(arg => [`set${capitalize(arg)}`, (state, action) => {state[arg] = action.payload; return state}]))
@@ -23,6 +24,7 @@ const initialState = {
   mpdPool: [],
   playlists: [],
   error: null,
+  searchDownload: null,
 }
 
 export const appSlice = createSlice({
@@ -33,7 +35,7 @@ export const appSlice = createSlice({
   },
 })
 
-export const { setTree, setFullTree, setAudioUrl, setPlayIndex, setRadios, setCanvasIndex, setMpdMode, setMpdStatus, setMpdPool, setError, setConfig, setPlaylists } = appSlice.actions
+export const { setTree, setFullTree, setAudioUrl, setPlayIndex, setRadios, setCanvasIndex, setMpdMode, setMpdStatus, setMpdPool, setError, setConfig, setPlaylists, setSearchDownload } = appSlice.actions
 
 export default appSlice.reducer
 
@@ -133,8 +135,10 @@ const getPlaylists = force => async dispatch => {
   }
 }
 
+
 export const useApp = () => {
     const dispatch = useDispatch();
+    const dashboard = useDashboard()
 
     return {
       setError: value => dispatch(updateError(value)),
@@ -147,6 +151,7 @@ export const useApp = () => {
       nextIndex: () => dispatch(nextIndex()),
       getConfig: () => dispatch(getMpdConfig),
       getPlaylists: force => dispatch(getPlaylists(force)),
+      eraseSearchDownload: () => dispatch(setSearchDownload(null)),
       update: async () => {
         await mpdUpdate();
         await getMpdDatabase(dispatch, true)
@@ -154,6 +159,10 @@ export const useApp = () => {
       getMpdPool: async () => {
         await getMpdDatabase(dispatch)
       },
-      resetCanvas: () => dispatch(resetCanvas())
+      resetCanvas: () => dispatch(resetCanvas()),
+      downloadActual: value => {
+        dispatch(setSearchDownload(value))
+        dashboard.showWindow(WINDOWS.DOWNLOADER)
+      }
     }
 }

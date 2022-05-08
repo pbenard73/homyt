@@ -24,9 +24,15 @@ const COMMANDS = {
     DATABASE: {label: 'database'},
     ADD: {label: "add"},
     LOAD_PLAYLIST: {label: "load"},
-    MOVE_PLAYLIST: {label: "playlistmove"},
+    MOVE_PLAYLIST: {label: "playlistmove", auto: true},
     DELETE_PLAYLIST: {label: "deleteplaylist", command: "rm", auto: true},
     LISTEN_RADIO: {label: "listenradio", command: 'load'},
+    ADD_TO_PLAYLIST: {label: "addToPlaylist", command: 'playlistadd', auto: true},
+    DELETE_FROM_PLAYLIST: {label: "playlistdelete", auto: true},
+}
+
+const emitStoredPlaylistChange = () => {
+    socket.emit('stored_playlist', {})
 }
 
 class MpdManager {
@@ -77,12 +83,16 @@ class MpdManager {
 
         try {
             await this.client?.disconnect?.();
+
             this.client = await mpd.connect(config)
+
             socket.emit('server_connection_error', null)
+
             this.client.on('system', (...args) => this.onSystem(...args))
             this.client.on('system-player', refreshStatus)
             this.client.on('system-mixer', refreshStatus)
             this.client.on('system-playlist', refreshStatus)
+
             this.getStatus();
             this.database();
             this.listplaylists({body: {force: true}});
@@ -92,9 +102,12 @@ class MpdManager {
 
                     if (this.fullStatus?.state === 'play') {
                         const status = await this.client.sendCommand('status').then(mpd.parseObject);
+
                         delete status.playlist_info;
+
                         const newStatus = {...this.fullStatus, ...status}
                         this.fullStatus = newStatus;
+
                         socket.emit('mpd_status', newStatus)
                     }
                 } catch(e) {
@@ -109,6 +122,7 @@ class MpdManager {
             this.progressInterval();
         } catch(e) {
             socket.emit('server_connection_error', {host: config.host, port: config.port})
+
             setTimeout(() => this.run(), 1000)
         }
     }
@@ -139,7 +153,7 @@ class MpdManager {
 
     async onSystem(systemLabel) {
         if (systemLabel === 'stored_playlist') {
-            socket.emit('stored_playlist', {})
+            emitStoredPlaylistChange()
         }
     }
 
@@ -163,6 +177,7 @@ class MpdManager {
             
             let processedFolder = []
             let newPool = []
+
             const cleanFilter = i => i !== null && i !== undefined
 
             const nestThePool = (poolItem) => {
@@ -252,8 +267,8 @@ class MpdManager {
         const { name } = req.body;
 
         await this.pause();
-        await this.clear()
-        await this.client.sendCommand(mpd.cmd(COMMANDS.LOAD_PLAYLIST.label, [name]))
+        await this.clear();
+        await this.client.sendCommand(mpd.cmd(COMMANDS.LOAD_PLAYLIST.label, [name]));
         await this.play();
 
         this.getStatus()
@@ -263,16 +278,16 @@ class MpdManager {
         const { params } = req.body;
 
         await this.pause();
-        await this.clear()
-        await this.client.sendCommand(mpd.cmd(COMMANDS.LISTEN_RADIO.command, params))
+        await this.clear();
+        await this.client.sendCommand(mpd.cmd(COMMANDS.LISTEN_RADIO.command, params));
         await this.play();
 
         this.getStatus()
     }
 
-    async [COMMANDS.MOVE_PLAYLIST.label](req) {
+   /* async [COMMANDS.MOVE_PLAYLIST.label](req) {
         await this.client.sendCommand(mpd.cmd(COMMANDS.MOVE_PLAYLIST.label, req.body.params))
-    }
+    }*/
 }
 
 const mpdManager = new MpdManager()
