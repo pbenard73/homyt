@@ -1,15 +1,19 @@
-import { IconButton, List, ListItem, ListItemSecondaryAction, ListItemText, TextField } from '@mui/material'
+import { Autocomplete, IconButton, List, ListItem, ListItemSecondaryAction, ListItemText, TextField } from '@mui/material'
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { RADIO_PLAYLIST_NAME, useApp } from '../redux/appSlice'
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
+import SaveIcon from '@mui/icons-material/Save';
 import listener, { EVENTS } from '../utils/listener';
 import { addradio } from '../api'
 import Form from '../components/Form'
 import { useTranslation } from 'react-i18next'
 import Button from '../components/Button';
+import { getCloudRadiosList } from '../apis/publicApi'
 import { mpdAddToPlaylist, mpdDeleteFromPlaylist, mpdListenRadio } from './../apis/mpdApi'
+import axios from 'axios';
 
 const Radio = () => {
     const { t } = useTranslation()
@@ -19,6 +23,8 @@ const Radio = () => {
 
     const [add, setAdd] = useState(false);
     const [newRadio, setNewRadio] = useState({name: '', path:''});
+    const [importRadio, setImportRadio] = useState(false)
+    const [radioList, setRadioList] = useState(null)
 
     const onSubmit = async e => {
         e.preventDefault()
@@ -43,7 +49,7 @@ const Radio = () => {
         }
     }
 
-    const listenRadio = (radio, radioIndex) => async () => {
+    const listenRadio = (_, radioIndex) => async () => {
         await mpdListenRadio({}, {params: [RADIO_PLAYLIST_NAME, `${radioIndex}:${radioIndex + 1}`]})
     }
 
@@ -52,9 +58,9 @@ const Radio = () => {
     }
 
     const radioPlaylist = (playlists || []).find(i => i.name === RADIO_PLAYLIST_NAME);
-    const songs = [...(radioPlaylist?.songs || [])].map((radio, index) => ({
+    const songs = [...(radioPlaylist?.songs || [])].map((radio, baseIndex) => ({
         ...radio,
-        baseIndex: index
+        baseIndex
      }))
 
     songs.sort((a, b) => {
@@ -64,10 +70,33 @@ const Radio = () => {
         return aName.toLowerCase() < bName.toLowerCase() ? -1 : 1;
     })
 
+    const importAction = async () => {
+        if (radioList === null) {
+            const cloudRadioList = await getCloudRadiosList()
+
+            setRadioList(cloudRadioList)
+        }
+
+        setImportRadio(true);        
+    }
+
+    const toggleImport = () => {
+        if (importRadio === false) {
+            return importAction()
+        }
+
+        setImportRadio(false);
+    }
+
+    const formFields = fieldName => ({
+        onChange: e => setNewRadio({...newRadio, [fieldName]: e.target.value}),
+        value: newRadio[fieldName]
+    })
+
     return (
     <div style={{padding:'10px'}}>
         <Button
-            style={{marginRight:'20px'}}
+            style={{marginBottom:'10px'}}
             onClick={() => setAdd(!add)}
         >
         {t('add_radio')}
@@ -75,11 +104,28 @@ const Radio = () => {
         {add && (
             <Form onSubmit={onSubmit} className="nodrag">
                 <div>
-                    <TextField label="Radio name" value={newRadio.name} onChange={e => setNewRadio({...newRadio, name: e.target.value})} />
-                    <TextField label="Radio URL" value={newRadio.url} onChange={e => setNewRadio({...newRadio, path: e.target.value})} />
-                    <div>
+                    <div style={{textAlign:'right'}}>
+                        <Button type="button" onClick={toggleImport} style={{marginBottom:'10px'}}>
+                            <CloudDownloadIcon />
+                        </Button>
+                    </div>
+                    {radioList && importRadio && (
+                        <Autocomplete
+                            renderInput={(params) => <TextField {...params} label="Movie" />}
+                            options={radioList.sort(({name: aName}, {name: bName}) => aName.toLowerCase() < bName.toLowerCase() ? -1 : 1)}
+                            getOptionLabel={(option) => option.name}
+                            onChange={(e, newValue) => {
+                                setNewRadio(newValue)
+                                setImportRadio(false)
+                            }}
+                        />
+                    )}
+                    <TextField label="Radio name" {...formFields('name')} style={{marginBottom:'10px'}} />
+                    <TextField label="Radio URL" {...formFields('path')} />
+                    
+                    <div style={{textAlign: 'right'}}>
                         <Button type="submit" style={{marginTop:'20px'}}>
-                        {t('add')}
+                            <SaveIcon />
                         </Button>
                     </div>
                 </div>
