@@ -1,4 +1,4 @@
-import { IconButton, TextField } from "@mui/material";
+import { TextField } from "@mui/material";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import StorageIcon from '@mui/icons-material/Storage';
@@ -86,7 +86,6 @@ const Servers = () => {
     }
 
     const createNewServer = async (e, value) => {
-        console.log(typeof e, e)
         e.preventDefault()
 
         const data = await addServer({}, value) 

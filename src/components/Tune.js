@@ -6,37 +6,28 @@ import SkipNextIcon from '@mui/icons-material/SkipNext';
 import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
 import VolumeDownIcon from '@mui/icons-material/VolumeDown';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
-import TuneIcon from '@mui/icons-material/Tune';
 import RepeatIcon from '@mui/icons-material/Repeat';
 import ShuffleIcon from '@mui/icons-material/Shuffle';
 import CancelScheduleSendIcon from '@mui/icons-material/CancelScheduleSend';
 import { useSelector } from 'react-redux';
 import { mpdConsume, mpdNext, mpdPause, mpdPlay, mpdPrevious, mpdRandom, mpdRepeat, mpdSeek } from '../apis/mpdApi';
-import { useState } from 'react';
-import { IconButton, Paper, Popper, Slider, Tooltip, Typography } from '@mui/material';
+import { IconButton, Paper, Slider, Tooltip, Typography } from '@mui/material';
 import { mpdVolume } from '../apis/mpdApi';
 import { getPicture } from '../api';
 import { useMemo } from 'react';
 
-const CoverImage = styled('div')({
-    width: 100,
-    height: 100,
-    objectFit: 'cover',
-    overflow: 'hidden',
-    flexShrink: 0,
-    borderRadius: 8,
-    backgroundColor: 'rgba(0,0,0,0.08)',
-    '& > img': {
-      width: '100%',
+const CoverImage = styled.div`
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    overflow: hidden;
+    flex-shrink: 0;
+    border-radius: 8px;
+    background-color: rgba(0,0,0,0.08);
+    & > img {
+      width: 100%;
     },
-  });
-  
-  const TinyText = styled(Typography)({
-    fontSize: '0.75rem',
-    opacity: 0.38,
-    fontWeight: 500,
-    letterSpacing: 0.2,
-  });
+`
 
 const TuneWrapper = styled(Paper)`
     width: 400px;

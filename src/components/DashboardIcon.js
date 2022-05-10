@@ -1,8 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-
 import Draggable from 'react-draggable';
-import { t } from 'i18next';
 import { useTranslation } from 'react-i18next';
 import ApiIcon from '@mui/icons-material/Api';
 
@@ -30,25 +28,25 @@ const IconWrapper = styled.div`
     }
 `
 
-
-
 const DashboardIcon = ({Icon, label, position, onClick}) => {
-    const { t} = useTranslation();
+    const { t } = useTranslation();
 
     return (
-    <Draggable handle={".handle"}>
-
-    <IconWrapper position={position} onClick={(e) => {
-        if (e.target.closest('.handle') === null) {
-            onClick?.()
-        }
-    }}>
-            <span className="handle"><ApiIcon /></span>
-        <Icon />
-        <span>{t(label)}</span>
-    </IconWrapper>
-    </Draggable>
-)
+        <Draggable handle={".handle"}>
+            <IconWrapper
+                position={position} 
+                onClick={(e) => {
+                    if (e.target.closest('.handle') === null) {
+                        onClick?.()
+                    }
+                }
+            }>
+                <span className="handle"><ApiIcon /></span>
+                <Icon />
+                <span>{t(label)}</span>
+            </IconWrapper>
+        </Draggable>
+    )
 }
 
 export default DashboardIcon

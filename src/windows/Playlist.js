@@ -8,7 +8,7 @@ import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import CasinoIcon from '@mui/icons-material/Casino';
 import SaveAsIcon from '@mui/icons-material/SaveAs';
 import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
-import { mpdClear, mpdConsume, mpdDeleteId, mpdMoveId, mpdPlay, mpdRandom, mpdRepeat, mpdSave, mpdShuffle } from '../apis/mpdApi';
+import { mpdClear, mpdDeleteId, mpdMoveId, mpdPlay, mpdSave, mpdShuffle } from '../apis/mpdApi';
 import Button from '../components/Button'
 
 import {SortableContainer, SortableElement, sortableHandle} from 'react-sortable-hoc';

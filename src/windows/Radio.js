@@ -6,18 +6,14 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import SaveIcon from '@mui/icons-material/Save';
-import listener, { EVENTS } from '../utils/listener';
-import { addradio } from '../api'
 import Form from '../components/Form'
 import { useTranslation } from 'react-i18next'
 import Button from '../components/Button';
 import { getCloudRadiosList } from '../apis/publicApi'
 import { mpdAddToPlaylist, mpdDeleteFromPlaylist, mpdListenRadio } from './../apis/mpdApi'
-import axios from 'axios';
 
 const Radio = () => {
     const { t } = useTranslation()
-    const app = useApp()
     const playlists = useSelector(state => state.app.playlists)
 
 

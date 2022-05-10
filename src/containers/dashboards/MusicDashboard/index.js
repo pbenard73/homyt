@@ -1,7 +1,6 @@
 import { AppBar } from '@mui/material';
 import React from 'react'
 import styled from 'styled-components'
-import { useSelector } from 'react-redux';
 import ProgressToolBar from './ProgressToolBar';
 import Controls from './Controls';
 import Volume from './Volume';

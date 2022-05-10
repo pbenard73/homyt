@@ -15,7 +15,7 @@ const Background = styled.div`
 const UserBackground = () => {
     const user = useSelector(state => state.auth.user);
     const mpdStatus = useSelector(state => state.app.mpdStatus) || {}
-    const {artist, title, file} = (mpdStatus?.current || {})
+    const {title, file} = (mpdStatus?.current || {})
     const isRadio = file?.indexOf?.('http') === 0;
 
 

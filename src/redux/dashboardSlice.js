@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { useDispatch } from 'react-redux'
+import {arrayMoveImmutable} from 'array-move';
 import Browser from '../windows/Browser'
 import Config from '../windows/Config'
 import Profil from '../windows/Profil'
@@ -88,6 +89,7 @@ const windowsList = {
 
 const initialState = {
   windows: {},
+  order: []
 }
 
 export const dashboardSlice = createSlice({
@@ -98,43 +100,60 @@ export const dashboardSlice = createSlice({
   },
 })
 
-export const { setWindows } = dashboardSlice.actions
+export const { setWindows, setOrder } = dashboardSlice.actions
 
 export default dashboardSlice.reducer
 
 const showWindow = windowUuid => (dispatch, getState) => {
   const { dashboard } = getState()
   const windows = {...dashboard.windows}
-
+  const order = [...dashboard.order ]
+  
   if (windows[windowUuid] !== undefined || windowsList[windowUuid] === undefined) {
-    return
+    const orderIndex = order.indexOf(windowUuid)
+    const newOrder = arrayMoveImmutable(order, orderIndex, order.length -1)
+  
+    return dispatch(setOrder(newOrder));
   }
-
+  
   windows[windowUuid] = {...windowsList[windowUuid]}
+  order.push(windowUuid)
 
+  dispatch(setOrder(order))
   dispatch(setWindows(windows))
 }
 
 const removeWindow = windowUuid => (dispatch, getState) => {
   const { dashboard } = getState()
   const windows = {...dashboard.windows}
-
+  
   if (windows[windowUuid] === undefined ) {
     return
   }
+  
+  const order = [...dashboard.order ].filter(i => i !== windowUuid)
 
+  dispatch(setOrder(order))
   windows[windowUuid] = undefined
   delete windows[windowUuid]
 
   dispatch(setWindows(windows))
 }
 
+const setActive = windowUuid => (dispatch, getState) => {
+  const order = getState().dashboard.order;
+  const index = order.indexOf(windowUuid)
+  const newOrder = arrayMoveImmutable(order, index, order.length - 1)
+
+  dispatch(setOrder(newOrder));
+}
 
 export const useDashboard = () => {
     const dispatch = useDispatch();
 
     return {
       showWindow: windowUuid => dispatch(showWindow(windowUuid)),
-      removeWindow: windowUuid => dispatch(removeWindow(windowUuid))
+      removeWindow: windowUuid => dispatch(removeWindow(windowUuid)),
+      setActive: windowUuid => dispatch(setActive(windowUuid))
     }
 }

@@ -1,20 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import {Drawer, TextField, List, ListItem, ListItemIcon, IconButton, ListItemSecondaryAction, ListItemText, Avatar} from '@mui/material'
-
-import { useApp } from '../redux/appSlice'
-import TreeView from '../TreeView'
-import { AwesomeButton } from "react-awesome-button";
+import { TextField, List, ListItem, ListItemIcon, IconButton, ListItemSecondaryAction, ListItemText, Avatar} from '@mui/material';
+import { useApp } from '../redux/appSlice';
+import TreeView from '../TreeView';
 import Modal from '../components/Modal';
 import Paper from '../components/Paper';
 import styled from 'styled-components'
 import socketIOClient from "socket.io-client";
-import { search, download } from './../api'
+import { search, download } from './../api';
 import VideocamIcon from '@mui/icons-material/Videocam';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
-import Button from '../components/Button'
-import Form from '../components/Form'
-import { useTranslation } from 'react-i18next'
+import Button from '../components/Button';
+import Form from '../components/Form';
+import { useTranslation } from 'react-i18next';
 
 const MODE = {
     DOWNLOAD: 'download',
@@ -75,7 +73,6 @@ const Downloader = () => {
       });
   
       mySocket.on("msg", data => {
-        console.log(data)
         setRealtime(data)
       });
       

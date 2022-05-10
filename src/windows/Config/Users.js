@@ -29,10 +29,6 @@ const Users = () => {
 
     useEffect(() => {
         getUsersList()
-
-        return () => {
-            console.log('Dechargement ')
-        }
     }, [])
 
     const changeValue = field => ({

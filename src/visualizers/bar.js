@@ -1,5 +1,4 @@
-const barVisualizer = ({clear, analyzer, lastValue, canvas, bufferMemoryLength, dataArray}) => {
-  
+const barVisualizer = ({clear, analyzer, lastValue, canvas, bufferMemoryLength, dataArray}) => {  
     analyzer.fftSize = 256;
     bufferMemoryLength = analyzer.frequencyBinCount;
     dataArray = new Uint8Array(bufferMemoryLength);
@@ -7,7 +6,6 @@ const barVisualizer = ({clear, analyzer, lastValue, canvas, bufferMemoryLength, 
 
    // var barWidth = (canvas.width / dataArray.length) * 2.5;
     var barWidth = ((canvas.width + dataArray.length) / dataArray.length) ;
-    var barHeight;
     var x = 0;
 
     if (clear !== false) {

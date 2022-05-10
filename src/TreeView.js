@@ -1,17 +1,11 @@
 import React, { useState } from "react";
 import { IconButton, List, ListItem, ListItemIcon, ListItemText, ListItemSecondaryAction } from "@mui/material";
 import FolderIcon from '@mui/icons-material/Folder';
-import DeleteIcon from '@mui/icons-material/Delete';
-import ContentPasteIcon from '@mui/icons-material/ContentPaste';
-import FileCopyIcon from '@mui/icons-material/FileCopy';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import PlaylistPlayIcon from '@mui/icons-material/PlaylistPlay';
 import PlayCircleIcon from '@mui/icons-material/PlayCircle';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import styled from "styled-components";
-import { deleteFile } from "./api";
 import { useApp } from "./redux/appSlice";
-import PlayArrow from "@mui/icons-material/PlayArrow";
 import { mpdAdd } from "./apis/mpdApi";
 
 
@@ -38,7 +32,6 @@ const LeafItem = styled(ListItem)`
 
 const TreeView = ({ tree, setFolder }) => {
   const [open, setOpen] = useState([])
-  const app = useApp()
 
   const toggle = (leafPath) => {
     const newOpen = [...open]
@@ -49,26 +42,6 @@ const TreeView = ({ tree, setFolder }) => {
 
     setOpen(o => [...o, leafPath])
   }
-
-  // const deleteFileAction = async (filePath) => {
-  //   const result = await deleteFile({}, {file: filePath})
-
-  //   if (result.valid === true) {
-  //     return refresh?.()
-  //   }
-  // }
-
-  // const addAllFolder = leaf => {
-  //   const loop = obj => {
-  //     if (obj.children === undefined) {
-  //       return app.addToPlaylist(obj)
-  //     }
-
-  //     obj.children.forEach(i => loop(i))
-  //   }
-
-  //   loop(leaf)
-  // }
 
   const renderName = (item, parentPath = '') => {
     if (item.directory) {

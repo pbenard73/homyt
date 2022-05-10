@@ -5,7 +5,6 @@ import { nanoid } from 'nanoid'
 import listener, { EVENTS } from "../utils/listener";
 import player from './../utils/player'
 import { useAuth } from "../redux/authSlice";
-import { ContactSupportOutlined } from "@mui/icons-material";
 
 const GhostData = () => {
   const app = useApp()

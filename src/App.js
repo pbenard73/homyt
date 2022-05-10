@@ -7,7 +7,6 @@ import GhostPlayer from "./components/GhostPlayer";
 import UserBackground from "./components/UserBackground";
 import Human from "./components/Human";
 
-import AwesomeButtonStyles from "react-awesome-button/src/styles/styles.scss";
 import './App.scss';
 import ErrorPanel from "./components/ErrorPanel";
 

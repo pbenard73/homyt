@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import App from '../App'
 import { AwesomeButton } from "react-awesome-button";
 import Paper from '../components/Paper';
 import { TextField } from '@mui/material';

@@ -7,7 +7,6 @@ import { THEMES } from '../../data/theme';
 import { useAuth } from '../../redux/authSlice';
 
 const Theme = () => {
-    const {i18n} = useTranslation()
     const user = useSelector(state => state.auth.user);
     const auth = useAuth()
 

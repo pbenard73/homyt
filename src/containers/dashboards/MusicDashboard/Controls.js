@@ -8,7 +8,7 @@ import TuneIcon from '@mui/icons-material/Tune';
 import { useSelector } from 'react-redux';
 import { mpdNext, mpdPause, mpdPlay, mpdPrevious } from '../../../apis/mpdApi';
 import { useState } from 'react';
-import { IconButton, Paper, Popper } from '@mui/material';
+import { Popper } from '@mui/material';
 import Tune from '../../../components/Tune';
 
 export const HoverButton = styled.span`
