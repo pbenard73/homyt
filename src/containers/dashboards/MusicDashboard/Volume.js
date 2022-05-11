@@ -1,24 +1,40 @@
 
+import styled from 'styled-components'
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import { Paper, Popper, Slider } from "@mui/material";
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import ComputerIcon from '@mui/icons-material/Computer';
+import StorageIcon from '@mui/icons-material/Storage';
 import { mpdVolume } from '../../../apis/mpdApi';
-import storage, { STORAGE } from "../../../utils/storage";
+import { useApp } from '../../../redux/appSlice';
 import { HoverButton } from './Controls';
 
+const VolumeStyled = styled(Paper)`
+    padding: 10px 5px;
+    background-color: #161616 !important;
+    display: flex;
+    color: white;
+    > div {
+        display:flex;
+        flex-direction: column;
+        align-items:center;
+        > svg {
+            color: white;
+            margin-bottom: 10px;
+            height: .7em;
+        }
+    }
+`
+
 const Volume = () => {
+    const app = useApp()
     const [volumeOpen, setVolumeOpen] = useState(false);
+    const innerVolume = useSelector(state => state.app.volume || 0)
     const volume = useSelector(state => state.app.mpdStatus?.volume || 0)
+    const servers = useSelector(state => state.app.config?.servers) || []
 
-    const onVolumeChange = (e, volume) => {       
-        mpdVolume({}, {params: [volume]})   
-        const source = document.querySelector('#casper_video')
-        const mvolume = volume / 100;
-        source.volume = mvolume
-        storage.set(STORAGE.VOLUME, mvolume)        
-    }   
-
+    const actualServer = servers.find(i => i.default === true);
     
     const toggleVolumeOpen = (e) => setVolumeOpen(volumeOpen ? false : e.target);
 
@@ -34,9 +50,19 @@ const Volume = () => {
                 anchorEl={volumeOpen}
                 placement="top"
                 >
-                    <Paper style={{padding:'10px 5px', backgroundColor:'#161616', color:'white'}}>
-                        <Slider value={volume} orientation="vertical" style={{height:"150px"}} onChange={onVolumeChange} />
-                    </Paper>
+                    <VolumeStyled >
+                            {actualServer?.audioUrl && (
+                        <div>
+                            <ComputerIcon />
+                            <Slider value={innerVolume * 100} orientation="vertical" style={{height:"150px"}} onChange={(e, newVolume) => app.setVolume(newVolume / 100)} />
+                        </div>
+                            )}
+
+                        <div>
+                            <StorageIcon />
+                            <Slider value={volume} orientation="vertical" style={{height:"150px"}} onChange={(_, newVolume) =>  mpdVolume({}, {params: [newVolume]})} />
+                        </div>
+                    </VolumeStyled>
                 </Popper>
             )}
         </>

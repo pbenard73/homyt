@@ -7,6 +7,7 @@ export const EVENTS = {
     PLAYER_META: 'playermeta',
     PLAYER_SEEK: 'playerseek',
     PLAYER_CURRENT_HUMAN: 'playercurrenthuman',
+    PLAYER_VOLUME: 'playervolume',
     ACTION_PLAY_SONG: 'action_play_song',
     PLAYLIST_CHANGE: 'playlist_change',
     PLAYLIST_INDEX: 'playlist_index',

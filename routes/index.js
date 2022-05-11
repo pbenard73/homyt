@@ -160,9 +160,8 @@ router.post("/search/:query", acl('ADMIN'), async (req, res, next) => {
 });
 
 router.post('/update', acl('ADMIN'), (req, res) => {
-  console.log('UPDATE')
  // const update = spawn('git', ['remote', '-v'], {cwd: `${__dirname}/../`})
-  const update = spawn('git', ['rebase', 'dev'], {cwd: `${__dirname}/../`})
+  const update = spawn('git', ['pull', 'origin', 'dev'], {cwd: `${__dirname}/../`})
 
   update.stdout.on("data", (data) => {    
     console.log(`git: ${data}`);

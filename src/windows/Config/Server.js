@@ -1,4 +1,3 @@
-import { TextField } from "@mui/material";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import StorageIcon from '@mui/icons-material/Storage';
@@ -10,6 +9,7 @@ import styled from 'styled-components'
 import { addServer, setDefaultServer } from "../../apis/configApi";
 import Button from "../../components/Button";
 import Form from "../../components/Form";
+import TextField from "../../components/TextField";
 
 const ServerBox = styled.div`
     display:flex;
@@ -115,7 +115,7 @@ const Servers = () => {
 
              >
              <div>
-                 <BadgeIcon /> <span title={server.name}>{server.name}</span>
+                 <BadgeIcon /> <span title={server.name}>{server.name ? server.name : server.internal ? 'Internal' : null}</span>
              </div>
              <div>
                  <StorageIcon /> <span title={`${server.host}:${server.port}`}></span>

@@ -83,7 +83,7 @@ const Tune = () => {
         mpdSeek({}, {params: [percent]});
     }
 
-    const isRadio = file.indexOf('http') === 0;
+    const isRadio = file?.indexOf?.('http') === 0;
 
     const repeatMemo = useMemo(() => (
         <Tooltip title={"Mode repeat"} placement="top">
@@ -116,9 +116,9 @@ const Tune = () => {
                 <CoverImage>
                     <img src={getPicture.url({path: file?.replace?.(/\./g, '_'), query: title, radio: isRadio})} alt="cover"/>
                 </CoverImage>
-                <div style={{padding:'5px 16px'}}>
-                    <Typography variant="caption">{artist}</Typography>
-                    <Typography noWrap><b>{title}</b></Typography>
+                <div style={{padding:'5px 16px', width:"calc(100% - 103px)", textOverflow:"ellipsis"}}>
+                    <Typography variant="caption" title={artist}>{artist}</Typography>
+                    <Typography noWrap title={title}><b>{title}</b></Typography>
                 </div>
             </div>
             <div>

@@ -32,10 +32,15 @@ const GhostPlayer = () => {
     }
   }, [audioUrl, mpdState])
 
+  useEffect(() => {
+    listener.dispatch()
+  }, [])
+
   const memoizedVideo = useMemo(() => (
     <CasperVideo
       controls 
       id="casper_video"
+      onVolumeChange={(...args) => listener.dispatch(EVENTS.PLAYER_VOLUME)}
       onPlay={(...args) => listener.dispatch(EVENTS.PLAYER_START, ...args)} 
       onPause={(...args) => listener.dispatch(EVENTS.PLAYER_PAUSE, ...args)} 
       onEnded={(...args) => listener.dispatch(EVENTS.PLAYER_END, ...args)}

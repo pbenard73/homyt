@@ -23,6 +23,7 @@ const initialState = {
   mpdStatus: {},
   mpdPool: [],
   playlists: [],
+  volume: 1,
   error: null,
   searchDownload: null,
 }
@@ -35,7 +36,23 @@ export const appSlice = createSlice({
   },
 })
 
-export const { setTree, setFullTree, setAudioUrl, setPlayIndex, setRadios, setCanvasIndex, setMpdMode, setMpdStatus, setMpdPool, setError, setConfig, setPlaylists, setSearchDownload } = appSlice.actions
+export const { 
+  setTree, 
+  setFullTree,
+  setAudioUrl,
+  setPlayIndex, 
+  setRadios, 
+  setCanvasIndex,
+  setMpdMode,
+  setMpdStatus, 
+  setMpdPool, 
+  etError,
+  setConfig, 
+  setPlaylists, 
+  setSearchDownload,
+  setVolume,
+  setError,
+} = appSlice.actions
 
 export default appSlice.reducer
 
@@ -122,6 +139,7 @@ const getMpdConfig = async (dispatch, getState) => {
   if (actualServerIndex !== actualStateServerIndex) {
     await getMpdDatabase(dispatch, true)
     await mpdStatus()
+    dispatch(getPlaylists(true))
   }
 
   dispatch(setConfig(data))
@@ -163,6 +181,10 @@ export const useApp = () => {
       downloadActual: value => {
         dispatch(setSearchDownload(value))
         dashboard.showWindow(WINDOWS.DOWNLOADER)
+      },
+      setVolume: volume => {
+        dispatch(setVolume(volume));
+        document.getElementById('casper_video').volume = volume;
       }
     }
 }

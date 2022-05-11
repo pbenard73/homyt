@@ -14,6 +14,7 @@ class Player {
     audioContext=null
     gainNode=null
     source=null
+    volume=1;
 
     resetContext() {
         this.context = null;
@@ -72,6 +73,11 @@ class Player {
         this.state = stateValue
     }
 
+
+    setVolume(volume) {
+        this.volume = volume;
+    }
+
     getState() {
         return this.state
     }
@@ -79,6 +85,7 @@ class Player {
 
 const player = new Player()
 
+listener.register('playerstate_volume', EVENTS.PLAYER_VOLUME, () => player.setVolume(document.getElementById('casper_video').volume))
 listener.register('playerstate_start', EVENTS.PLAYER_START, () => player.setState(STATE.PLAYING))
 listener.register('playerstate_pause', EVENTS.PLAYER_PAUSE, () => player.setState(STATE.PAUSE))
 listener.register('playerstate_stop', EVENTS.PLAYER_STOP, () => player.setState(STATE.STOP))
