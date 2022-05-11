@@ -51,7 +51,7 @@ const Volume = () => {
                 placement="top"
                 >
                     <VolumeStyled >
-                            {actualServer?.audioUrl && (
+                            {(actualServer?.audioUrl || actualServer?.internal) &&  (
                         <div>
                             <ComputerIcon />
                             <Slider value={innerVolume * 100} orientation="vertical" style={{height:"150px"}} onChange={(e, newVolume) => app.setVolume(newVolume / 100)} />
