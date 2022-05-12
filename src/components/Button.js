@@ -35,7 +35,7 @@ const Buttons = {
 }
 
 const Button = ({children, ...props}) => {
-    const userTheme = useSelector(state => state.auth.user?.theme)
+    const userTheme = useSelector(state => state.auth.user?.theme) || 'music';
     
     const Button = Buttons[userTheme]
 

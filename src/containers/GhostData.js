@@ -36,6 +36,10 @@ const GhostData = () => {
       auth.checkUserDeletion(data)
     })
 
+    mySocket.on('database', data => {
+      app.getMpdPool();
+    })
+
     mySocket.on('server_connection_error', data => {
       app.setError(data)
     })

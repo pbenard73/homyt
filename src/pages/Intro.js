@@ -1,13 +1,15 @@
 import React, { useEffect } from 'react'
 import App from '../App'
-import { AwesomeButton } from "react-awesome-button";
 import { useState } from 'react';
 import { useAuth } from '../redux/authSlice';
 import { useSelector } from 'react-redux';
 import Login from './Login';
 import Paper from '../components/Paper';
+import Button from '../components/Button';
+import { useTranslation } from 'react-i18next';
 
 const Intro = () => {
+    const { t } = useTranslation()
     const auth = useAuth()
     const user = useSelector(state => state.auth.user)
     const [open, setOpen] = useState(false)
@@ -42,31 +44,16 @@ const Intro = () => {
     return (
         <div style={{display:'flex', alignItems:'center', justifyContent:'center', height:'100vh'}}>
             <Paper style={{padding:'50px', display:'flex', flexDirection:'column', gap:'20px'}}>               
-                <AwesomeButton
-                className="nodrag"
-                type="instagram"
-                style={{marginRight:'20px'}}
-                onPress={openMp3}
-                >
-                    Ecouter Sortie Son
-                </AwesomeButton>  
-                <AwesomeButton
-                className="nodrag"
-                type="instagram"
-                style={{marginRight:'20px'}}
-                onPress={openRadio}
-                >
-                    Ecouter Sortie Radio
-                </AwesomeButton>  
+                <Button onClick={openMp3}>
+                    {t('sound_output')}
+                </Button>  
+                <Button onClick={openRadio}>
+                    {t('radio_output')}
+                </Button>  
                 {user.role === 'ADMIN' && (
-                    <AwesomeButton
-                    className="nodrag"
-                    type="instagram"
-                    style={{marginRight:'20px'}}
-                    onPress={() => setOpen(true)}
-                    >
-                        Admin Area
-                    </AwesomeButton>  
+                    <Button onClick={() => setOpen(true)}>
+                    {t('admin_area')}
+                    </Button>  
                 )}
             </Paper>    
         </div>

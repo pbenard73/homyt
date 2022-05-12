@@ -155,6 +155,10 @@ class MpdManager {
         if (systemLabel === 'stored_playlist') {
             emitStoredPlaylistChange()
         }
+        if (systemLabel === 'database') {
+            await this.database({body: {refresh: true}})
+            socket.emit('database', {})
+        }
     }
 
     async onSystemPlayer() {

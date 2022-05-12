@@ -7,20 +7,25 @@ import Button from '../../components/Button';
 import Servers from './Server';
 import Tabular from '../../containers/Tabular';
 import Users from './Users';
+import { useTranslation } from 'react-i18next';
 
-const Config = () =>  (
-    <Tabular icons={[StorageIcon, GroupIcon, InfoIcon]}>
-        <Servers />
-        <Users />
-        <div>
-            <Button
-                style={{marginRight:'20px'}}
-                onClick={() => softwareUpdate()}
-            >
-                {"UPGRADE"}
-            </Button>
-        </div>
-    </Tabular>
-)
+const Config = () =>  {
+    const { t } = useTranslation();
+
+    return (
+        <Tabular icons={[StorageIcon, GroupIcon, InfoIcon]}>
+            <Servers />
+            <Users />
+            <div>
+                <Button
+                    style={{marginRight:'20px'}}
+                    onClick={() => softwareUpdate()}
+                >
+                    {t("upgrade")}
+                </Button>
+            </div>
+        </Tabular>
+    )
+}
     
 export default Config

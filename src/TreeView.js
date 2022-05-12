@@ -4,9 +4,11 @@ import FolderIcon from '@mui/icons-material/Folder';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import PlaylistPlayIcon from '@mui/icons-material/PlaylistPlay';
 import PlayCircleIcon from '@mui/icons-material/PlayCircle';
+import BadgeIcon from '@mui/icons-material/Badge';
 import styled from "styled-components";
-import { useApp } from "./redux/appSlice";
 import { mpdAdd } from "./apis/mpdApi";
+import { getMetadata } from "./apis/metadataApi";
+import TagEditor from "./components/TagEditor";
 
 
 const LeafItem = styled(ListItem)`
@@ -30,8 +32,9 @@ const LeafItem = styled(ListItem)`
   }
 `;
 
-const TreeView = ({ tree, setFolder }) => {
+const TreeView = ({ tree, setFolder, metadata }) => {
   const [open, setOpen] = useState([])
+  const [editTag, setEditTag] = useState(null)
 
   const toggle = (leafPath) => {
     const newOpen = [...open]
@@ -57,6 +60,17 @@ const TreeView = ({ tree, setFolder }) => {
     }
   }
 
+  const showMetadata = async (file) => {
+    const {valid, tags} = await getMetadata({file})
+
+    if (valid === false) {
+      return;
+    }
+
+    setEditTag({tags, file});
+
+  }
+
   const renderTree = (children, parentName = '', files = false) => children.map(leaf => (
     <LeafItem key={files === false ? leaf.directory : leaf.file }>
       <div style={{flexDirection:'row', display:'flex'}}>
@@ -75,6 +89,11 @@ const TreeView = ({ tree, setFolder }) => {
               </IconButton>
             ) : (
             <>
+              {files === true && metadata === true && (
+                <IconButton onClick={() => showMetadata(leaf.file)}>
+                  <BadgeIcon />
+                </IconButton>
+              )}
               <IconButton onClick={() => {
                 mpdAdd({}, {path: files === true ? leaf.file : leaf.directory})
               }}>
@@ -106,9 +125,12 @@ const TreeView = ({ tree, setFolder }) => {
 
   return (
     <>
-    <List className="nodrag">
-      {renderTree(tree)}
-    </List>
+      <List className="nodrag">
+        {renderTree(tree)}
+      </List>
+      {editTag && (
+        <TagEditor {...editTag} onClose={() => setEditTag(null)} />
+      )}
     </>
   )  
 };

@@ -9,6 +9,7 @@ const mpdRouter = require("./routes/mpd");
 const themeRouter = require("./routes/theme");
 const authRouter = require("./routes/auth");
 const coverRouter = require("./routes/cover");
+const metadataRouter = require("./routes/metadata");
 const mpdManager = require('./managers/mpd');
 const database = require('./database/db');
 const dataManager = require('./managers/data');
@@ -42,5 +43,6 @@ app.use("/config", configRouter);
 app.use("/mpd", mpdRouter);
 app.use("/theme", themeRouter);
 app.use("/cover", coverRouter);
+app.use("/metadata", metadataRouter);
 
 module.exports = app;

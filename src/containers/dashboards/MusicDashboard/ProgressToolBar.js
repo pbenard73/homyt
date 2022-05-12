@@ -33,6 +33,7 @@ const ThemedSeekHandler = styled.div`
         height: 6px;
         background: #007ed7;
         width: ${props => props.progress || 0 }%;
+        max-width:100vw;
         left: 0;
         pointer-events:none;
     }

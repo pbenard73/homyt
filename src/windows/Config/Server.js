@@ -10,6 +10,7 @@ import { addServer, setDefaultServer } from "../../apis/configApi";
 import Button from "../../components/Button";
 import Form from "../../components/Form";
 import TextField from "../../components/TextField";
+import { useTranslation } from "react-i18next";
 
 const ServerBox = styled.div`
     display:flex;
@@ -54,6 +55,7 @@ const SmallField = styled(TextField)`
 `
 
 const ServerForm = ({value: initialValue, onSubmit}) => {
+    const { t } = useTranslation()
     const [value, setValue] = useState(initialValue)
 
     const changeValue = field => e => setValue({...value, [field]: e.target.value})
@@ -61,11 +63,11 @@ const ServerForm = ({value: initialValue, onSubmit}) => {
     return (
         <Form onSubmit={e => onSubmit(e, value)}>
             <div>
-                <SmallField label={"Name"} value={value.name} onChange={changeValue('name')} />
-                <SmallField label={"Host"} value={value.host} onChange={changeValue('host')} />
-                <SmallField label={"Port"} value={value.port} onChange={changeValue('port')} />
-                <SmallField label={"Audio Url"} value={value.audioUrl} onChange={changeValue('audioUrl')} />
-                <Button type="submit">{'Save'}</Button>
+                <SmallField label={t("server_name")} value={value.name} onChange={changeValue('name')} />
+                <SmallField label={t("server_host")} value={value.host} onChange={changeValue('host')} />
+                <SmallField label={t("server_port")} value={value.port} onChange={changeValue('port')} />
+                <SmallField label={t("server_audio_url")} value={value.audioUrl} onChange={changeValue('audioUrl')} />
+                <Button type="submit">{t('save')}</Button>
             </div>
         </Form>
     )

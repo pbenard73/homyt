@@ -15,6 +15,7 @@ import { IconButton, Paper, Slider, Tooltip, Typography } from '@mui/material';
 import { mpdVolume } from '../apis/mpdApi';
 import { getPicture } from '../api';
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const CoverImage = styled.div`
     width: 100px;
@@ -65,6 +66,7 @@ const TuneWrapper = styled(Paper)`
 `
 
 const Tune = () => {
+    const { t, i18n } = useTranslation()
     const mpdStatus = useSelector(state => state.app.mpdStatus) || {}
     const mpdIsRepeating = useSelector(state => state.app.mpdStatus?.repeat) === true
     const mpdIsRandom = useSelector(state => state.app.mpdStatus?.random) === true
@@ -86,28 +88,28 @@ const Tune = () => {
     const isRadio = file?.indexOf?.('http') === 0;
 
     const repeatMemo = useMemo(() => (
-        <Tooltip title={"Mode repeat"} placement="top">
+        <Tooltip title={t("mode_repeat")} placement="top">
             <IconButton onClick={() => mpdRepeat()} style={{color: mpdIsRepeating ? 'white': 'grey'}}>
                 <RepeatIcon style={{height:'.8em'}}/>
             </IconButton>
         </Tooltip>
-      ), [mpdIsRepeating])
+      ), [mpdIsRepeating, i18n.language])
 
       const randomMemo = useMemo(() => (
-        <Tooltip title={"Mode Random"} placement="top">
+        <Tooltip title={t("mode_random")} placement="top">
          <IconButton onClick={() => mpdRandom()} style={{color: mpdIsRandom ? 'white': 'grey'}}>
              <ShuffleIcon style={{height:'.8em'}}/>
         </IconButton>
         </Tooltip>
-      ), [mpdIsRandom])
+      ), [mpdIsRandom, i18n.language])
 
       const consumeMemo = useMemo(() => (
-        <Tooltip title={"Mode Consume"} placement="top">
+        <Tooltip title={t("mode_consume")} placement="top">
         <IconButton onClick={() => mpdConsume()}  style={{color: mpdIsConsume ? 'white': 'grey'}}>
             <CancelScheduleSendIcon style={{height:'.8em'}}/>
             </IconButton>
         </Tooltip>
-      ), [mpdIsConsume])
+      ), [mpdIsConsume, i18n.language])
 
 
     return(

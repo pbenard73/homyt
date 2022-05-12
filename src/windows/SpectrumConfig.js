@@ -14,8 +14,9 @@ const SpectrumConfig = () => {
             <List className="nodrag">
                 {Object.keys(VISUALIZER).map(spectrumMode => (
                     <ListItem 
-                    key={spectrumMode}
-                    onClick={() => visualizer.setSpectrum(VISUALIZER[spectrumMode])}>
+                        key={spectrumMode}
+                        onClick={() => visualizer.setSpectrum(VISUALIZER[spectrumMode])}
+                    >
                         <ListItemText primary={t(`spectrum_${VISUALIZER[spectrumMode]}`)} />
                     </ListItem>
                 ))}

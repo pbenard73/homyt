@@ -16,6 +16,7 @@
     "memorystore": "^1.6.7",
     "morgan": "~1.9.1",
     "mpd2": "^1.0.5",
+    "node-id3": "^0.2.3",
     "pm2": "^5.2.0",
     "sequelize": "^6.19.0",
     "socket.io": "^4.4.1",
@@ -50,7 +51,6 @@
     ]
   },
   "devDependencies": {
-    "array-move": "^4.0.0",
     "@emotion/react": "^11.8.2",
     "@emotion/styled": "^11.8.1",
     "@mui/icons-material": "^5.5.1",
@@ -59,6 +59,7 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
+    "array-move": "^4.0.0",
     "i18next": "^21.6.16",
     "i18next-browser-languagedetector": "^6.1.4",
     "node-sass": "^7.0.1",

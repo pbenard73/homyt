@@ -174,8 +174,8 @@ export const useApp = () => {
         await mpdUpdate();
         await getMpdDatabase(dispatch, true)
       },
-      getMpdPool: async () => {
-        await getMpdDatabase(dispatch)
+      getMpdPool: async (refresh = false) => {
+        await getMpdDatabase(dispatch, refresh)
       },
       resetCanvas: () => dispatch(resetCanvas()),
       downloadActual: value => {

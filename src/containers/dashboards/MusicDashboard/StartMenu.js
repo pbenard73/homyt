@@ -7,6 +7,7 @@ import styled from 'styled-components'
 import { useState } from "react"
 import { useAuth } from "../../../redux/authSlice"
 import { useDashboard, WINDOWS } from "../../../redux/dashboardSlice"
+import { useTranslation } from "react-i18next";
 
 const MainMenuPopover = styled(Popover)`
     .MuiPaper-root{
@@ -42,9 +43,10 @@ const SmallList = styled(List)`
 const RadioIcon = props => <img src="/icons/radio.png" alt="Radio icon" {...props} />
 
 const StartMenu = () => {
-    const [mainMenuOpen, setMainMenuOpen] = useState(null)
-    const dashboard = useDashboard()
-    const auth = useAuth()    
+    const { t } = useTranslation();
+    const [mainMenuOpen, setMainMenuOpen] = useState(null);
+    const dashboard = useDashboard();
+    const auth = useAuth()    ;
 
     const show = windowUuid => () => {
         dashboard.showWindow(windowUuid);
@@ -103,23 +105,23 @@ const StartMenu = () => {
                             <div style={{maxHeight:'100%', overflow:'auto', width:'100%', paddingLeft:'5px'}}>
                                 <List>
                                     <HoverListItem onClick={show(WINDOWS.PLAYLIST)}>
-                                        <ListItemText primary="Playlist" />
+                                        <ListItemText primary={t("window_playlist")} />
                                     </HoverListItem>
                                     <HoverListItem onClick={show(WINDOWS.DOWNLOADER)}>
-                                        <ListItemText primary="Youtube" />
+                                        <ListItemText primary={t("window_downloader")} />
                                     </HoverListItem>
                                     <HoverListItem onClick={show(WINDOWS.RADIO)}>
-                                        <ListItemText primary="Radio" />
+                                        <ListItemText primary={t("window_radios")} />
                                     </HoverListItem>
                                     <HoverListItem onClick={show(WINDOWS.STORED_PLAYLISTS)}>
-                                        <ListItemText primary="Stored Playlists" />
+                                        <ListItemText primary={t("window_stored_playlists")} />
                                     </HoverListItem>
                                     <HoverListItem onClick={show(WINDOWS.SPECTRUM)}>
-                                        <ListItemText primary="Spectrum" />
+                                        <ListItemText primary={t("window_spectrum")} />
                                     </HoverListItem>
-                                    <HoverListItem onClick={show(WINDOWS.REMOTE)}>
+                                    {/* <HoverListItem onClick={show(WINDOWS.REMOTE)}>
                                         <ListItemText primary="Télécommande" />
-                                    </HoverListItem>
+                                    </HoverListItem> */}
                                 </List>
                             </div>
                         </div>

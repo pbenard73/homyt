@@ -15,6 +15,7 @@ import {SortableContainer, SortableElement, sortableHandle} from 'react-sortable
 import { useApp } from '../redux/appSlice';
 import { useState } from 'react';
 import Form from '../components/Form';
+import { useTranslation } from 'react-i18next';
 
 const DragHandle = sortableHandle(() =>(
   <ListItemIcon className="dragger" style={{cursor:'grab'}}>
@@ -68,6 +69,7 @@ const InnerPlaylist = () => {
          items={items} 
          onSortEnd={({oldIndex, newIndex}) => {
             const song = items[oldIndex];
+
             mpdMoveId({}, {params: [song.id, newIndex]})
          }}
           />
@@ -77,6 +79,7 @@ const InnerPlaylist = () => {
 }
 
 const Playlist = () => {
+    const { t } = useTranslation()
       const app = useApp()
 
       const [newPlaylistName, setNewPlaylistName] = useState(null)
@@ -100,12 +103,12 @@ const Playlist = () => {
                 <CasinoIcon />
               </Button>
               <span style={{marginLeft:'auto'}}>
-                <Tooltip title="Save as playlist" placement='top'>
+                <Tooltip title={t('save_as_playlist')} placement='top'>
                   <IconButton onClick={toggleSave}>
                       <SaveAsIcon />
                   </IconButton>
                 </Tooltip>
-                <Tooltip title="clear all" placement="top">
+                <Tooltip title={t('clear_playlist')} placement="top">
                   <IconButton onClick={() => mpdClear()}>
                       <DeleteSweepIcon />
                   </IconButton>
@@ -116,8 +119,8 @@ const Playlist = () => {
               <>
                 <Form onSubmit={saveAsAction}>
                   <div>
-                    <TextField label="Playlist's name" value={newPlaylistName} onChange={e => setNewPlaylistName(e.target.value)} />
-                    <Button type="submit">Save</Button>
+                    <TextField label={t('playlist_name')} value={newPlaylistName} onChange={e => setNewPlaylistName(e.target.value)} />
+                    <Button type="submit">{t('save')}</Button>
                   </div>
                 </Form>
               </>

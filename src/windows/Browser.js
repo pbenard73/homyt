@@ -7,6 +7,11 @@ import { useApp } from '../redux/appSlice';
 
 const Browser = () => {
     const fullTree = useSelector(state => state.app.mpdPool)
+    const servers = useSelector(state => state.app.config?.servers) || []
+
+    const showMetadata = servers.find(i => i.default === true && i.internal === true) !== null;
+
+
     const app = useApp()
 
     return (
@@ -18,7 +23,7 @@ const Browser = () => {
                     </IconButton>
                 </Tooltip>
             </div>
-            <TreeView tree={fullTree} />
+            <TreeView tree={fullTree} metadata={showMetadata}/>
         </div>
     )
 }

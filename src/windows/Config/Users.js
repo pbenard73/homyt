@@ -7,8 +7,10 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { useState, useEffect } from "react"
 import { createUser, deleteUser, editUser, getUsers } from "../../apis/authApi"
 import Form from "../../components/Form";
+import { useTranslation } from "react-i18next";
 
 const Users = () => {
+    const { t } = useTranslation();
     const [users, setUsers] = useState([]);
     const [userForm, setUserForm] = useState(null)
 
@@ -34,7 +36,7 @@ const Users = () => {
     const changeValue = field => ({
         onChange: e => setUserForm({...userForm, [field]: e.target.value}),
         value: userForm[field],
-        label: field
+        label: t(field)
     })
 
     const onSubmit = async e => {
@@ -82,12 +84,11 @@ const Users = () => {
                     <div>
                         <TextField {...changeValue('username')} />
                         <TextField {...changeValue('password')} />
-                        <TextField {...changeValue('token')} />
                         <FormControlLabel
-                            label='Is admin'
+                            label={t('user_is_admin')}
                             control={<Checkbox checked={userForm.isAdmin} onChange={() => setUserForm({...userForm, isAdmin: !userForm.isAdmin})} />}
                         />
-                        <Button type="submit">save</Button>
+                        <Button type="submit">{t('save')}</Button>
                     </div>
                 </Form>
             )}
