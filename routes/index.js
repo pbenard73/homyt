@@ -192,7 +192,7 @@ router.post('/update', acl('ADMIN'), (req, res) => {
 
         setTimeout(() => {
           process.send('restart')
-        }, 8000);
+        }, 2000);
       //}
     })
   })
