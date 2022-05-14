@@ -26,6 +26,7 @@ const initialState = {
   volume: 1,
   error: null,
   searchDownload: null,
+  upgrading: false
 }
 
 export const appSlice = createSlice({
@@ -52,6 +53,7 @@ export const {
   setSearchDownload,
   setVolume,
   setError,
+  setUpgrading
 } = appSlice.actions
 
 export default appSlice.reducer
@@ -167,6 +169,7 @@ export const useApp = () => {
       setRadios: item => dispatch(setRadios(item)),
       addToPlaylist: item => dispatch(addToPlaylist(item)),
       nextIndex: () => dispatch(nextIndex()),
+      willUpgrade: () => dispatch(setUpgrading(true)),
       getConfig: () => dispatch(getMpdConfig),
       getPlaylists: force => dispatch(getPlaylists(force)),
       eraseSearchDownload: () => dispatch(setSearchDownload(null)),

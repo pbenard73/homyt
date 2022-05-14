@@ -9,6 +9,7 @@ import Human from "./components/Human";
 
 import './App.scss';
 import ErrorPanel from "./components/ErrorPanel";
+import UpgradePanel from "./components/UpgradeTimeout";
 
 const AppStyled = styled.div`
   @media screen and (max-width:768px) {
@@ -33,6 +34,7 @@ const App = () => (
     </Suspense>
     <Human />
     <ErrorPanel />
+    <UpgradePanel />
   </AppStyled>
 )
 

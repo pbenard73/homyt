@@ -55,9 +55,10 @@ const GhostData = () => {
     })
 
     mySocket.on('update', () => {
+      app.willUpgrade()
       setTimeout(() => {
         window.location.reload()
-      }, 8000)
+      }, 15000)
     })
 
     mySocket.on('mpd_status', data => {
