@@ -172,6 +172,7 @@ router.post('/update', acl('ADMIN'), (req, res) => {
   });
 
   update.on('close', code => {
+    console.log('UPDATE STATUS : ', code)
     res.json({valid: code === 0})
 
     if (code !== 0) {
@@ -185,13 +186,14 @@ router.post('/update', acl('ADMIN'), (req, res) => {
     });
 
     npmInstall.on('close', installCode => {
-      if (installCode === 0) {
+       console.log('UPDATE NPM STATUS : ', installCode)
+      //if (installCode === 0) {
         socketManager.emit('update', {})
 
         setTimeout(() => {
           process.send('restart')
         }, 2000);
-      }
+      //}
     })
   })
 })

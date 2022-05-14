@@ -10,7 +10,7 @@ RUN apt-get install curl git wget dirmngr ffmpeg apt-transport-https lsb-release
 RUN apt-get install alsa-utils pulseaudio mpd nginx-full -y -q
 COPY mpd.conf /etc/mpd.conf
 RUN apt install icecast2 -y -qq
-RUN apt-get install zsh -y
+RUN apt-get install vim zsh -y
 RUN sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" -y
 RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
 RUN apt-get install nodejs -y
