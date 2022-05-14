@@ -52,5 +52,7 @@
     "admin_area": "Painel",
     "mode_repeat": "Repetir",
     "mode_consume": "Consumir",
-    "mode_random": "Aleatório"
+    "mode_random": "Aleatório",
+    "server_error": "Erro de servidor",
+    "server_restarting": "Servidor reiniciando"
 }

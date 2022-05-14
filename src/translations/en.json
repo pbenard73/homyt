@@ -24,8 +24,7 @@
     "spectrum_firework": "Firework",
     "spectrum_heart": "Heart",
     "spectrum_full": "Complex",
-    "spectrum_none": "No effect",
-    
+    "spectrum_none": "No effect",    
     "username": "Username",
     "password": "Password",
     "login": "Login",    
@@ -53,5 +52,7 @@
     "admin_area": "Dashboard",
     "mode_repeat": "Repeat",
     "mode_consume": "Consume",
-    "mode_random": "Random"
+    "mode_random": "Random",
+    "server_error": "Server Error",
+    "server_restarting": "Server restarting"
 }

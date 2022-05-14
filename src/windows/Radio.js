@@ -15,8 +15,6 @@ import { mpdAddToPlaylist, mpdDeleteFromPlaylist, mpdListenRadio } from './../ap
 const Radio = () => {
     const { t } = useTranslation()
     const playlists = useSelector(state => state.app.playlists)
-
-
     const [add, setAdd] = useState(false);
     const [newRadio, setNewRadio] = useState({name: '', path:''});
     const [importRadio, setImportRadio] = useState(false)

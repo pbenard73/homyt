@@ -24,8 +24,7 @@
     "spectrum_firework": "Havai fişek",
     "spectrum_heart": "Kalp",
     "spectrum_full": "Karmaşık",
-    "spectrum_none": "Etkisi yok",
-    
+    "spectrum_none": "Etkisi yok",    
     "username": "Kullanıcı adı",
     "password": "Parola",
     "login": "Giriş yapmak",    
@@ -53,5 +52,7 @@
     "admin_area": "Gösterge Paneli",
     "mode_repeat": "Tekrarlamak",
     "mode_consume": "Tüketmek",
-    "mode_random": "Rastgele"
+    "mode_random": "Rastgele",
+    "server_error": "Server hatası",
+    "server_restarting": "Sunucu yeniden başlatılıyor"
 }

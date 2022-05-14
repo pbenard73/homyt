@@ -25,7 +25,6 @@
     "spectrum_heart": "Coeur",
     "spectrum_full": "Multiple",
     "spectrum_none": "Aucun effect",
-
     "username": "Nom d'utilisateur",
     "password": "Mot de passe",
     "login": "Se connecter",
@@ -53,5 +52,7 @@
     "admin_area": "Tableau de Bord",
     "mode_repeat": "Répétition",
     "mode_consume": "Consumer",
-    "mode_random": "Aléatoire"
+    "mode_random": "Aléatoire",
+    "server_error": "Erreur de connexion au serveur",
+    "server_restarting": "Redémarrage du serveur"
 }

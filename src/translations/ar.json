@@ -52,5 +52,7 @@
     "admin_area": "لوحة القيادة",
     "mode_repeat": "يكرر",
     "mode_consume": "تستهلك",
-    "mode_random": "عشوائي"
+    "mode_random": "عشوائي",
+    "server_error": "خطأ في الخادم",
+    "server_restarting": "إعادة تشغيل الخادم"
 }

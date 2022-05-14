@@ -52,5 +52,7 @@
     "admin_area": "Salpicadero",
     "mode_repeat": "Repetir",
     "mode_consume": "Consumir",
-    "mode_random": "Aleatorio"
+    "mode_random": "Aleatorio",
+    "server_error": "Error del Servidor",
+    "server_restarting": "Reinicio del servidor"
 }
