@@ -16,7 +16,7 @@ icecast.on('close', (code) => {
 
 const runServer = () => {
   const now = Date.now()
-  const server = fork('node', ['/homyt/bin/www'])
+  const server = fork('/homyt/bin/www')
   
   server.on('error', error => {
     console.error(error);
