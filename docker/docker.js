@@ -1,4 +1,4 @@
-const { spawn } = require('child_process');
+const { spawn, fork } = require('child_process');
 const icecast = spawn('su', ['icecast', '-c', "'icecast2 -c /usr/share/icecast/icecast.xml -b &'"], {shell: true});
 
 icecast.stdout.on('data', (data) => {
@@ -16,19 +16,14 @@ icecast.on('close', (code) => {
 
 const runServer = () => {
   const now = Date.now()
-  const server = spawn('node', ['/homyt/bin/www'])
-
-  server.stdout.on('data', (data) => {
-    console.log(`stdout: ${data}`);
-  });
+  const server = fork('node', ['/homyt/bin/www'])
   
-  server.stderr.on('data', (data) => {
-    console.error(`stderr: ${data}`);
+  server.on('error', error => {
+    console.error(error);
   });
   
   server.on('message', msg => {
     if (msg === 'restart') {
-      server.stdin.pause();
       server.kill('SIGKILL');
     }
   })
