@@ -7,6 +7,7 @@ export const EVENTS = {
     PLAYER_META: 'playermeta',
     PLAYER_SEEK: 'playerseek',
     PLAYER_CURRENT_HUMAN: 'playercurrenthuman',
+    PLAYER_VOLUME: 'playervolume',
     ACTION_PLAY_SONG: 'action_play_song',
     PLAYLIST_CHANGE: 'playlist_change',
     PLAYLIST_INDEX: 'playlist_index',
@@ -15,7 +16,8 @@ export const EVENTS = {
     REMOTE_PREV: 'remote_prev',
     REMOTE_ACTION_VOLUME: 'remote_action_volume',
     REMOTE_ACTION_NEXT: 'remote_action_next',
-    REMOTE_ACTION_PREV: 'remote_action_prev'
+    REMOTE_ACTION_PREV: 'remote_action_prev',
+    MPD_STATUS: 'mpd_status',
 }
 
 class Listener {

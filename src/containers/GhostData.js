@@ -4,13 +4,19 @@ import socketIOClient from "socket.io-client";
 import { nanoid } from 'nanoid'
 import listener, { EVENTS } from "../utils/listener";
 import player from './../utils/player'
+import { useAuth } from "../redux/authSlice";
 
-function GhostData() {
+const GhostData = () => {
   const app = useApp()
+  const auth = useAuth()
   const [uuid, setUuid] = useState(null)
 
   useEffect(() => {
+    app.getConfig();
+    auth.refreshSession();
     app.getFullTree();
+    app.getPlaylists();
+
     const newUuid = nanoid()
     setUuid(nanoid(newUuid))
 
@@ -22,10 +28,41 @@ function GhostData() {
       withCredentials: true,
     });
 
+    mySocket.on('stored_playlist', data => {
+      app.getPlaylists(true)
+    })
+
+    mySocket.on('user_delete', data => {
+      auth.checkUserDeletion(data)
+    })
+
+    mySocket.on('database', data => {
+      app.getMpdPool();
+    })
+
+    mySocket.on('server_connection_error', data => {
+      app.setError(data)
+    })
+
+    mySocket.on('config_change', data => {
+      app.getConfig()
+    })
+
     mySocket.on('volume', data => {
       if (data.target === newUuid) {
         listener.dispatch(EVENTS.REMOTE_VOLUME, data)
       }
+    })
+
+    mySocket.on('update', () => {
+      app.willUpgrade()
+      setTimeout(() => {
+        window.location.reload()
+      }, 15000)
+    })
+
+    mySocket.on('mpd_status', data => {
+      app.setMpdStatus(data);
     })
 
     listener.register('remote_action_volume', EVENTS.REMOTE_ACTION_VOLUME , data => {
@@ -53,8 +90,7 @@ function GhostData() {
 
       if (newIndex > -1 && newIndex <= playlist.length -1) {
         listener.dispatch(EVENTS.ACTION_PLAY_SONG, {...playlist[newIndex], index: newIndex})
-      }
-      
+      }      
     })
 
     return () => mySocket.close()

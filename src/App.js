@@ -3,12 +3,13 @@ import styled from "styled-components";
 import Main from "./containers/Main";
 import GhostData from "./containers/GhostData";
 import Vizualizer from "./components/Vizualizer";
-import Player from "./components/Player";
 import GhostPlayer from "./components/GhostPlayer";
+import UserBackground from "./components/UserBackground";
 import Human from "./components/Human";
 
-import AwesomeButtonStyles from "react-awesome-button/src/styles/styles.scss";
 import './App.scss';
+import ErrorPanel from "./components/ErrorPanel";
+import UpgradePanel from "./components/UpgradeTimeout";
 
 const AppStyled = styled.div`
   @media screen and (max-width:768px) {
@@ -27,11 +28,13 @@ const App = () => (
     <GhostData />
     <GhostPlayer />
     <Suspense callback={"loading"}>
+      <UserBackground />
     <Vizualizer />
-    <Main />
-    <Player />
+    <Main />   
     </Suspense>
     <Human />
+    <ErrorPanel />
+    <UpgradePanel />
   </AppStyled>
 )
 

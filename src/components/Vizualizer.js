@@ -31,7 +31,13 @@ const Vizualizer = () => {
                 
                 let lastValue = null
 
-                function draw() {                
+                function draw() {    
+                    if (player.context === null) {
+                        let {analyzer: newAnalyser, canvas: newCanvas} = player.getContext()
+                        analyzer = newAnalyser;
+                        canvas = newCanvas
+                    }            
+                    
                     const rendererName = spectrum.getRendererName();
                     if (lastValue !== null && lastValue.rendererName !== rendererName) {
                         resetCanvas()

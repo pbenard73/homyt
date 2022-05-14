@@ -1,4 +1,5 @@
 const { spawn } = require("child_process");
+const mpdManager = require("./managers/mpd");
 const socket = require("./socket");
 
 class Downloader {
@@ -17,6 +18,11 @@ class Downloader {
       cmd.on("close", (code) => {
         console.log(`child process exited with code ${code}`);
         socket?.emit?.("end", { valid: code === 0 });
+
+        if (code === 0) {
+          mpdManager.database({body: {refresh: true}})
+        }
+
         resolve(code);
       });
     });

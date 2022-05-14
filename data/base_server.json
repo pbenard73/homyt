@@ -1,0 +1,8 @@
+[
+    {
+        "host": "localhost",
+        "port": 6600,
+        "default": true,
+        "internal": true
+    }
+]

@@ -4,8 +4,25 @@ const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const cors = require("cors");
 const indexRouter = require("./routes/index");
+const configRouter = require("./routes/config");
+const mpdRouter = require("./routes/mpd");
+const themeRouter = require("./routes/theme");
+const authRouter = require("./routes/auth");
+const coverRouter = require("./routes/cover");
+const metadataRouter = require("./routes/metadata");
+const mpdManager = require('./managers/mpd');
+const database = require('./database/db');
+const dataManager = require('./managers/data');
+const sessionManager = require("./managers/session");
+
+dataManager.checkPresence()
 
 const app = express();
+app.set('trust proxy', 1)
+
+sessionManager.init(app);
+mpdManager.run();
+database.init();
 
 app.use(
   cors({
@@ -21,5 +38,11 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "build")));
 
 app.use("/", indexRouter);
+app.use("/auth", authRouter);
+app.use("/config", configRouter);
+app.use("/mpd", mpdRouter);
+app.use("/theme", themeRouter);
+app.use("/cover", coverRouter);
+app.use("/metadata", metadataRouter);
 
 module.exports = app;

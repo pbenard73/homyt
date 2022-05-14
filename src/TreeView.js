@@ -1,30 +1,40 @@
 import React, { useState } from "react";
 import { IconButton, List, ListItem, ListItemIcon, ListItemText, ListItemSecondaryAction } from "@mui/material";
 import FolderIcon from '@mui/icons-material/Folder';
-import DeleteIcon from '@mui/icons-material/Delete';
-import ContentPasteIcon from '@mui/icons-material/ContentPaste';
-import FileCopyIcon from '@mui/icons-material/FileCopy';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import PlaylistPlayIcon from '@mui/icons-material/PlaylistPlay';
+import PlayCircleIcon from '@mui/icons-material/PlayCircle';
+import BadgeIcon from '@mui/icons-material/Badge';
 import styled from "styled-components";
-import { deleteFile } from "./api";
-import { useApp } from "./redux/appSlice";
+import { mpdAdd } from "./apis/mpdApi";
+import { getMetadata } from "./apis/metadataApi";
+import TagEditor from "./components/TagEditor";
 
 
 const LeafItem = styled(ListItem)`
   flex-direction: column;
   align-items: start !important;
+  position:relative;
   .MuiListItemSecondaryAction-root {
     top: 26px;
   }
   .children_leaf {
     width: 100%;
   }
+  .actions {   
+     svg {
+       fill: white;
+     }
+  }
+  .MuiListItemIcon-root,
+  .MuiListItemText-root{
+    color: white
+  }
 `;
 
-const TreeView = ({ setFolder, select, setPlaylist, mode, tree, refresh, copyFile, setCopyFile, copyAction }) => {
+const TreeView = ({ tree, setFolder, metadata }) => {
   const [open, setOpen] = useState([])
-  const app = useApp()
+  const [editTag, setEditTag] = useState(null)
 
   const toggle = (leafPath) => {
     const newOpen = [...open]
@@ -36,76 +46,77 @@ const TreeView = ({ setFolder, select, setPlaylist, mode, tree, refresh, copyFil
     setOpen(o => [...o, leafPath])
   }
 
-  const deleteFileAction = async (filePath) => {
-    const result = await deleteFile({}, {file: filePath})
+  const renderName = (item, parentPath = '') => {
+    if (item.directory) {
+      return item.directory.replace(parentPath, '')
+    }
 
-    if (result.valid === true) {
-      return refresh?.()
+    if (item.title) {
+      return `${item.title} - ${item.artist}`
+    }
+
+    if (item.file) {
+      return item.file.replace(parentPath, '')
     }
   }
 
-  const addAllFolder = leaf => {
-    const loop = obj => {
-      if (obj.children === undefined) {
-        return app.addToPlaylist(obj)
-      }
+  const showMetadata = async (file) => {
+    const {valid, tags} = await getMetadata({file})
 
-      obj.children.forEach(i => loop(i))
+    if (valid === false) {
+      return;
     }
 
-    loop(leaf)
+    setEditTag({tags, file});
+
   }
 
-  const renderTree = children => children.filter(i => setFolder !== undefined ? Array.isArray(i.children) : i).map(leaf => (
-    <LeafItem key={leaf.path}>
+  const renderTree = (children, parentName = '', files = false) => children.map(leaf => (
+    <LeafItem key={files === false ? leaf.directory : leaf.file }>
       <div style={{flexDirection:'row', display:'flex'}}>
 
-      {Array.isArray(leaf.children) === true && (
-        <ListItemIcon style={{color:'white', alignItems:'center'}}>
+      {files === false && (
+        <ListItemIcon style={{alignItems:'center'}}>
           <FolderIcon />
         </ListItemIcon>
       )}
-      <ListItemText primary={leaf.name} style={{color:'white'}} onClick={() => toggle(leaf.path)}/>
+      <ListItemText primary={renderName(leaf, parentName)} onClick={files === true ? undefined : () => toggle(leaf.directory)}/>
       </div>
-      <ListItemSecondaryAction>
-        <>
-          {setFolder !== undefined && (
-            <IconButton onClick={() => setFolder(leaf)} style={{color:'white'}}>
-              S
-            </IconButton>
-          )}
-          {}
-          {select !== true && leaf.children === undefined ? (
+      <ListItemSecondaryAction className="actions">
+          {setFolder ? (
+              <IconButton onClick={() => setFolder(leaf.directory)}>
+                <PlaylistPlayIcon />
+              </IconButton>
+            ) : (
             <>
-          
-            <IconButton onClick={() => app.addToPlaylist(leaf)} style={{color:'white'}}>
-              <AddCircleOutlineIcon />
-            </IconButton>
-            {/* <IconButton onClick={() => setCopyFile(leaf.path)} style={{color: copyFile === leaf.path ? 'red' : 'white'}}>
-              <FileCopyIcon />
-            </IconButton> */}
-            <IconButton onClick={() => deleteFileAction(leaf.path)} style={{color:'white'}}>
-              <DeleteIcon />
-            </IconButton>
-            </>
-          ) : (
-            <IconButton onClick={() => addAllFolder(leaf)} style={{color:'white'}}>
-              <AddCircleIcon />
-            </IconButton>
-          )}
-          {select !== true && leaf.children !== undefined && copyFile !== null && (
-            <>
-            <IconButton onClick={() => copyAction(leaf.path)} style={{color: 'white'}}>
-              <ContentPasteIcon />
-            </IconButton>
+              {files === true && metadata === true && (
+                <IconButton onClick={() => showMetadata(leaf.file)}>
+                  <BadgeIcon />
+                </IconButton>
+              )}
+              <IconButton onClick={() => {
+                mpdAdd({}, {path: files === true ? leaf.file : leaf.directory})
+              }}>
+                <AddCircleIcon />
+              </IconButton>
+              <IconButton onClick={() => {
+                mpdAdd({}, {path: files === true ? leaf.file : leaf.directory, play:true})
+              }}>
+                <PlaylistPlayIcon />
+              </IconButton>
+              <IconButton onClick={() => {
+                mpdAdd({}, {path: files === true ? leaf.file : leaf.directory, play:true, clear: true})
+              }}>
+                <PlayCircleIcon />
+              </IconButton>
             </>
           )}
-        </>
       </ListItemSecondaryAction>
-      {Array.isArray(leaf.children) === true && open.indexOf(leaf.path) !== -1 && (
+      {files === false && !setFolder && (
        <div className="children_leaf">
          <List>
-           {renderTree(leaf.children)}
+          {Array.isArray(leaf.directories) === true && leaf.directories.length > 0 && open.indexOf(leaf.directory) !== -1 && renderTree(leaf.directories, leaf.directory)}
+          {Array.isArray(leaf.file) === true && leaf.file.length > 0 && open.indexOf(leaf.directory) !== -1 && renderTree(leaf.file, leaf.directory, true)}
          </List>
        </div>
       )}
@@ -114,9 +125,12 @@ const TreeView = ({ setFolder, select, setPlaylist, mode, tree, refresh, copyFil
 
   return (
     <>
-    <List className="nodrag" style={{maxHeight:'75vh', overflow:'auto'}}>
-      {renderTree(tree)}
-    </List>
+      <List className="nodrag">
+        {renderTree(tree)}
+      </List>
+      {editTag && (
+        <TagEditor {...editTag} onClose={() => setEditTag(null)} />
+      )}
     </>
   )  
 };
