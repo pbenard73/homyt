@@ -4,6 +4,7 @@ import barVisualizer from "./bar"
 import fullVisualizer from "./full"
 import heartVisualizer from "./heart"
 import fireworkVisualizer from "./fireworks"
+import cubesVisualizer from "./cubes"
 import noneVisualizer from "./none"
 
 export const VISUALIZER = {
@@ -13,6 +14,7 @@ export const VISUALIZER = {
     FIREWORK: 'firework',
     HEART: 'heart',
     FULL: 'full',
+    CUBES: 'cubes',
     NONE: 'none',
 }
 
@@ -23,6 +25,7 @@ const visualizers = {
     [VISUALIZER.BAR]: barVisualizer,
     [VISUALIZER.HEART]: heartVisualizer,
     [VISUALIZER.FULL]: fullVisualizer,
+    [VISUALIZER.CUBES]: cubesVisualizer,
     [VISUALIZER.NONE]: noneVisualizer
 }
 
