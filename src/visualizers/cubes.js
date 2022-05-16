@@ -133,7 +133,6 @@ const threeVisualizer = ({clear, clear2d, analyzer, lastValue, canvas, canvas3d,
     lastThreeValue.renderer.render( lastThreeValue.scene, lastThreeValue.camera );
     
     return {
-      ...lastValue,
       three: lastThreeValue
     }
 }

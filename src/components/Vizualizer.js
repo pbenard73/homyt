@@ -64,12 +64,12 @@ const Vizualizer = () => {
 
                     const clear3d = () => {
                         const gl = canvas3d.getContext('webgl')
-                        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT | gl.STENCIL_BUFFER_BIT);
+                        gl?.clear?.(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT | gl.STENCIL_BUFFER_BIT);
                     }
 
                     const clear2d = () => {
                         const ctx = canvas.getContext('2d');
-                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+                        ctx?.clearRect?.(0, 0, canvas.width, canvas.height);
                     }
 
                     analyzer.fftSize = 2048;
