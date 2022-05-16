@@ -30,6 +30,7 @@ class Player {
             const audioElement = document.querySelector('#casper_video')
 
             const canvas = document.querySelector('#spectrum_canvas')
+            const canvas3d = document.querySelector('#spectrum3d_canvas')
 
             if (this.source === null) {
                 this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -46,7 +47,7 @@ class Player {
             this.gainNode.connect(this.audioContext.destination);
 
             this.context = {
-                audioContext: this.audioContext, gainNode: this.gainNode, analyzer, canvas
+                audioContext: this.audioContext, gainNode: this.gainNode, analyzer, canvas, canvas3d
             }
         }
 

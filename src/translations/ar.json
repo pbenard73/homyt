@@ -1,4 +1,5 @@
 {
+    "auto_connect_on_admin": "إعادة التوجيه التلقائي في منطقة الإدارة",
     "window_browser": "مستكشف الملفات",
     "window_downloader": "اقتناء يوتيوب",
     "window_spectrum": "المتخيلون",
@@ -48,6 +49,7 @@
     "theme_cover_as_bg": "تغطية في الخلفية",
     "theme_cover_contain": "قم بتضمين الغلاف في الخلفية",
     "theme_rainbow_mode": "وضع قوس قزح",
+    "theme_show_bgcolor": "إظهار لون الخلفية",
     "sound_output": "مخرج الصوت",
     "radio_output": "خرج الراديو",
     "admin_area": "لوحة القيادة",

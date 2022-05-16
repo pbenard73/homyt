@@ -12,7 +12,17 @@ const Intro = () => {
     const { t } = useTranslation()
     const auth = useAuth()
     const user = useSelector(state => state.auth.user)
-    const [open, setOpen] = useState(false)
+    const firstEntry = useSelector(state => state.app.firstEntry)
+    const [open, setOpen] = useState(user?.settings?.autoConnectOnAdmin === true)
+
+    useEffect(() => {
+        if (!user && firstEntry === false) {
+            return window.location.reload()
+        }
+        if (user && open === false) {
+            setOpen(user?.settings?.autoConnectOnAdmin === true)
+        }
+    }, [user])
 
     useEffect(() => {
         auth.refreshSession()

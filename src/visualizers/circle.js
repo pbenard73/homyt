@@ -1,4 +1,6 @@
-const circleVisualizer = ({clear, lastValue, canvas, bufferMemoryLength, dataArray}) => {
+const circleVisualizer = ({clear, clear3d, lastValue, canvas, bufferMemoryLength, dataArray}) => {
+    clear3d()
+    
     var    ctx = canvas.getContext('2d');
     if (clear !== false) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);

@@ -1,4 +1,6 @@
-const fireworksVisualizer = ({clear, analyzer, lastValue, canvas, bufferMemoryLength, dataArray}) => {
+const fireworksVisualizer = ({clear, clear3d, analyzer, lastValue, canvas, bufferMemoryLength, dataArray}) => {
+    clear3d()
+    
     const ctx = canvas.getContext('2d')
 
     ctx.beginPath()

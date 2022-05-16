@@ -1,4 +1,5 @@
 {
+    "auto_connect_on_admin": "Auto redirect on Admin",
     "window_browser": "File Browser",
     "window_downloader": "Youtube Downloader",
     "window_spectrum": "Visualizers",
@@ -48,6 +49,7 @@
     "theme_cover_as_bg": "Cover in background",
     "theme_cover_contain": "Contain the cover in background",
     "theme_rainbow_mode": "Rainbow mode",
+    "theme_show_bgcolor": "Force the background color",
     "sound_output": "Audio Output",
     "radio_output": "Radio Output",
     "admin_area": "Dashboard",

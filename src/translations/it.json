@@ -1,4 +1,5 @@
 {
+    "auto_connect_on_admin": "Reindirizzamento automatico nell'area di amministrazione",
     "window_browser": "Browser di file",
     "window_downloader": "Acquisizione Youtube",
     "window_spectrum": "Visualizzatori",
@@ -48,6 +49,7 @@
     "theme_cover_as_bg": "Copertina sullo sfondo",
     "theme_cover_contain": "Contenere la copertina sullo sfondo",
     "theme_rainbow_mode": "Modalità arcobaleno",
+    "theme_show_bgcolor": "Mostra il colore di sfondo",
     "sound_output": "Uscita audio",
     "radio_output": "Uscita radio",
     "admin_area": "Pannello",

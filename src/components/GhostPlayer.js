@@ -2,8 +2,10 @@ import React, {  useMemo } from 'react';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components'
+import { useApp } from '../redux/appSlice';
 import listener, { EVENTS } from '../utils/listener';
 import player from '../utils/player';
+import storage, { STORAGE } from '../utils/storage';
 
 const CasperVideo = styled.video`
     display:none;
@@ -12,6 +14,7 @@ const CasperVideo = styled.video`
 const GhostPlayer = () => {
   const audioUrl = useSelector(state => state.app.audioUrl)
   const mpdState = useSelector(state => state.app.mpdStatus?.state)
+  const app = useApp()
 
   useEffect(() => {
     const casperVideo = document.getElementById('casper_video');
@@ -34,6 +37,11 @@ const GhostPlayer = () => {
 
   useEffect(() => {
     listener.dispatch()
+    const volume = storage.get(STORAGE.VOLUME)
+
+    if (volume) {
+      app.setVolume(volume)
+    }
   }, [])
 
   const memoizedVideo = useMemo(() => (

@@ -1,4 +1,6 @@
-const lineVisualizer = ({clear, lastValue, canvas, bufferMemoryLength, dataArray}) => {
+const lineVisualizer = ({clear, clear3d, lastValue, canvas, bufferMemoryLength, dataArray}) => {
+    clear3d();
+    
     var    ctx = canvas.getContext('2d');
     if (clear !== false) {
         canvas.setAttribute('data-theme', 'line');

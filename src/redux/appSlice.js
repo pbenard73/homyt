@@ -12,6 +12,7 @@ export const staty = (args) => Object.fromEntries(args.map(arg => [`set${capital
 export const RADIO_PLAYLIST_NAME = "[Radio Streams]"
 
 const initialState = {
+  firstEntry: true,
   audioUrl: null,
   tree: null,
   config: [],
@@ -53,7 +54,8 @@ export const {
   setSearchDownload,
   setVolume,
   setError,
-  setUpgrading
+  setUpgrading,
+  setFirstEntry
 } = appSlice.actions
 
 export default appSlice.reducer
@@ -161,6 +163,7 @@ export const useApp = () => {
     const dashboard = useDashboard()
 
     return {
+      setFirstEntry: () => dispatch(setFirstEntry(false)),
       setError: value => dispatch(updateError(value)),
       setMpdMode: value => dispatch(toggleMpdMode(value)),
       setMpdStatus: value => dispatch(setMpdStatus(value)),
@@ -188,6 +191,7 @@ export const useApp = () => {
       setVolume: volume => {
         dispatch(setVolume(volume));
         document.getElementById('casper_video').volume = volume;
+        storage.set(STORAGE.VOLUME, volume)
       }
     }
 }

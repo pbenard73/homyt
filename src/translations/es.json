@@ -1,4 +1,5 @@
 {
+    "auto_connect_on_admin": "Redirección automática en el área de administración",
     "window_browser": "Explorador de archivos",
     "window_downloader": "Adquisición de youtuber",
     "window_spectrum": "Visualizadores",
@@ -48,6 +49,7 @@
     "theme_cover_as_bg": "Cubrir en segundo plano",
     "theme_cover_contain": "Contener la portada en segundo plano",
     "theme_rainbow_mode": "Modo arcoiris",
+    "theme_show_bgcolor": "Mostrar color de fondo",
     "sound_output": "Salida de audio",
     "radio_output": "Salida de radio",
     "admin_area": "Salpicadero",

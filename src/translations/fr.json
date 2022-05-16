@@ -1,4 +1,5 @@
 {
+    "auto_connect_on_admin": "Redirection Admin Auto",
     "window_browser": "Explorateur de Fichier",
     "window_downloader": "Acquisition Youtube",
     "window_spectrum": "Visualiseurs",
@@ -48,6 +49,7 @@
     "theme_cover_as_bg": "Jaquette en fond d'écran",
     "theme_cover_contain": "Adapter la jaquette à l'écran",
     "theme_rainbow_mode": "Mode arc-en-ciel",
+    "theme_show_bgcolor": "Forcer la couleur",
     "sound_output": "Sortie Son",
     "radio_output": "Sortie Radio",
     "admin_area": "Tableau de Bord",

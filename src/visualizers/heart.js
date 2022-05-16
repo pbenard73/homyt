@@ -1,4 +1,6 @@
-const heartVisualizer = ({clear, analyzer, lastValue, canvas, bufferMemoryLength, dataArray}) => {
+const heartVisualizer = ({clear, clear3d, analyzer, lastValue, canvas, bufferMemoryLength, dataArray}) => {
+    clear3d()
+
     const ctx = canvas.getContext('2d')
 
     analyzer.fftSize = 256;

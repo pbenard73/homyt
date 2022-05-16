@@ -12,6 +12,7 @@ const GhostData = () => {
   const [uuid, setUuid] = useState(null)
 
   useEffect(() => {
+    app.setFirstEntry();
     app.getConfig();
     auth.refreshSession();
     app.getFullTree();

@@ -29,15 +29,22 @@ const UserBackground = () => {
         }
     `
 
+    //
+
+    const colorStyle = {
+        backgroundColor: user.settings?.bgcolor || 'black',
+    }
+    const coverStyle = {
+        backgroundImage: `url(${getPicture.url({path: file?.replace?.(/\./g, '_'), query: title, radio: isRadio, big: true})})`,
+        backgroundSize: user.settings?.coverContain === true ? 'contain' : 'cover',
+        backgroundColor: user.settings?.bgcolor || 'black',
+    }
+
     return (
         <>
         {user.settings?.rainbow && <style dangerouslySetInnerHTML={{__html: rainbowStyle}} />}
-        {user.settings?.coverAsBackground === true && (
-            <Background style={{
-                backgroundColor: user.settings?.bgcolor || 'black',
-                backgroundImage: `url(${getPicture.url({path: file?.replace?.(/\./g, '_'), query: title, radio: isRadio, big: true})})`,
-                backgroundSize: user.settings?.coverContain === true ? 'contain' : 'cover',
-            }}></Background>
+        {(user.settings?.coverAsBackground === true || user.settings?.showBgColor === true) && (
+            <Background style={user.settings?.coverAsBackground === true ? coverStyle : colorStyle}></Background>
         )}
         </>
     )

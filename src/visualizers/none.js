@@ -1,6 +1,6 @@
-const noneVisualizer = ({canvas}) => {
-    var ctx = canvas.getContext('2d');  
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+const noneVisualizer = ({clear2d, clear3d}) => {
+    clear2d()
+    clear3d()
 }
 
 export default noneVisualizer

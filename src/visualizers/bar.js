@@ -1,4 +1,6 @@
-const barVisualizer = ({clear, analyzer, lastValue, canvas, bufferMemoryLength, dataArray}) => {  
+const barVisualizer = ({clear, analyzer, clear3d, lastValue, canvas, bufferMemoryLength, dataArray}) => {  
+    clear3d();
+    
     analyzer.fftSize = 256;
     bufferMemoryLength = analyzer.frequencyBinCount;
     dataArray = new Uint8Array(bufferMemoryLength);

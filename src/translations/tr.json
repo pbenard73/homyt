@@ -1,4 +1,5 @@
 {
+    "auto_connect_on_admin": "Yönetici alanında otomatik yönlendirme",
     "window_browser": "Dosya Gezgini",
     "window_downloader": "Youtube'u indir",
     "window_spectrum": "Ozel efektler",
@@ -48,6 +49,7 @@
     "theme_cover_as_bg": "Arka planda kapak",
     "theme_cover_contain": "Kapağı arka planda tut",
     "theme_rainbow_mode": "Gökkuşağı modu",
+    "theme_show_bgcolor": "Arka plan rengini göster",
     "sound_output": "Ses çıkışı",
     "radio_output": "Radyo Çıkışı",
     "admin_area": "Gösterge Paneli",

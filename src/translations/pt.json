@@ -1,4 +1,5 @@
 {
+    "auto_connect_on_admin": "Redirecionamento automático na área de administração",
     "window_browser": "Explorador de arquivos",
     "window_downloader": "Aquisição do Youtube",
     "window_spectrum": "Visualizadores",
@@ -48,6 +49,7 @@
     "theme_cover_as_bg": "Capa em segundo plano",
     "theme_cover_contain": "Contenha a capa em segundo plano",
     "theme_rainbow_mode": "Modo arco-íris",
+    "theme_show_bgcolor": "Mostrar cor de fundo",
     "sound_output": "Saída de áudio",
     "radio_output": "Saída de rádio",
     "admin_area": "Painel",

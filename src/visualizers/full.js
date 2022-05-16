@@ -3,6 +3,8 @@ import circleVisualizer from "./circle"
 import barVisualizer from "./bar"
 
 const fullVisualizer = (options) => {  
+  options.clear3d();
+  
   options.canvas.setAttribute('data-theme', 'full');
   var    ctx = options.canvas.getContext('2d');
  

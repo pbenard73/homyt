@@ -24,9 +24,13 @@ const Theme = () => {
 
     return (
         <div style={{padding:'10px'}}>
+        <FormControlLabel
+            control={<Checkbox checked={user.settings?.coverAsBackground === true} onChange={() => updateSettings('coverAsBackground', !user.settings?.coverAsBackground)} />}
+            label={t('theme_cover_as_bg')}
+        />
             <FormControlLabel
-                control={<Checkbox checked={user.settings?.coverAsBackground === true} onChange={() => updateSettings('coverAsBackground', !user.settings?.coverAsBackground)} />}
-                label={t('theme_cover_as_bg')}
+                control={<Checkbox checked={user.settings?.showBgColor === true} onChange={() => updateSettings('showBgColor', !user.settings?.showBgColor)} />}
+                label={t('theme_show_bgcolor')}
             />
 
             <input type="color" value={user.settings?.bgcolor ||'black'} onChange={(e) => updateSettings('bgcolor', e.target.value)} />
